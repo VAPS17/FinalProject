@@ -28,11 +28,6 @@ namespace FinalProject.Controllers
             return View();
         }
 
-        public IActionResult Teste()
-        {
-            return View();
-        }
-
         public IActionResult About()
         {
             return View();
