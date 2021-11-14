@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<FinalProject.Models.P_Task>
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -38,21 +40,48 @@
 
         <div id="layoutSidenav_content">
             <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-4">Projects (??)</h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Sidenav Light</li>
-                    </ol>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <a asp-controller="P_Tasks" asp-action="Index">
-                                Novo
-                            </a>
-                            Página onde se encontram os projetos, TALVEZ
-                        </div>
-                    </div>
-                </div>
+                <h1>Index</h1>
+
+                <p>
+                    <a asp-action="Create">Create New</a>
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.P_TaskName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Comentary)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.P_TaskState)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.P_TaskName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Comentary)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.P_TaskState)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.P_TaskId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.P_TaskId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.P_TaskId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </main>
 
             <footer class="py-4 bg-light mt-auto">
