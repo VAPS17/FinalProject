@@ -13,6 +13,6 @@ namespace FinalProject.Data
         {
         }
 
-        public DbSet<FinalProject.Models.Task> Task { get; set; }
+        public DbSet<FinalProject.Models.P_Task> P_Task { get; set; }
     }
 }

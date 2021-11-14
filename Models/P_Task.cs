@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Models
 {
-    public class Task
+    public class P_Task
     {
-        public int TaskId { get; set; }
+        public int P_TaskId { get; set; }
 
         [Required]
         [StringLength(512)]
-        public string TaskName { get; set; }
+        public string P_TaskName { get; set; }
 
         public string Comentary { get; set; }
 
-        public string TaskState { get; set; }
+        public string P_TaskState { get; set; }
     }
 
 }

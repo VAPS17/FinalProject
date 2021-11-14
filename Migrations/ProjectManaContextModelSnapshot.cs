@@ -15,12 +15,12 @@ namespace FinalProject.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
+                .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FinalProject.Models.Task", b =>
+            modelBuilder.Entity("FinalProject.Models.P_Task", b =>
                 {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("P_TaskId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -28,17 +28,17 @@ namespace FinalProject.Migrations
                     b.Property<string>("Comentary")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TaskName")
+                    b.Property<string>("P_TaskName")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<string>("TaskState")
+                    b.Property<string>("P_TaskState")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TaskId");
+                    b.HasKey("P_TaskId");
 
-                    b.ToTable("Task");
+                    b.ToTable("P_Task");
                 });
 #pragma warning restore 612, 618
         }

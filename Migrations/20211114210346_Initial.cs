@@ -7,25 +7,25 @@ namespace FinalProject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Task",
+                name: "P_Task",
                 columns: table => new
                 {
-                    TaskId = table.Column<int>(type: "int", nullable: false)
+                    P_TaskId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    P_TaskName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     Comentary = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TaskState = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    P_TaskState = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Task", x => x.TaskId);
+                    table.PrimaryKey("PK_P_Task", x => x.P_TaskId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Task");
+                name: "P_Task");
         }
     }
 }
