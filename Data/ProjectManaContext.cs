@@ -17,5 +17,9 @@ namespace FinalProject.Data
         public DbSet<FinalProject.Models.P_Task> P_Task { get; set; }
 
         public DbSet<FinalProject.Models.Member> Member { get; set; }
+
+        public DbSet<FinalProject.Models.Meeting> Meeting { get; set; }
+
+        public DbSet<FinalProject.Models.Project> Project { get; set; }
     }
 }
