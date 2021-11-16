@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Models
 {
-    public class Meetings
+    public class Meeting
     {
         public int MeetingId { get; set; }
 
