@@ -142,10 +142,7 @@ namespace FinalProject.Controllers
             var p_Task = await _context.P_Task.FindAsync(id);
             _context.P_Task.Remove(p_Task);
             await _context.SaveChangesAsync();
-
-            ViewBag.Title = "Task deleted";
-            ViewBag.Message = "Task sucessfully deleted.";
-            return View("Success");
+            return RedirectToAction(nameof(Index));
         }
 
         private bool P_TaskExists(int id)
