@@ -23,6 +23,8 @@ namespace FinalProject.Models
         public string Annotations { get; set; }
 
         public bool ProjectState { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
     }
 
 }
