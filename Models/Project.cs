@@ -12,7 +12,7 @@ namespace FinalProject.Models
 
         [Required]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
 
         public string Description { get; set; }
 
