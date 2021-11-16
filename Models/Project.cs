@@ -24,7 +24,9 @@ namespace FinalProject.Models
 
         public bool ProjectState { get; set; }
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Member> Members { get; set; }
+
+        public ICollection<P_Task> Tasks { get; set; }
     }
 
 }

@@ -18,6 +18,10 @@ namespace FinalProject.Models
         public string Comentary { get; set; }
 
         public string P_TaskState { get; set; }
+
+        [DisplayName("Project")]
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 
 }
