@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +12,16 @@ namespace FinalProject.Models
         public int MeetingId { get; set; }
 
         [Required]
-        public DateTime MeetingDateandTime { get; set; }
+        public DateTime DateandTime { get; set; }
 
         [Required]
-        [StringLength(300)]
-        public string MeetingTopic { get; set; }
+        [StringLength(200)]
+        public string Topic { get; set; }
+
+        [StringLength(1000)]
+        public string Description { get; set; }
+
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 }
