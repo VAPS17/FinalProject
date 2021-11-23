@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FinalProject.Models;
+using System.Linq;
 
 namespace FinalProject.Data
 {
@@ -14,6 +15,27 @@ namespace FinalProject.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MemberProject>().HasKey(bc => new { bc.MemberId, bc.ProjectId});
+            modelBuilder.Entity<MemberProject>()
+                .HasOne(bc => bc.Member)
+                .WithMany(b => b.MemberProjects)
+                .HasForeignKey(bc => bc.MemberId);
+            modelBuilder.Entity<MemberProject>()
+                .HasOne(bc => bc.Project)
+                .WithMany(b => b.ProjectMembers)
+                .HasForeignKey(bc => bc.ProjectId);
+
+            var foreignKeysWithCascadeDelete = modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetForeignKeys())
+                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+            foreach (var fk in foreignKeysWithCascadeDelete)
+            {
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
+
         public DbSet<FinalProject.Models.P_Task> P_Task { get; set; }
 
         public DbSet<FinalProject.Models.Member> Member { get; set; }
@@ -21,5 +43,7 @@ namespace FinalProject.Data
         public DbSet<FinalProject.Models.Meeting> Meeting { get; set; }
 
         public DbSet<FinalProject.Models.Project> Project { get; set; }
+
+        public DbSet<FinalProject.Models.MemberProject> MemberProject { get; set; }
     }
 }
