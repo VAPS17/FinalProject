@@ -33,6 +33,8 @@ namespace FinalProject.Models
         public ICollection<P_Task> Tasks { get; set; }
 
         public ICollection<Meeting> Meeting { get; set; }
+
+        public ICollection<MemberProject> ProjectMembers { get; set; }
     }
 
 }

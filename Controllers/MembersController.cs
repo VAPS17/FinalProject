@@ -22,8 +22,7 @@ namespace FinalProject.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var projectManaContext = _context.Member.Include(m => m.Project);
-            return View(await projectManaContext.ToListAsync());
+            return View(await _context.Member.ToListAsync());
         }
 
         // GET: Members/Details/5
@@ -35,7 +34,6 @@ namespace FinalProject.Controllers
             }
 
             var member = await _context.Member
-                .Include(m => m.Project)
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
@@ -48,7 +46,6 @@ namespace FinalProject.Controllers
         // GET: Members/Create
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "ProjectName");
             return View();
         }
 
@@ -57,7 +54,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,EmployeeNumber,Manager,ProjectId")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,EmployeeNumber")] Member member)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace FinalProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "ProjectName", member.ProjectId);
             return View(member);
         }
 
@@ -82,7 +78,6 @@ namespace FinalProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "ProjectName", member.ProjectId);
             return View(member);
         }
 
@@ -91,7 +86,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,EmployeeNumber,Manager,ProjectId")] Member member)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,EmployeeNumber")] Member member)
         {
             if (id != member.MemberId)
             {
@@ -118,7 +113,6 @@ namespace FinalProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "ProjectName", member.ProjectId);
             return View(member);
         }
 
@@ -131,7 +125,6 @@ namespace FinalProject.Controllers
             }
 
             var member = await _context.Member
-                .Include(m => m.Project)
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
