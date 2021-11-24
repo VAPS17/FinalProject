@@ -10,22 +10,22 @@ using FinalProject.Models;
 
 namespace FinalProject.Controllers
 {
-    public class P_TaskController : Controller
+    public class MembersController : Controller
     {
         private readonly ProjectManaContext _context;
 
-        public P_TaskController(ProjectManaContext context)
+        public MembersController(ProjectManaContext context)
         {
             _context = context;
         }
 
-        // GET: P_Task
+        // GET: Members
         public async Task<IActionResult> Index()
         {
-            return View(await _context.P_Task.ToListAsync());
+            return View(await _context.Member.ToListAsync());
         }
 
-        // GET: P_Task/Details/5
+        // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var member = await _context.Member
+                .FirstOrDefaultAsync(m => m.MemberId == id);
+            if (member == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(member);
         }
 
-        // GET: P_Task/Create
+        // GET: Members/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: P_Task/Create
+        // POST: Members/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,EmployeeNumber")] Member member)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(p_Task);
+                _context.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(p_Task);
+            return View(member);
         }
 
-        // GET: P_Task/Edit/5
+        // GET: Members/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task.FindAsync(id);
-            if (p_Task == null)
+            var member = await _context.Member.FindAsync(id);
+            if (member == null)
             {
                 return NotFound();
             }
-            return View(p_Task);
+            return View(member);
         }
 
-        // POST: P_Task/Edit/5
+        // POST: Members/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,EmployeeNumber")] Member member)
         {
-            if (id != p_Task.P_TaskId)
+            if (id != member.MemberId)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(p_Task);
+                    _context.Update(member);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!P_TaskExists(p_Task.P_TaskId))
+                    if (!MemberExists(member.MemberId))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace FinalProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(p_Task);
+            return View(member);
         }
 
-        // GET: P_Task/Delete/5
+        // GET: Members/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var member = await _context.Member
+                .FirstOrDefaultAsync(m => m.MemberId == id);
+            if (member == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(member);
         }
 
-        // POST: P_Task/Delete/5
+        // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var p_Task = await _context.P_Task.FindAsync(id);
-            _context.P_Task.Remove(p_Task);
+            var member = await _context.Member.FindAsync(id);
+            _context.Member.Remove(member);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool P_TaskExists(int id)
+        private bool MemberExists(int id)
         {
-            return _context.P_Task.Any(e => e.P_TaskId == id);
+            return _context.Member.Any(e => e.MemberId == id);
         }
     }
 }

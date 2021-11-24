@@ -11,18 +11,30 @@ namespace FinalProject.Models
         public int ProjectId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string ProjectName { get; set; }
+        [StringLength(100)]
+        public string Name { get; set; }
 
+        [StringLength(1000)]
         public string Description { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string ProjectCreator { get; set; }
+
+        public string NumberEmployees { get; set; }
+
+        [Required]
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }
 
-        public string Annotations { get; set; }
+        public DateTime DecisiveDeliveryDate { get; set; }
 
-        public bool ProjectState { get; set; }
+        public ICollection<P_Task> Tasks { get; set; }
+
+        public ICollection<Meeting> Meeting { get; set; }
+
+        public ICollection<MemberProject> ProjectMembers { get; set; }
     }
 
 }

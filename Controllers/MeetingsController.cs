@@ -10,22 +10,23 @@ using FinalProject.Models;
 
 namespace FinalProject.Controllers
 {
-    public class P_TaskController : Controller
+    public class MeetingsController : Controller
     {
         private readonly ProjectManaContext _context;
 
-        public P_TaskController(ProjectManaContext context)
+        public MeetingsController(ProjectManaContext context)
         {
             _context = context;
         }
 
-        // GET: P_Task
+        // GET: Meetings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.P_Task.ToListAsync());
+            var projectManaContext = _context.Meeting.Include(m => m.Project);
+            return View(await projectManaContext.ToListAsync());
         }
 
-        // GET: P_Task/Details/5
+        // GET: Meetings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var meeting = await _context.Meeting
+                .Include(m => m.Project)
+                .FirstOrDefaultAsync(m => m.MeetingId == id);
+            if (meeting == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(meeting);
         }
 
-        // GET: P_Task/Create
+        // GET: Meetings/Create
         public IActionResult Create()
         {
+            ViewData["ProjectId"] = new SelectList(_context.Project, "ProjectId", "Name");
             return View();
         }
 
-        // POST: P_Task/Create
+        // POST: Meetings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Create([Bind("MeetingId,DateandTime,Topic,Description,ProjectId")] Meeting meeting)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(p_Task);
+                _context.Add(meeting);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Project, "ProjectId", "Name", meeting.ProjectId);
+            return View(meeting);
         }
 
-        // GET: P_Task/Edit/5
+        // GET: Meetings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task.FindAsync(id);
-            if (p_Task == null)
+            var meeting = await _context.Meeting.FindAsync(id);
+            if (meeting == null)
             {
                 return NotFound();
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Project, "ProjectId", "Name", meeting.ProjectId);
+            return View(meeting);
         }
 
-        // POST: P_Task/Edit/5
+        // POST: Meetings/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Edit(int id, [Bind("MeetingId,DateandTime,Topic,Description,ProjectId")] Meeting meeting)
         {
-            if (id != p_Task.P_TaskId)
+            if (id != meeting.MeetingId)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(p_Task);
+                    _context.Update(meeting);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!P_TaskExists(p_Task.P_TaskId))
+                    if (!MeetingExists(meeting.MeetingId))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace FinalProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Project, "ProjectId", "Name", meeting.ProjectId);
+            return View(meeting);
         }
 
-        // GET: P_Task/Delete/5
+        // GET: Meetings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +130,31 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var meeting = await _context.Meeting
+                .Include(m => m.Project)
+                .FirstOrDefaultAsync(m => m.MeetingId == id);
+            if (meeting == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(meeting);
         }
 
-        // POST: P_Task/Delete/5
+        // POST: Meetings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var p_Task = await _context.P_Task.FindAsync(id);
-            _context.P_Task.Remove(p_Task);
+            var meeting = await _context.Meeting.FindAsync(id);
+            _context.Meeting.Remove(meeting);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool P_TaskExists(int id)
+        private bool MeetingExists(int id)
         {
-            return _context.P_Task.Any(e => e.P_TaskId == id);
+            return _context.Meeting.Any(e => e.MeetingId == id);
         }
     }
 }
