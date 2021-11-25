@@ -28,7 +28,8 @@ namespace FinalProject.Models
 
         public DateTime FinishDate { get; set; }
 
-        public DateTime DecisiveDeliveryDate { get; set; }
+        [Required]
+        public DateTime DecisiveDeliveryDate { get; set; } //prazo
 
         public ICollection<P_Task> Tasks { get; set; }
 
