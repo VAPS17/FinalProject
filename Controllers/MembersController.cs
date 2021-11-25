@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -20,9 +21,41 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page = 1)
         {
-            return View(await _context.Member.ToListAsync());
+            var membersSearch = _context.Member
+                .Where(b => search == null || b.Name.Contains(search) || b.EmployeeNumber.Equals(search));
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = membersSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var members = await membersSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            return View(
+                new MemberListViewModel
+                {
+                    Members = members,
+                    PagingInfo = pagingInfo,
+                    StringSearched = search
+                }
+            );
         }
 
         // GET: Members/Details/5
@@ -34,7 +67,7 @@ namespace FinalProject.Controllers
             }
 
             var member = await _context.Member
-                .FirstOrDefaultAsync(m => m.MemberId == id);
+                .SingleOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
                 return NotFound();

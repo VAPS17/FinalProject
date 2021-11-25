@@ -21,7 +21,8 @@ namespace FinalProject.Models
 
         [Required]
         [StringLength(6)]
-        public int EmployeeNumber { get; set; }
+        [DisplayName("Employee Number")]
+        public string EmployeeNumber { get; set; }
 
         public ICollection<MemberProject> MemberProjects { get; set; }
 
