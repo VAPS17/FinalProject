@@ -23,13 +23,13 @@ namespace FinalProject.Controllers
         // GET: Members
         public async Task<IActionResult> Index(string search, int page = 1)
         {
-            var memberSearch = _context.Member
-                .Where(b => search == null || b.Name.Contains(search) || b.EmployeeNumber == search);
+            var membersSearch = _context.Member
+                .Where(b => search == null || b.Name.Contains(search));
 
             var pagingInfo = new PagingInfo
             {
-                CurrentPage = 1,
-                TotalItems = _context.Member.Count()
+                CurrentPage = page,
+                TotalItems = membersSearch.Count()
             };
 
             if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
@@ -42,9 +42,8 @@ namespace FinalProject.Controllers
                 pagingInfo.CurrentPage = 1;
             }
 
-
-            var members = await _context.Member
-                      
+            var members = await membersSearch
+                            .OrderBy(b => b.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
                             .ToListAsync();
@@ -53,7 +52,8 @@ namespace FinalProject.Controllers
                 new MemberListViewModel
                 {
                     Members = members,
-                    PagingInfo = pagingInfo
+                    PagingInfo = pagingInfo,
+                    StringSearched = search
                 }
             );
         }
@@ -67,7 +67,7 @@ namespace FinalProject.Controllers
             }
 
             var member = await _context.Member
-                .FirstOrDefaultAsync(m => m.MemberId == id);
+                .SingleOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
                 return NotFound();

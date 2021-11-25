@@ -4,31 +4,14 @@
     ViewData["Title"] = "Members List";
 }
 
-<h1>Members List</h1>
-
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmployeeNumber)
-        </td>
-        <td>
-            |
-            <a asp-action="Details" asp-route-id="@item.MemberId">Details</a> |
-        </td>
-    </tr>
-}
-
+<h1 style="margin-top: 100px">Members List</h1>
 
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Search</h5>
         <form asp-action="Index" method="get">
-            <label for="title" class="control-label">Title</label>
-            <input name="title" type="search" class="form-control" value="@Model.TitleSearched" />
+            <label for="title" class="control-label">Search</label>
+            <input name="Name or Employee Number" type="search" class="form-control" value="@Model.StringSearched" />
             <div class="mt-3">
                 <input type="submit" value="Search" class="btn btn-info" />
                 <a asp-action="Index" class="btn btn-secondary">Clear</a>

@@ -10,5 +10,7 @@ namespace FinalProject.ViewModels
     {
         public IEnumerable<Member> Members { get; set; }
         public PagingInfo PagingInfo { get; set; }
+
+        public string StringSearched { get; set; }
     }
 }
