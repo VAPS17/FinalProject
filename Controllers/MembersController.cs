@@ -24,7 +24,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> Index(string search, int page = 1)
         {
             var membersSearch = _context.Member
-                .Where(b => search == null || b.Name.Contains(search));
+                .Where(b => search == null || b.Name.Contains(search) || b.EmployeeNumber.Equals(search));
 
             var pagingInfo = new PagingInfo
             {
