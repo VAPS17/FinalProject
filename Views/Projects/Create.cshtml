@@ -4,59 +4,55 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="d-flex justify-content-center" style="margin-top:100px">
+    <h3>Create a Project</h3>
+</div>
 
-<h4>Project</h4>
-<hr />
-<div class="row">
+
+<div class="row" style="margin-top: 20px">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Project Name</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+            <div class="form-group" style="margin-top: 5px">
+                <label asp-for="Description" class="control-label">Description</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ProjectCreator" class="control-label"></label>
+            <div class="form-group" style="margin-top: 5px">
+                <label asp-for="ProjectCreator" class="control-label">Project Creator</label>
                 <input asp-for="ProjectCreator" class="form-control" />
                 <span asp-validation-for="ProjectCreator" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NumberEmployees" class="control-label"></label>
+            <div class="form-group" style="margin-top: 5px">
+                <label asp-for="NumberEmployees" class="control-label">Number of Participants</label>
                 <input asp-for="NumberEmployees" class="form-control" />
                 <span asp-validation-for="NumberEmployees" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
+            <div class="form-group" style="margin-top: 5px">
+                <label asp-for="StartDate" class="control-label">Start Date</label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FinishDate" class="control-label"></label>
-                <input asp-for="FinishDate" class="form-control" />
-                <span asp-validation-for="FinishDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DecisiveDeliveryDate" class="control-label"></label>
+            <div class="form-group" style="margin-top: 5px">
+                <label asp-for="DecisiveDeliveryDate" class="control-label">Decisive Delivery Date</label>
                 <input asp-for="DecisiveDeliveryDate" class="form-control" />
                 <span asp-validation-for="DecisiveDeliveryDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 5px">
                 <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div style="margin-top: 5px">
+                <a asp-action="Index" class="btn btn-outline-primary">Back to Projects</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
