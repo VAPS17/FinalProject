@@ -30,7 +30,7 @@ namespace FinalProject.Models
 
         public DateTime DecisiveDeliveryDate { get; set; }
 
-        public ICollection<P_Task> Tasks { get; set; }
+        public ICollection<P_Task> P_Task { get; set; }
 
         public ICollection<Meeting> Meeting { get; set; }
 

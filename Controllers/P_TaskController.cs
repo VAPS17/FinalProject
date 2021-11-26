@@ -22,7 +22,8 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index()
         {
-            return View(await _context.P_Task.ToListAsync());
+            var P_TasksContext = _context.P_Task.Include(b => b.Project);
+            return View(await P_TasksContext.ToListAsync());
         }
 
         // GET: P_Task/Details/5
@@ -33,19 +34,21 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var p_task = await _context.P_Task
+                .Include(b => b.Project)
+                .SingleOrDefaultAsync(b => b.ProjectId == id);
+            if (p_task == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(p_task);
         }
 
         // GET: P_Task/Create
         public IActionResult Create()
         {
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name");
             return View();
         }
 
@@ -54,15 +57,19 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Create([Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(p_Task);
+                _context.Add(p_task);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                ViewBag.Title = "Task added";
+                ViewBag.Message = "Task sucessfully added.";
+                return View("Success");
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            return View(p_task);
         }
 
         // GET: P_Task/Edit/5
@@ -73,12 +80,13 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task.FindAsync(id);
-            if (p_Task == null)
+            var p_task = await _context.P_Task.FindAsync(id);
+            if (p_task == null)
             {
                 return NotFound();
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            return View(p_task);
         }
 
         // POST: P_Task/Edit/5
@@ -86,9 +94,9 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState")] P_Task p_Task)
+        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
         {
-            if (id != p_Task.P_TaskId)
+            if (id != p_task.P_TaskId)
             {
                 return NotFound();
             }
@@ -97,12 +105,12 @@ namespace FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(p_Task);
+                    _context.Update(p_task);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!P_TaskExists(p_Task.P_TaskId))
+                    if (!P_TaskExists(p_task.P_TaskId))
                     {
                         return NotFound();
                     }
@@ -111,9 +119,13 @@ namespace FinalProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                ViewBag.Title = "Task edited";
+                ViewBag.Message = "Taskessfully altered.";
+                return View("Success");
             }
-            return View(p_Task);
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            return View(p_task);
         }
 
         // GET: P_Task/Delete/5
@@ -124,14 +136,15 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var p_Task = await _context.P_Task
-                .FirstOrDefaultAsync(m => m.P_TaskId == id);
-            if (p_Task == null)
+            var p_task = await _context.P_Task
+                .Include(b => b.Project)
+                .FirstOrDefaultAsync(m => m.ProjectId == id);
+            if (p_task == null)
             {
                 return NotFound();
             }
 
-            return View(p_Task);
+            return View(p_task);
         }
 
         // POST: P_Task/Delete/5
@@ -139,10 +152,13 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var p_Task = await _context.P_Task.FindAsync(id);
-            _context.P_Task.Remove(p_Task);
+            var p_task = await _context.P_Task.FindAsync(id);
+            _context.P_Task.Remove(p_task);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            ViewBag.Title = "P_Task deleted";
+            ViewBag.Message = "P_Task sucessfully deleted.";
+            return View("Success");
         }
 
         private bool P_TaskExists(int id)
