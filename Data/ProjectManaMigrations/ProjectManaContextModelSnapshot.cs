@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FinalProject.Data.ProjectManaMigrations
+namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
     partial class ProjectManaContextModelSnapshot : ModelSnapshot
