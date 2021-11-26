@@ -31,7 +31,7 @@ namespace FinalProject.Models
         [Required]
         public DateTime DecisiveDeliveryDate { get; set; } //prazo
 
-        public ICollection<P_Task> Tasks { get; set; }
+        public ICollection<P_Task> P_Task { get; set; }
 
         public ICollection<Meeting> Meeting { get; set; }
 

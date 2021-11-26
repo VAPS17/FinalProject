@@ -1,15 +1,18 @@
 ﻿@model IEnumerable<FinalProject.Models.Project>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Projects";
 }
 
-<div class="d-flex justify-content-center" style="margin-top:100px">
-    <h1>List of Projects</h1>
-    <a asp-action="Create" class="btn btn-success">Create</a>
-</div>
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+          <div class="d-flex justify-content-center" style="margin-top:100px">
+            <h1>List of Projects</h1>
+            <a asp-action="Create" class="btn btn-success">Create</a>
+          </div>
 
-        <div style="margin-top: 25px">
+          <div style="margin-top: 25px">
             <table class="table" style="margin-top: 20px">
                 <thead>
                     <tr>
@@ -63,10 +66,11 @@
                                 @Html.DisplayFor(modelItem => item.DecisiveDeliveryDate)
                             </td>
                             <td>
+
                                 <div class="d-flex">
                                     <a asp-action="Create" asp-route-id="@item.ProjectId" class="btn btn-success">Create</a>
                                     <a asp-action="Edit" asp-route-id="@item.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
+                                    <a asp-controller="P_Task" asp-action="Index" asp-route-id="@item.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
                                     <a asp-action="Delete" asp-route-id="@item.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
                                 </div>
                             </td>
@@ -74,4 +78,6 @@
                     }
                 </tbody>
             </table>
-        </div>
+        </main>
+    </div>
+</div>

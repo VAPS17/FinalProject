@@ -12,6 +12,7 @@
             <p>
                 <a asp-action="Create">Create New</a>
             </p>
+
             <table class="table">
                 <thead>
                     <tr>
@@ -24,28 +25,36 @@
                         <th>
                             @Html.DisplayNameFor(model => model.P_TaskState)
                         </th>
-                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Project.Name)
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.P_TaskName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Comentary)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.P_TaskState)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.P_TaskId">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.P_TaskId">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.P_TaskId">Delete</a>
-                            </td>
-                        </tr>
+                        if (item.P_TaskState == )
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.P_TaskName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Comentary)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.P_TaskState)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Name)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.P_TaskId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.P_TaskId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.P_TaskId">Delete</a>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
