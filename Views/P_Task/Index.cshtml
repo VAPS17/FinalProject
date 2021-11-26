@@ -33,8 +33,7 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        if (item.P_TaskState == )
-                        {
+                        
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.P_TaskName)
@@ -54,7 +53,7 @@
                                     <a asp-action="Delete" asp-route-id="@item.P_TaskId">Delete</a>
                                 </td>
                             </tr>
-                        }
+                        
                     }
                 </tbody>
             </table>
