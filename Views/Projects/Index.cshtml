@@ -4,15 +4,16 @@
     ViewData["Title"] = "Projects";
 }
 
-<div id="layoutSidenav">
+   <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <h1>Index</h1>
+          <div class="d-flex justify-content-center" style="margin-top:100px">
+            <h1>List of Projects</h1>
+            <a asp-action="Create" class="btn btn-success">Create</a>
+          </div>
 
-            <p>
-                <a asp-action="Create">Create New</a>
-            </p>
-            <table class="table">
+          <div style="margin-top: 25px">
+            <table class="table" style="margin-top: 20px">
                 <thead>
                     <tr>
                         <th>
@@ -65,9 +66,13 @@
                                 @Html.DisplayFor(modelItem => item.DecisiveDeliveryDate)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                                <a asp-controller="P_Task" asp-route-id="@item.ProjectId" asp-action="Index">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+
+                                <div class="d-flex">
+                                    <a asp-action="Create" asp-route-id="@item.ProjectId" class="btn btn-success">Create</a>
+                                    <a asp-action="Edit" asp-route-id="@item.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
+                                    <a asp-controller="P_Task" asp-action="Index" asp-route-id="@item.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
+                                </div>
                             </td>
                         </tr>
                     }
