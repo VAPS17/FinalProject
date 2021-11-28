@@ -20,9 +20,9 @@ namespace FinalProject.Controllers
         }
 
         // GET: P_Task
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            var P_TasksContext = _context.P_Task.Include(b => b.Project);
+            var P_TasksContext = _context.P_Task.Where(t => t.ProjectId == id).Include(b => b.Project);
             return View(await P_TasksContext.ToListAsync());
         }
 
