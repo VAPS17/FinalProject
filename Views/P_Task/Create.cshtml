@@ -6,41 +6,43 @@
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
-        <main>
-            <h1>Create</h1>
+        <h1>Create</h1>
 
-            <h4>P_Task</h4>
-            <hr />
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="P_TaskName" class="control-label"></label>
-                    <input asp-for="P_TaskName" class="form-control" />
-                    <span asp-validation-for="P_TaskName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Comentary" class="control-label"></label>
-                    <textarea asp-for="Comentary" class="form-control" rows="7"></textarea>
-                    <span asp-validation-for="Comentary" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="P_TaskState" class="control-label"></label>
-                    <input asp-for="P_TaskState" class="form-control" rows="7"></>
-                    <span asp-validation-for="P_TaskState" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ProjectId" class="control-label"></label>
-                    <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
-
-            <div>
-                <a asp-action="Index">Back to List</a>
+        <h4>P_Task</h4>
+        <hr />
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="P_TaskName" class="control-label"></label>
+                <input asp-for="P_TaskName" class="form-control" />
+                <span asp-validation-for="P_TaskName" class="text-danger"></span>
             </div>
-        </main>
+            <div class="form-group">
+                <label asp-for="Comentary" class="control-label"></label>
+                <textarea asp-for="Comentary" class="form-control" rows="7"></textarea>
+                <span asp-validation-for="Comentary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="P_TaskState" class="control-label"></label>
+                <input asp-for="P_TaskState" class="form-control" rows="7"></>
+                <span asp-validation-for="P_TaskState" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

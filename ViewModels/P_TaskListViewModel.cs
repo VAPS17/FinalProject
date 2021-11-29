@@ -10,9 +10,6 @@ namespace FinalProject.ViewModels
     {
         public IEnumerable<P_Task> P_Task { get; set; }
         public PagingInfo P_TaskPagingInfo { get; set; }
-
-        //public Project Project { get; set; }
-
         public string P_TaskStringSearched { get; set; }
     }
 }

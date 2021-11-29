@@ -16,7 +16,6 @@
             <div class="card-body">
                 <h5 class="card-title">Search</h5>
                 <form asp-action="Index" method="get">
-                    <label for="title" class="control-label">Search</label>
                     <input name="Name of Task" type="search" class="form-control" value="@Model.P_TaskStringSearched" />
                     <div class="mt-3">
                         <input type="submit" value="Search" class="btn btn-success" />
@@ -32,10 +31,13 @@
                 <div class="card-body">
                     <h5 class="card-title">name: @task.P_TaskName</h5>
                     <p class="card-text lead">Comemtary: @task.Comentary</p>
+                    <p class="card-text lead">Project: @task.Project.Name</p>
                     <p class="card-text lead">State: @task.P_TaskState</p>
 
                     <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
+
+
                 </div>
             </div>
         }

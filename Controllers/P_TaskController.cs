@@ -21,9 +21,10 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index(int id, string search, int page = 1)
         {
-            var P_TasksContext = _context.P_Task.Where(t => t.ProjectId == id).Include(b => b.Project);
             var P_TaskSearch = _context.P_Task
-    .Where(b => search == null || b.P_TaskName.Contains(search));
+                                .Where(b => search == null || b.P_TaskName.Contains(search))
+                                .Where(t => t.ProjectId == id)
+                                .Include((b => b.Project));
 
             var pagingInfo = new PagingInfo
             {
@@ -165,14 +166,16 @@ namespace FinalProject.Controllers
             if (id == null)
             {
                 return NotFound();
+                //return Content("Não tem id");
             }
 
             var p_task = await _context.P_Task
                 .Include(b => b.Project)
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
+                .FirstOrDefaultAsync(m => m.P_TaskId == id);
             if (p_task == null)
             {
                 return NotFound();
+                //return Content("Não tem tarefa");
             }
 
             return View(p_task);
