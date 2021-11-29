@@ -2,98 +2,101 @@
 
 @{
     ViewData["Title"] = "Task List";
+    var ID = ViewBag.ID;
 }
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
-        <h1>Task List</h1>
+        <main>
+            <h1>Task List</h1>
 
-        <p>
-            <a asp-action="Create" class="btn btn-success">Create a new task</a>
-        </p>
+            <p>
+                <a asp-action="Create" asp-route-id="@ID" class ="btn btn-success">Create a new task</a>
+            </p>
 
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Search</h5>
-                <form asp-action="Index" method="get">
-                    <input name="Name of Task" type="search" class="form-control" value="@Model.P_TaskStringSearched" />
-                    <div class="mt-3">
-                        <input type="submit" value="Search" class="btn btn-success" />
-                        <a asp-action="Index" class="btn btn-secondary">Clear</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        @foreach (var task in Model.P_Task)
-        {
-            <div class="card mt-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">name: @task.P_TaskName</h5>
-                    <p class="card-text lead">Comemtary: @task.Comentary</p>
-                    <p class="card-text lead">Project: @task.Project.Name</p>
-                    <p class="card-text lead">State: @task.P_TaskState</p>
-
-                    <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-
-
+                    <h5 class="card-title">Search</h5>
+                    <form asp-action="Index" method="get">
+                        <input name="Name of Task" type="search" class="form-control" value="@Model.P_TaskStringSearched" />
+                        <div class="mt-3">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                        </div>
+                    </form>
                 </div>
             </div>
-        }
 
-        <nav class="mt-3">
-            <ul class="pagination">
-                @{
-                    if (Model.P_TaskPagingInfo.CurrentPage == 1)
-                    {
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">First</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
-                        </li>
-                    }
+            @foreach (var task in Model.P_Task)
+            {
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">name: @task.P_TaskName</h5>
+                        <p class="card-text lead">Comemtary: @task.Comentary</p>
+                        <p class="card-text lead">Project: @task.Project.Name</p>
+                        <p class="card-text lead">State: @task.P_TaskState</p>
 
-                    int firstPage = Model.P_TaskPagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                    if (firstPage < 1) firstPage = 1;
+                        <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
 
-                    int lastPage = Model.P_TaskPagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                    if (lastPage > Model.P_TaskPagingInfo.TotalPages) lastPage = Model.P_TaskPagingInfo.TotalPages;
 
-                    for (int p = firstPage; p <= lastPage; p++)
-                    {
-                        if (p == Model.P_TaskPagingInfo.CurrentPage)
+                    </div>
+                </div>
+            }
+
+            <nav class="mt-3">
+                <ul class="pagination">
+                    @{
+                        if (Model.P_TaskPagingInfo.CurrentPage == 1)
                         {
-                            <li class="page-item active">
-                                <a class="page-link" href="#">@p <span class="sr-only">(current)</span></a>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">First</a>
                             </li>
                         }
                         else
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                            </li>
+                        }
+
+                        int firstPage = Model.P_TaskPagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                        if (firstPage < 1) firstPage = 1;
+
+                        int lastPage = Model.P_TaskPagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                        if (lastPage > Model.P_TaskPagingInfo.TotalPages) lastPage = Model.P_TaskPagingInfo.TotalPages;
+
+                        for (int p = firstPage; p <= lastPage; p++)
+                        {
+                            if (p == Model.P_TaskPagingInfo.CurrentPage)
+                            {
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">@p <span class="sr-only">(current)</span></a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                                </li>
+                            }
+                        }
+
+                        if (Model.P_TaskPagingInfo.CurrentPage == Model.P_TaskPagingInfo.TotalPages)
+                        {
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Last</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@Model.P_TaskPagingInfo.TotalPages">Last</a>
                             </li>
                         }
                     }
-
-                    if (Model.P_TaskPagingInfo.CurrentPage == Model.P_TaskPagingInfo.TotalPages)
-                    {
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Last</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@Model.P_TaskPagingInfo.TotalPages">Last</a>
-                        </li>
-                    }
-                }
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+        </main>
     </div>
 </div>

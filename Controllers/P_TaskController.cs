@@ -21,10 +21,11 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index(int id, string search, int page = 1)
         {
+            ViewBag.ID = id;
             var P_TaskSearch = _context.P_Task
                                 .Where(b => search == null || b.P_TaskName.Contains(search))
                                 .Where(t => t.ProjectId == id)
-                                .Include((b => b.Project));
+                                .Include(b => b.Project);
 
             var pagingInfo = new PagingInfo
             {
@@ -80,7 +81,8 @@ namespace FinalProject.Controllers
         // GET: P_Task/Create
         public IActionResult Create(int id)
         {
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name");
+            ViewBag.ID = id;
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", id);
             return View();
         }
 
@@ -89,8 +91,9 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
+        public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(p_task);
@@ -100,6 +103,7 @@ namespace FinalProject.Controllers
                 ViewBag.Message = "Task sucessfully added.";
                 return View("Success");
             }
+
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
             return View(p_task);
         }

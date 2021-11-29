@@ -6,45 +6,47 @@
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
-        <h1>Edit</h1>
+        <main>
+            <h1>Edit</h1>
 
-        <h4>P_Task</h4>
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="P_TaskId" />
-                    <div class="form-group">
-                        <label asp-for="P_TaskName" class="control-label"></label>
-                        <input asp-for="P_TaskName" class="form-control" />
-                        <span asp-validation-for="P_TaskName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Comentary" class="control-label"></label>
-                        <input asp-for="Comentary" class="form-control" />
-                        <span asp-validation-for="Comentary" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="P_TaskState" class="control-label"></label>
-                        <input asp-for="P_TaskState" class="form-control" />
-                        <span asp-validation-for="P_TaskState" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ProjectId" class="control-label"></label>
-                        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                        <span asp-validation-for="ProjectId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                </form>
+            <h4>P_Task</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="P_TaskId" />
+                        <div class="form-group">
+                            <label asp-for="P_TaskName" class="control-label"></label>
+                            <input asp-for="P_TaskName" class="form-control" />
+                            <span asp-validation-for="P_TaskName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Comentary" class="control-label"></label>
+                            <input asp-for="Comentary" class="form-control" />
+                            <span asp-validation-for="Comentary" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="P_TaskState" class="control-label"></label>
+                            <input asp-for="P_TaskState" class="form-control" />
+                            <span asp-validation-for="P_TaskState" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProjectId" class="control-label"></label>
+                            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                            <span asp-validation-for="ProjectId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </main>
     </div>
 </div>
 
