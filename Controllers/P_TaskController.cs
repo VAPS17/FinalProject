@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -20,10 +19,42 @@ namespace FinalProject.Controllers
         }
 
         // GET: P_Task
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int id, string search, int page = 1)
         {
             var P_TasksContext = _context.P_Task.Where(t => t.ProjectId == id).Include(b => b.Project);
-            return View(await P_TasksContext.ToListAsync());
+            var P_TaskSearch = _context.P_Task
+    .Where(b => search == null || b.P_TaskName.Contains(search));
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = P_TaskSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var p_task = await P_TaskSearch
+                            .OrderBy(b => b.P_TaskName)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            return View(
+                new P_TaskListViewModel
+                {
+                    P_Task = p_task,
+                    P_TaskPagingInfo = pagingInfo,
+                    P_TaskStringSearched = search
+                }
+            );
         }
 
         // GET: P_Task/Details/5
@@ -46,7 +77,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: P_Task/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name");
             return View();
