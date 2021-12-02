@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace FinalProject.ViewModels
 {
-    public class MemberListViewModel
+    public class ProjectListViewModel
     {
-        public IEnumerable<Member> Members { get; set; }
+        public IEnumerable<Project> Projects { get; set; }
 
         public PagingInfo PagingInfo { get; set; }
 
-        public string StringSearched { get; set; }
+        public string ProjectNameSearched { get; set; }
     }
 }

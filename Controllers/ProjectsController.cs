@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -20,10 +21,43 @@ namespace FinalProject.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page = 1)
         {
-            return View(await _context.Project.ToListAsync());
+            var projectsSearch = _context.Project
+                .Where(b => search == null || b.Name.Contains(search));
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = projectsSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            return View(
+                new ProjectListViewModel
+                {
+                    Projects = projects,
+                    PagingInfo = pagingInfo,
+                    ProjectNameSearched = search
+                }
+            );
         }
+
 
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -149,5 +183,17 @@ namespace FinalProject.Controllers
         {
             return _context.Project.Any(e => e.ProjectId == id);
         }
+
+
+        /*
+        public void ValidaDatas()
+        {
+            DateTime dtTextBox = DateTime.Parse(StartDate.Text);
+
+            int dataInicial = StartDate.DateTime;
+            //var dataInicial = new DateTime StartDate.get();
+            
+        }
+        */
     }
 }

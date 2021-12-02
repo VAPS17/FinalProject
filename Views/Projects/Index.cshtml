@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FinalProject.Models.Project>
+﻿@model ProjectListViewModel
 
 @{
     ViewData["Title"] = "Projects";
@@ -11,41 +11,107 @@
                 <h1>List of Projects</h1>
                 <h4>Do you want to create a new Project?</h4><br />
                 <a asp-action="Create" class="btn btn-success">Create</a>
-            </div>      
-             
-            
-            @foreach (var item in Model)
-            {
-                       
+            </div>
 
-             <div class="card" style="margin-top:50px">
-                <div class="card-header text-center">
-                    <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+            <div class="card" style="margin-top:20px">
+                <div class="card-body">
+                    <h5 class="card-title">Search</h5>
+                    <form asp-action="Index" method="get">
+                        <input name="Project name" type="search" class="form-control" value="@Model.ProjectNameSearched" />
+                        <div class="mt-3">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                        </div>
+                    </form>
                 </div>
-                    <div class="card-body">
-                        <h5>@Html.DisplayNameFor(model => model.Description)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.Description)</p>
-                        <h5>@Html.DisplayNameFor(model => model.ProjectCreator)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.ProjectCreator)</p>
-                        <h5>@Html.DisplayNameFor(model => model.NumberEmployees)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.NumberEmployees)</p>
-                        <h5>@Html.DisplayNameFor(model => model.StartDate)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.StartDate)</p>
-                        <h5>@Html.DisplayNameFor(model => model.FinishDate)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.FinishDate)</p>
-                        <h5>@Html.DisplayNameFor(model => model.DecisiveDeliveryDate)</h5>
-                        <p> @Html.DisplayFor(modelItem => item.DecisiveDeliveryDate)</p>
+            </div>
+
+            @foreach (var project in Model.Projects)
+            {
+
+                <!---->
+                <div class="card" style="margin-top:50px">
+                    <div class="card-header text-center">
+                        <h3>@project.Name</h3>
+                    </div>
+                    <div class="card-body" style="text-align:center">
+                        <h5>Description</h5>
+                        <p> @project.Description</p>
+                        <!--<h5>ProjectCreator</h5>
+                        <p> @project.ProjectCreator</p>
+                        <h5>NumberEmployees</h5>
+                        <p> @project.NumberEmployees</p>
+                        <h5>StartDate</h5>
+                        <p> @project.StartDate</p>
+                        <h5>FinishDate</h5>
+                        <p> @project.FinishDate</p>
+                        <h5>DecisiveDeliveryDate</h5>
+                        <p> @project.DecisiveDeliveryDate</p>-->
 
                         <div class="d-flex justify-content-md-end">
-                        <a asp-action="Edit" asp-route-id="@item.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
-                        <a asp-controller="P_Task" asp-action="Index" asp-route-id="@item.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@project.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
+                            <a asp-controller="P_Task" asp-action="Index" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
+                            <a asp-action="Delete" asp-route-id="@project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
                         </div>
                     </div>
-             </div>
+                </div>
 
-            } 
-            
+            }
+
+            <nav class="mt-3">
+                <ul class="pagination">
+                    @{
+                        if (Model.PagingInfo.CurrentPage == 1)
+                        {
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">First</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                            </li>
+                        }
+
+                        int firstPage = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                        if (firstPage < 1) firstPage = 1;
+
+                        int lastPage = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                        if (lastPage > Model.PagingInfo.TotalPages) lastPage = Model.PagingInfo.TotalPages;
+
+                        for (int p = firstPage; p <= lastPage; p++)
+                        {
+                            if (p == Model.PagingInfo.CurrentPage)
+                            {
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">@p <span class="sr-only">(current)</span></a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                                </li>
+                            }
+                        }
+
+                        if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+                        {
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Last</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </nav>
+
         </main>
     </div>
 </div>
