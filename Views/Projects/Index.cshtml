@@ -8,7 +8,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container" style="margin-top:100px">
-                <h1>List of Projects</h1><br />
+                <h1>List of Projects</h1>
                 <h4>Do you want to create a new Project?</h4><br />
                 <a asp-action="Create" class="btn btn-success">Create</a>
             </div>      
@@ -36,7 +36,7 @@
                         <h5>@Html.DisplayNameFor(model => model.DecisiveDeliveryDate)</h5>
                         <p> @Html.DisplayFor(modelItem => item.DecisiveDeliveryDate)</p>
 
-                        <div class="d-flex">
+                        <div class="d-flex justify-content-md-end">
                         <a asp-action="Edit" asp-route-id="@item.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
                         <a asp-controller="P_Task" asp-action="Index" asp-route-id="@item.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
