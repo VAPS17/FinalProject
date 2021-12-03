@@ -25,7 +25,9 @@ namespace FinalProject.Data
 			projectManaContext.SaveChanges();
 			*/
 			//Preencher a tabela "P_Task"
+
 			/*if (projectManaContext.P_Task.Any()) return;
+
 
 			projectManaContext.P_Task.AddRange(
 				new P_Task { P_TaskName = "Teste_1", Comentary = "Ola primeira Tarefa", StateId = 1, ProjectId = 1 },
