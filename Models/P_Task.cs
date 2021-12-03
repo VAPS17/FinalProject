@@ -12,12 +12,15 @@ namespace FinalProject.Models
         public int P_TaskId { get; set; }
 
         [Required]
-        [StringLength(512)]
+        [StringLength(50)]
         public string P_TaskName { get; set; }
 
+        [StringLength(500)]
         public string Comentary { get; set; }
 
-        public string P_TaskState { get; set; }
+        [DisplayName("State")]
+        public int StateId { get; set; }
+        public State State { get; set; }
 
         [DisplayName("Project")]
         public int ProjectId { get; set; }
