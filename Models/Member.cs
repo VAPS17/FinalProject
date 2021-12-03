@@ -26,6 +26,9 @@ namespace FinalProject.Models
 
         public ICollection<MemberProject> MemberProjects { get; set; }
 
+        [DisplayName("Function")]
+        public int FunctionId { get; set; }
+        public Function Function { get; set; }
 
     }
 }
