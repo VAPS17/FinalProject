@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
-    [Migration("20211203000806_initial")]
+    [Migration("20211203004359_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,22 +99,25 @@ namespace FinalProject.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Comentary")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("P_TaskName")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
-                    b.Property<string>("P_TaskState")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StateId")
                         .HasColumnType("int");
 
                     b.HasKey("P_TaskId");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("StateId");
 
                     b.ToTable("P_Task");
                 });
@@ -212,7 +215,15 @@ namespace FinalProject.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("FinalProject.Models.State", "State")
+                        .WithMany("P_Task")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Project");
+
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("FinalProject.Models.Member", b =>
@@ -227,6 +238,11 @@ namespace FinalProject.Migrations
                     b.Navigation("P_Task");
 
                     b.Navigation("ProjectMembers");
+                });
+
+            modelBuilder.Entity("FinalProject.Models.State", b =>
+                {
+                    b.Navigation("P_Task");
                 });
 #pragma warning restore 612, 618
         }

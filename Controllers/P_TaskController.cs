@@ -25,7 +25,8 @@ namespace FinalProject.Controllers
             var P_TaskSearch = _context.P_Task
                                 .Where(b => search == null || b.P_TaskName.Contains(search))
                                 .Where(t => t.ProjectId == id)
-                                .Include(b => b.Project);
+                                .Include(b => b.Project)
+                                .Include(b => b.State);
 
             var pagingInfo = new PagingInfo
             {
@@ -59,30 +60,12 @@ namespace FinalProject.Controllers
             );
         }
 
-        // GET: P_Task/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var p_task = await _context.P_Task
-                .Include(b => b.Project)
-                .SingleOrDefaultAsync(b => b.ProjectId == id);
-            if (p_task == null)
-            {
-                return NotFound();
-            }
-
-            return View(p_task);
-        }
-
         // GET: P_Task/Create
         public IActionResult Create(int id)
         {
             ViewBag.ID = id;
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", id);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue");
             return View();
         }
 
@@ -91,7 +74,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
+        public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
         {
             ViewBag.ID = id;
             if (ModelState.IsValid)
@@ -105,6 +88,7 @@ namespace FinalProject.Controllers
             }
 
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
         }
 
@@ -122,6 +106,7 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
         }
 
@@ -130,7 +115,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
+        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -161,6 +146,7 @@ namespace FinalProject.Controllers
                 return View("Success");
             }
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
         }
 
@@ -170,16 +156,15 @@ namespace FinalProject.Controllers
             if (id == null)
             {
                 return NotFound();
-                //return Content("Não tem id");
             }
 
             var p_task = await _context.P_Task
                 .Include(b => b.Project)
+                .Include(b => b.State)
                 .FirstOrDefaultAsync(m => m.P_TaskId == id);
             if (p_task == null)
             {
                 return NotFound();
-                //return Content("Não tem tarefa");
             }
 
             return View(p_task);
