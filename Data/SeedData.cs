@@ -1,4 +1,4 @@
-﻿//#define TEST_PAGINATION_MEMBERS
+﻿#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_PROJECTS
 
 using FinalProject.Models;
@@ -34,15 +34,24 @@ namespace FinalProject.Data
 				new P_Task { P_TaskName = "Teste_2.1", Comentary = "Ola segunda Tarefa", StateId = 3, ProjectId = 2 }
 				) ;*/
 			projectManaContext.SaveChanges();
-			
+
 #if TEST_PAGINATION_MEMBERS
+			Function function = projectManaContext.Function.FirstOrDefault();
+
+			if (function == null) {
+				function = new Function { Name = "Anonymous" };
+				projectManaContext.Add(function);
+			}
+
 			for (int i = 1; i <= 1000; i++) {
 				projectManaContext.Member.Add(
 					new Member {
 						Name = "Member " + i,
-						Email = "membertest"+i + "@ipg.pt",
-						EmployeeNumber=""+i
-					}
+						Email = "membertest" + i + "@ipg.pt",
+						EmployeeNumber = "" + i,
+						Function = function 
+					});
+			}
 			projectManaContext.SaveChanges();
 #endif
 

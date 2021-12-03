@@ -12,7 +12,7 @@ namespace FinalProject.Models
         public int FunctionId { get; set; }
 
         [Required]
-        [StringLength(256)]
+        [StringLength(32)]
         public string Name { get; set; }
 
         public ICollection<Member> Members { get; set; }
