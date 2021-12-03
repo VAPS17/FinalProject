@@ -90,6 +90,11 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,NumberEmployees,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
         {
+            if (project.StartDate >= project.DecisiveDeliveryDate)
+            {
+                ModelState.AddModelError("DecisiveDeliveryDate", "Data inferior a StartDate");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(project);
@@ -122,13 +127,21 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name,Description,ProjectCreator,NumberEmployees,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
         {
+           
+
             if (id != project.ProjectId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (project.StartDate >= project.DecisiveDeliveryDate)
             {
+                ModelState.AddModelError("DecisiveDeliveryDate", "Data inferior a StartDate");
+            }
+
+            if (ModelState.IsValid )
+            {
+
                 try
                 {
                     _context.Update(project);
@@ -183,17 +196,5 @@ namespace FinalProject.Controllers
         {
             return _context.Project.Any(e => e.ProjectId == id);
         }
-
-
-        /*
-        public void ValidaDatas()
-        {
-            DateTime dtTextBox = DateTime.Parse(StartDate.Text);
-
-            int dataInicial = StartDate.DateTime;
-            //var dataInicial = new DateTime StartDate.get();
-            
-        }
-        */
     }
 }
