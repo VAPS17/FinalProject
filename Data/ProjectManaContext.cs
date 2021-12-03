@@ -47,5 +47,7 @@ namespace FinalProject.Data
         public DbSet<FinalProject.Models.MemberProject> MemberProject { get; set; }
 
         public DbSet<FinalProject.Models.State> State{ get; set; }
+
+        public DbSet<FinalProject.Models.Function> Function { get; set; }
     }
 }
