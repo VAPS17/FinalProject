@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Task";
+    var ID = ViewBag.ID;
 }
 
 <div id="layoutSidenav">
@@ -44,7 +45,7 @@
             </div>
 
             <div>
-                <a asp-action="Index">Back to List</a>
+                <a asp-route-id="@Model.ProjectId" asp-action="Index">Back to List</a>
             </div>
         </main>
     </div>

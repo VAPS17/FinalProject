@@ -42,6 +42,19 @@ namespace FinalProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "State",
+                columns: table => new
+                {
+                    StateId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StateValue = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_State", x => x.StateId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Meeting",
                 columns: table => new
                 {
@@ -135,6 +148,9 @@ namespace FinalProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "P_Task");
+
+            migrationBuilder.DropTable(
+                name: "State");
 
             migrationBuilder.DropTable(
                 name: "Member");

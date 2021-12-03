@@ -13,6 +13,29 @@ namespace FinalProject.Data
 	{
 		internal static void Populate(ProjectManaContext projectManaContext)
 		{
+
+			//Preencher a tabela "State"
+			/*
+			if (projectManaContext.State.Any()) return;
+
+			projectManaContext.State.AddRange(
+				new State { StateValue = "On Going" },
+				new State { StateValue = "In Progress" },
+				new State { StateValue = "Conclued" }
+				);
+
+			//Preencher a tabela "P_Task"
+			if (projectManaContext.P_Task.Any()) return;
+
+			projectManaContext.P_Task.AddRange(
+				new P_Task { P_TaskName = "Teste_1", Comentary = "Ola primeira Tarefa", P_TaskState = "1", ProjectId = 1 },
+				new P_Task { P_TaskName = "Teste_1.2", Comentary = "Ola segunda Tarefa", P_TaskState = "1", ProjectId = 1 },
+				new P_Task { P_TaskName = "Teste_2", Comentary = "Ola primeira Tarefa", P_TaskState = "1", ProjectId = 2 },
+				new P_Task { P_TaskName = "Teste_2.1", Comentary = "Ola segunda Tarefa", P_TaskState = "1", ProjectId = 2 }
+				) ;
+			projectManaContext.SaveChanges();
+
+			*/
 #if TEST_PAGINATION_MEMBERS
 			for (int i = 1; i <= 1000; i++) {
 				projectManaContext.Member.Add(
@@ -21,15 +44,6 @@ namespace FinalProject.Data
 						Email = "membertest"+i + "@ipg.pt",
 						EmployeeNumber=""+i
 					}
-			if (context.State.Any()) return;
-
-			context.State.AddRange(
-				new State { StateValue = "On Going" },
-				new State { StateValue = "In Progress"},
-				new State { StateValue = "Conclued"}
-				);
-			}
-
 			projectManaContext.SaveChanges();
 #endif
 
@@ -45,15 +59,6 @@ namespace FinalProject.Data
                         FinishDate = 0,
 						DecisiveDeliveryDate = 
 					}
-			/*if (context.State.Any()) return;
-
-			context.State.AddRange(
-				new State { StateValue = "On Going" },
-				new State { StateValue = "In Progress"},
-				new State { StateValue = "Conclued"}
-				);
-			}
-			*/
 			projectManaContext.SaveChanges();
 #endif
 		}

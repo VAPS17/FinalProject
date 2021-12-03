@@ -155,6 +155,23 @@ namespace FinalProject.Migrations
                     b.ToTable("Project");
                 });
 
+            modelBuilder.Entity("FinalProject.Models.State", b =>
+                {
+                    b.Property<int>("StateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("StateValue")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("StateId");
+
+                    b.ToTable("State");
+                });
+
             modelBuilder.Entity("FinalProject.Models.Meeting", b =>
                 {
                     b.HasOne("FinalProject.Models.Project", "Project")
@@ -188,7 +205,7 @@ namespace FinalProject.Migrations
             modelBuilder.Entity("FinalProject.Models.P_Task", b =>
                 {
                     b.HasOne("FinalProject.Models.Project", "Project")
-                        .WithMany("Tasks")
+                        .WithMany("P_Task")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -205,9 +222,9 @@ namespace FinalProject.Migrations
                 {
                     b.Navigation("Meeting");
 
-                    b.Navigation("ProjectMembers");
+                    b.Navigation("P_Task");
 
-                    b.Navigation("Tasks");
+                    b.Navigation("ProjectMembers");
                 });
 #pragma warning restore 612, 618
         }

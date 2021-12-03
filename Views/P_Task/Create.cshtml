@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create Task";
+    var ID = ViewBag.ID;
 }
 
 <div id="layoutSidenav">
@@ -10,7 +11,7 @@
             <h1>Create</h1>
 
             <h4>P_Task</h4>
-            <hr />
+
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -33,14 +34,11 @@
                     <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    <input asp-route-id="@ID" type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-route-id="@ID" asp-action="Index" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
 
-            <div>
-                <a asp-action="Index">Back to List</a>
-            </div>
         </main>
     </div>
 </div>

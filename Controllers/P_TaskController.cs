@@ -93,7 +93,7 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId")] P_Task p_task)
         {
-
+            ViewBag.ID = id;
             if (ModelState.IsValid)
             {
                 _context.Add(p_task);
