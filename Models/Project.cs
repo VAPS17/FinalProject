@@ -18,10 +18,7 @@ namespace FinalProject.Models
         public string Description { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string ProjectCreator { get; set; }
-
-        public string NumberEmployees { get; set; }
+        public int ProjectCreatorId { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

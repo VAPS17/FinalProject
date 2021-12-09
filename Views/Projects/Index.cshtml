@@ -38,9 +38,7 @@
                         <h5>Description</h5>
                         <p> @project.Description</p>
                         <!--<h5>ProjectCreator</h5>
-                        <p> @project.ProjectCreator</p>
-                        <h5>NumberEmployees</h5>
-                        <p> @project.NumberEmployees</p>
+                        <p> @project.ProjectCreatorId</p>
                         <h5>StartDate</h5>
                         <p> @project.StartDate</p>
                         <h5>FinishDate</h5>
@@ -48,7 +46,7 @@
                         <h5>DecisiveDeliveryDate</h5>
                         <p> @project.DecisiveDeliveryDate</p>-->
 
-                        <div class="d-flex justify-content-md-end">
+                        <div class="d-flex justify-content-md-end" style="margin-top:50px">
                             <a asp-action="Edit" asp-route-id="@project.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
                             <a asp-controller="P_Task" asp-action="Index" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
                             <a asp-action="Delete" asp-route-id="@project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
