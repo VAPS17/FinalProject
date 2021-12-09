@@ -30,6 +30,8 @@
                     <p class="card-text">Employee Number: @member.EmployeeNumber</p>
 
                     <a asp-action="Details" asp-route-id="@member.MemberId" class="btn btn-success">Details</a>
+                    <a asp-action="Edit" asp-route-id="@member.MemberId" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@member.MemberId" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         }
