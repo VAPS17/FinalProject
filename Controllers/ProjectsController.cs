@@ -125,9 +125,9 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name,Description,ProjectCreator,NumberEmployees,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name,Description,ProjectCreatorId,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
         {
-           
+
 
             if (id != project.ProjectId)
             {
@@ -139,7 +139,7 @@ namespace FinalProject.Controllers
                 ModelState.AddModelError("DecisiveDeliveryDate", "Data inferior a StartDate");
             }
 
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
 
                 try
