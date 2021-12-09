@@ -34,7 +34,7 @@ namespace FinalProject.Data
 				new P_Task { P_TaskName = "Teste_1.2", Comentary = "Ola segunda Tarefa", StateId = 2, ProjectId = 1 },
 				new P_Task { P_TaskName = "Teste_2", Comentary = "Ola primeira Tarefa", StateId = 1, ProjectId = 2 },
 				new P_Task { P_TaskName = "Teste_2.1", Comentary = "Ola segunda Tarefa", StateId = 3, ProjectId = 2 }
-				) ;*/
+				) ;
 			projectManaContext.SaveChanges();
 
 #if TEST_PAGINATION_MEMBERS
@@ -71,6 +71,7 @@ namespace FinalProject.Data
 					}
 			projectManaContext.SaveChanges();
 #endif
+			*/
 		}
 	}
 }

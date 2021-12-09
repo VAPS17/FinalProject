@@ -11,7 +11,7 @@
             <h1>Task List</h1>
 
             <p>
-                <a asp-action="Create" asp-route-id="@ID" class ="btn btn-success">Create a new task</a>
+                <a asp-action="Create" asp-route-id="@ID" class="btn btn-success">Create a new task</a>
             </p>
 
             <div class="card">
@@ -27,22 +27,75 @@
                 </div>
             </div>
 
-            @foreach (var task in Model.P_Task)
-            {
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">name: @task.P_TaskName</h5>
-                        <p class="card-text lead">Comemtary: @task.Comentary</p>
-                        <p class="card-text lead">State: @task.State.StateValue</p>
-                        <p class="card-text lead">Project: @task.Project.Name</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>On Going</th>
+                        <th>In Progress</th>
+                        <th>Concluded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var task in Model.P_Task)
+                    {
+                    <tr>
+                        @if (task.State.StateId == 1)
+                        {
+                            <td>
+                                <h1>Teste 1</h1>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>&nbsp;</td>
+                        }
 
-                        <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
+                        @if (task.StateId == 2)
+                        {
+                            <td>
+                                <h1>Teste 2</h1>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>&nbsp;</td>
+                        }
+
+                        @if (task.StateId == 3)
+                        {
+                            <td>
+                                <h1>Teste 3</h1>
+                            </td>
+                        }
+
+                        else
+                        {
+                            <td>&nbsp;</td>
+                        }
+
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            <!--
+    @foreach (var task in Model.P_Task)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">name: @task.P_TaskName</h5>
+                <p class="card-text lead">Comemtary: @task.Comentary</p>
+                <p class="card-text lead">State: @task.State.StateValue</p>
+                <p class="card-text lead">Project: @task.Project.Name</p>
+
+                <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
+                <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
 
 
-                    </div>
-                </div>
-            }
+            </div>
+        </div>
+    }-->
 
             <nav class="mt-3">
                 <ul class="pagination">
