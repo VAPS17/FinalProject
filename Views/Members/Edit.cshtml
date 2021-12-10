@@ -6,43 +6,50 @@
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
-        <h3 style="margin-top:40px">Edit Member</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="MemberId" />
-                    <div class="form-group ">
-                        <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label asp-for="EmployeeNumber" class="control-label"></label>
-                        <input asp-for="EmployeeNumber" class="form-control" />
-                        <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label asp-for="FunctionId" class="control-label"></label>
-                        <select asp-for="FunctionId" class="form-control" asp-items="ViewBag.FunctionId"></select>
-                        <span asp-validation-for="FunctionId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary mt-2" />
-                    </div>
-                </form>
+        <main>
+            <div class="d-flex justify-content-center" style="margin-top:100px">
+                <h3>Edit Member</h3>
             </div>
-        </div>
+            <div class="row d-flex justify-content-center" style="margin-top:30px">
+                <div class="col-md-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="MemberId" />
+                        <div class="form-group ">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top:20px">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top:20px">
+                            <label asp-for="EmployeeNumber" class="control-label"></label>
+                            <input asp-for="EmployeeNumber" class="form-control" />
+                            <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top:20px">
+                            <label asp-for="FunctionId" class="control-label"></label>
+                            <select asp-for="FunctionId" class="form-control" asp-items="ViewBag.FunctionId"></select>
+                            <span asp-validation-for="FunctionId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group d-flex justify-content-center " style="margin-top:30px">
+                            <input type="submit" value="Save" class="btn btn-primary"  />
+                            <a asp-action="Index" class="btn btn-outline-primary" style="margin-left:15px">Back to members</a>
+                        </div>
+                    </form>
+                    
+                </div>
+                
+                    
+                
+            </div>
 
-        <div>
-            <a asp-action="Index" class="btn btn-outline-primary">Back to the list of members</a>
-        </div>
-    </div>
+            
+        </main>
+</div>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
