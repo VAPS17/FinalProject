@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -20,9 +21,41 @@ namespace FinalProject.Controllers
         }
 
         // GET: Functions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page = 1)
         {
-            return View(await _context.Function.ToListAsync());
+            var functionsSearch = _context.Function
+                .Where(f => search == null || f.Name.Contains(search));
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = functionsSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var functions = await functionsSearch
+                            .OrderBy(f => f.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            return View(
+                new FunctionListViewModel
+                {
+                    Functions = functions,
+                    PagingInfo = pagingInfo,
+                    StringSearched = search
+                }
+            );
         }
 
         // GET: Functions/Details/5
@@ -34,6 +67,7 @@ namespace FinalProject.Controllers
             }
 
             var function = await _context.Function
+                .Include(f => f.Members)
                 .FirstOrDefaultAsync(m => m.FunctionId == id);
             if (function == null)
             {
