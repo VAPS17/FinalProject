@@ -9,10 +9,10 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="d-flex justify-content-center" style="margin-top:100px">
-                <h3>Project</h3>
+                <h3>Edit your Project</h3>
             </div>
 
-            <div class="row">
+            <div class="d-flex justify-content-center" style="margin-top: 30px">
                 <div class="col-md-4">
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -22,45 +22,45 @@
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 20px">
                             <label asp-for="Description" class="control-label"></label>
                             <input asp-for="Description" class="form-control" />
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 20px">
                             <label asp-for="ProjectCreatorId" class="control-label"></label>
                             <input asp-for="ProjectCreatorId" class="form-control" />
                             <span asp-validation-for="ProjectCreatorId" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 20px">
                             <label asp-for="StartDate" class="control-label"></label>
                             <input asp-for="StartDate" class="form-control" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 20px">
                             <label asp-for="FinishDate" class="control-label"></label>
                             <input asp-for="FinishDate" class="form-control" />
                             <span asp-validation-for="FinishDate" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 20px">
                             <label asp-for="DecisiveDeliveryDate" class="control-label"></label>
                             <input asp-for="DecisiveDeliveryDate" class="form-control" />
                             <span asp-validation-for="DecisiveDeliveryDate" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+
+                        <div class="form-group justify-content-center" style="margin-top: 30px">
                             <input type="submit" value="Save" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-outline-primary" style="margin-left:15px">Back to Projects</a>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div>
-                <a asp-action="Index" class="btn btn-outline-primary">Back to Projects</a>
-            </div>
 
-            @section Scripts {
-                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-            }
-</main>
+        </main>
+    </div>
 </div>
-</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
