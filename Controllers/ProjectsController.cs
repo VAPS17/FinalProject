@@ -52,7 +52,7 @@ namespace FinalProject.Controllers
                 new ProjectListViewModel
                 {
                     Projects = projects,
-                    PagingInfo = pagingInfo,
+                    Pagination = pagingInfo,
                     ProjectNameSearched = search
                 }
             );
@@ -88,11 +88,11 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,NumberEmployees,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
         {
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Data inferior a StartDate");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Start date is high than Decisive delivery date");
             }
 
             if (ModelState.IsValid)
@@ -136,7 +136,7 @@ namespace FinalProject.Controllers
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Data inferior a StartDate");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Start Date is high than Decisive delivery date");
             }
 
             if (ModelState.IsValid)
