@@ -24,7 +24,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> Index(string search, int page = 1)
         {
             var functionsSearch = _context.Function
-                .Where(b => search == null || b.Name.Contains(search));
+                .Where(f => search == null || f.Name.Contains(search));
 
             var pagingInfo = new PagingInfo
             {
@@ -43,7 +43,7 @@ namespace FinalProject.Controllers
             }
 
             var functions = await functionsSearch
-                            .OrderBy(b => b.Name)
+                            .OrderBy(f => f.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
                             .ToListAsync();
@@ -67,6 +67,7 @@ namespace FinalProject.Controllers
             }
 
             var function = await _context.Function
+                .Include(f => f.Members)
                 .FirstOrDefaultAsync(m => m.FunctionId == id);
             if (function == null)
             {
