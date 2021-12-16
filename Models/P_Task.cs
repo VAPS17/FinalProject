@@ -18,6 +18,18 @@ namespace FinalProject.Models
         [StringLength(500)]
         public string Comentary { get; set; }
 
+        [Required]
+        public DateTime StartDate { get; set; }
+
+        public DateTime Deadline { get; set; }
+
+        [Required]
+        public DateTime DecisiveDeliveryDate { get; set; }
+        /*
+        [DisplayName("Member")]
+        public int MemberId { get; set; }
+        public Member member { get; set; }
+        */
         [DisplayName("State")]
         public int StateId { get; set; }
         public State State { get; set; }

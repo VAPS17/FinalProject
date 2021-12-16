@@ -8,18 +8,16 @@ namespace FinalProject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Member",
+                name: "Function",
                 columns: table => new
                 {
-                    MemberId = table.Column<int>(type: "int", nullable: false)
+                    FunctionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmployeeNumber = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Member", x => x.MemberId);
+                    table.PrimaryKey("PK_Function", x => x.FunctionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,8 +28,7 @@ namespace FinalProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ProjectCreator = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    NumberEmployees = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectCreatorId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DecisiveDeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -55,6 +52,28 @@ namespace FinalProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Member",
+                columns: table => new
+                {
+                    MemberId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployeeNumber = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    FunctionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Member", x => x.MemberId);
+                    table.ForeignKey(
+                        name: "FK_Member_Function_FunctionId",
+                        column: x => x.FunctionId,
+                        principalTable: "Function",
+                        principalColumn: "FunctionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Meeting",
                 columns: table => new
                 {
@@ -73,6 +92,37 @@ namespace FinalProject.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "P_Task",
+                columns: table => new
+                {
+                    P_TaskId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    P_TaskName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Comentary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DecisiveDeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_P_Task", x => x.P_TaskId);
+                    table.ForeignKey(
+                        name: "FK_P_Task_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_P_Task_State_StateId",
+                        column: x => x.StateId,
+                        principalTable: "State",
+                        principalColumn: "StateId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -100,38 +150,15 @@ namespace FinalProject.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "P_Task",
-                columns: table => new
-                {
-                    P_TaskId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    P_TaskName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Comentary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    StateId = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_P_Task", x => x.P_TaskId);
-                    table.ForeignKey(
-                        name: "FK_P_Task_Project_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Project",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_P_Task_State_StateId",
-                        column: x => x.StateId,
-                        principalTable: "State",
-                        principalColumn: "StateId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Meeting_ProjectId",
                 table: "Meeting",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Member_FunctionId",
+                table: "Member",
+                column: "FunctionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberProject_ProjectId",
@@ -168,6 +195,9 @@ namespace FinalProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "State");
+
+            migrationBuilder.DropTable(
+                name: "Function");
         }
     }
 }

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FinalProject.Data.ProjectManaMigrations
+namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
-    [Migration("20211203111639_functions")]
-    partial class functions
+    [Migration("20211216101142_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,8 @@ namespace FinalProject.Data.ProjectManaMigrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.HasKey("FunctionId");
 
@@ -124,6 +124,12 @@ namespace FinalProject.Data.ProjectManaMigrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DecisiveDeliveryDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("P_TaskName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -131,6 +137,9 @@ namespace FinalProject.Data.ProjectManaMigrations
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("StateId")
                         .HasColumnType("int");
@@ -166,13 +175,8 @@ namespace FinalProject.Data.ProjectManaMigrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("NumberEmployees")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectCreator")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("ProjectCreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");

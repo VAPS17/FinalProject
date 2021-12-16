@@ -122,6 +122,12 @@ namespace FinalProject.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DecisiveDeliveryDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("P_TaskName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -129,6 +135,9 @@ namespace FinalProject.Migrations
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("StateId")
                         .HasColumnType("int");
