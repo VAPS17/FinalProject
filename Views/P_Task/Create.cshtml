@@ -24,7 +24,17 @@
                     <textarea asp-for="Comentary" class="form-control" rows="7"></textarea>
                     <span asp-validation-for="Comentary" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-top: 20px">
+                    <label asp-for="StartDate" class="control-label">Start Date</label>
+                    <input asp-for="StartDate" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="margin-top: 20px">
+                    <label asp-for="Deadline" class="control-label">Start Date</label>
+                    <input asp-for="Deadline" class="form-control" />
+                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
                     <label asp-for="StateId" class="control-label"></label>
                     <select asp-for="StateId" class="form-control" asp-items="ViewBag.StateId"></select>
                 </div>
