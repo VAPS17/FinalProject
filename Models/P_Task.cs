@@ -21,7 +21,6 @@ namespace FinalProject.Models
         [Required]
         public DateTime CreationDate { get; set; }
 
-        [Required]
         public DateTime StartDate { get; set; }
         
         [Required]

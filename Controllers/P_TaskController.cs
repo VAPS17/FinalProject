@@ -11,8 +11,7 @@ namespace FinalProject.Controllers
 {
     public class P_TaskController : Controller
     {
-        private readonly ProjectManaContext _context;
-
+        private ProjectManaContext _context;
         public P_TaskController(ProjectManaContext context)
         {
             _context = context;
@@ -21,7 +20,9 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index(int id, string search, int page = 1)
         {
+            ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
             ViewBag.ID = id;
+
             var P_TaskSearch = _context.P_Task
                                 .Where(b => search == null || b.P_TaskName.Contains(search))
                                 .Where(t => t.ProjectId == id)
@@ -49,7 +50,7 @@ namespace FinalProject.Controllers
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
                             .ToListAsync();
-
+            
             return View(
                 new P_TaskListViewModel
                 {
@@ -74,9 +75,9 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
+        public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,P_TaskState,ProjectId,StateId")] P_Task p_task)
         {
-            ViewBag.ID = id;
             if (ModelState.IsValid)
             {
                 _context.Add(p_task);
@@ -84,6 +85,7 @@ namespace FinalProject.Controllers
 
                 ViewBag.Title = "Task added";
                 ViewBag.Message = "Task sucessfully added.";
+                ViewBag.ID = id;
                 return View("Success");
             }
 
@@ -115,7 +117,8 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
+        public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {

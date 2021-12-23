@@ -3,12 +3,13 @@
 @{
     ViewData["Title"] = "Task List";
     var ID = ViewBag.ID;
+    var T_Project = ViewBag.T_Project;
 }
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <h1>Task List</h1>
+            <h1>Project: @T_Project</h1>
 
             <p>
                 <a asp-action="Create" asp-route-id="@ID" class="btn btn-success">Create a new task</a>
@@ -27,9 +28,13 @@
                 </div>
 
             </div>
-
-            <div class="container">
-                <div class="row">
+            <p></p>
+            <div class="card mb-4">
+                <div class="card-header" style="background-color: #6666ff;">
+                    <i class="fas fa-table me-1"></i>
+                    <h2 style="text-align:center">Tasks</h2>
+                </div>
+                <div class="row" style="background-color: #ccccff;">
                     <div class="col-4">
                         <table class="table">
                             <thead>
@@ -38,29 +43,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var task in Model.P_Task)
-                                {
-                                    <tr>
-                                        <td>
+                                <tr>
+                                    <td>
+                                        @foreach (var task in Model.P_Task)
+                                        {
                                             @if (task.State.StateId == 1)
                                             {
                                                 <div class="card mt-3">
                                                     <div class="card-body">
                                                         <h5 class="card-title">name: @task.P_TaskName</h5>
+                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
+                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
+                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
                                                         <p class="card-text lead">Comemtary: @task.Comentary</p>
                                                         <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <p class="card-text lead">Project: @task.Project.Name</p>
-
                                                         <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
                                                         <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-
-
                                                     </div>
                                                 </div>
                                             }
-                                        </td>
-                                    </tr>
-                                }
+                                        }
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -72,29 +77,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var task in Model.P_Task)
-                                {
-                                    <tr>
-                                        <td>
+                                <tr>
+                                    <td>
+                                        @foreach (var task in Model.P_Task)
+                                        {
                                             @if (task.State.StateId == 2)
                                             {
                                                 <div class="card mt-3">
                                                     <div class="card-body">
                                                         <h5 class="card-title">name: @task.P_TaskName</h5>
+                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
+                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
+                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
                                                         <p class="card-text lead">Comemtary: @task.Comentary</p>
                                                         <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <p class="card-text lead">Project: @task.Project.Name</p>
-
                                                         <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
                                                         <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-
-
                                                     </div>
                                                 </div>
                                             }
-                                        </td>
-                                    </tr>
-                                }
+                                        }
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -106,29 +111,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var task in Model.P_Task)
-                                {
-                                    <tr>
-                                        <td>
+                                <tr>
+                                    <td>
+                                        @foreach (var task in Model.P_Task)
+                                        {
                                             @if (task.State.StateId == 3)
                                             {
                                                 <div class="card mt-3">
                                                     <div class="card-body">
                                                         <h5 class="card-title">name: @task.P_TaskName</h5>
+                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
+                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
+                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
                                                         <p class="card-text lead">Comemtary: @task.Comentary</p>
                                                         <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <p class="card-text lead">Project: @task.Project.Name</p>
-
                                                         <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
                                                         <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-
-
                                                     </div>
                                                 </div>
                                             }
-                                        </td>
-                                    </tr>
-                                }
+                                        }
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
