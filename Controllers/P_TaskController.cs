@@ -80,12 +80,15 @@ namespace FinalProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                p_task.CreationDate = System.DateTime.Now.Date;
+
                 _context.Add(p_task);
                 await _context.SaveChangesAsync();
 
                 ViewBag.Title = "Task added";
                 ViewBag.Message = "Task sucessfully added.";
                 ViewBag.ID = id;
+
                 return View("Success");
             }
 
