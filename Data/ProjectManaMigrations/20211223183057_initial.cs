@@ -103,9 +103,10 @@ namespace FinalProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     P_TaskName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Comentary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DecisiveDeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EffectiveEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                 },

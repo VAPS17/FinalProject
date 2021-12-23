@@ -19,12 +19,15 @@ namespace FinalProject.Models
         public string Comentary { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }
-
-        public DateTime Deadline { get; set; }
+        public DateTime CreationDate { get; set; }
 
         [Required]
-        public DateTime DecisiveDeliveryDate { get; set; }
+        public DateTime StartDate { get; set; }
+        
+        [Required]
+        public DateTime Deadline { get; set; }
+
+        public DateTime EffectiveEndDate { get; set; }
         /*
         [DisplayName("Member")]
         public int MemberId { get; set; }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
-    [Migration("20211216101142_initial")]
+    [Migration("20211223183057_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,10 +124,13 @@ namespace FinalProject.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DecisiveDeliveryDate")
+                    b.Property<DateTime>("EffectiveEndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("P_TaskName")

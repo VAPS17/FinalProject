@@ -8,17 +8,15 @@
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <h1>Edit</h1>
-
-            <h4>P_Task</h4>
-            <hr />
+            <h1>Task Edition</h1>
+            
             <div class="row">
                 <div class="col-md-4">
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="P_TaskId" />
                         <div class="form-group">
-                            <label asp-for="P_TaskName" class="control-label"></label>
+                            <label asp-for="P_TaskName" class="control-label">Name</label>
                             <input asp-for="P_TaskName" class="form-control" />
                             <span asp-validation-for="P_TaskName" class="text-danger"></span>
                         </div>

@@ -122,10 +122,13 @@ namespace FinalProject.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DecisiveDeliveryDate")
+                    b.Property<DateTime>("EffectiveEndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("P_TaskName")
