@@ -92,6 +92,7 @@ namespace FinalProject.Controllers
                 return View("Success");
             }
 
+            ViewBag.ID = id;
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
             ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
@@ -149,6 +150,7 @@ namespace FinalProject.Controllers
 
                 ViewBag.Title = "Task edited";
                 ViewBag.Message = "Taskessfully altered.";
+                ViewBag.ID = p_task.ProjectId;
                 return View("Success");
             }
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
@@ -185,6 +187,7 @@ namespace FinalProject.Controllers
             _context.P_Task.Remove(p_task);
             await _context.SaveChangesAsync();
 
+            ViewBag.ID = p_task.ProjectId;
             ViewBag.Title = "P_Task deleted";
             ViewBag.Message = "P_Task sucessfully deleted.";
             return View("Success");
