@@ -31,7 +31,7 @@
             <p></p>
             <div class="card mb-4">
                 <div class="card-header" style="background-color: #6666ff;">
-                    <h2 style="text-align:center">Tasks</h2>
+                    <h2 style="text-align:center"><i class="fas fa-table me-1"></i>Tasks</h2>
                 </div>
                 <div class="row" style="background-color: #ccccff;">
                     <div class="col-4">
@@ -50,22 +50,39 @@
                                             {
                                                 <div class="card mt-3">
                                                     <div class="card-header">
-                                                        <h5 class="card-title">
-                                                            name: @task.P_TaskName
-                                                            <!--
-                <a asp-action="Edit" asp-route-id="@task.P_TaskId">
-                    <img src="~/img/edit.png" />
-                </a>
-                <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId">
-                    <img src="~/img/delete.png" />
-                </a>
-    -->
-                                                        </h5>
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <p style="margin-bottom:7px;" />
+                                                                    <h5 class="card-title text-left">
+                                                                        @task.P_TaskName
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <ul class="navbar-nav">
+                                                                        <li class="dropdown">
+                                                                            <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
+                                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                                                                <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                                <li><hr class="dropdown-divider" /></li>
+                                                                                <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="card-body">
+                                                        <h5><strong>Comemtary:</strong></h5>
+
+                                                        <div class="comentary-card">
+                                                            <h6>@task.Comentary</h6>
+                                                        </div>
+                                                        <!--<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="contentToggle"><i class="fas fa-bars"></i></button>-->
+                                                        <button id="contentToggle"> Mostrar/esconder</button>
                                                         <p class="card-text lead">Created at: @task.CreationDate</p>
                                                         <p class="card-text lead">Deadline at: @task.Deadline</p>
-                                                        <p class="card-text lead">Comemtary: @task.Comentary</p>
                                                     </div>
                                                 </div>
                                             }

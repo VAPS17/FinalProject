@@ -4955,6 +4955,13 @@ textarea.form-control-lg {
     padding: 1rem 1rem;
 }
 
+.comentary-card {
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    display: none;
+}
+
 .card-title {
     margin-bottom: 0.5rem;
 }
