@@ -31,7 +31,6 @@
             <p></p>
             <div class="card mb-4">
                 <div class="card-header" style="background-color: #6666ff;">
-                    <i class="fas fa-table me-1"></i>
                     <h2 style="text-align:center">Tasks</h2>
                 </div>
                 <div class="row" style="background-color: #ccccff;">
@@ -50,16 +49,23 @@
                                             @if (task.State.StateId == 1)
                                             {
                                                 <div class="card mt-3">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">
+                                                            name: @task.P_TaskName
+                                                            <!--
+                <a asp-action="Edit" asp-route-id="@task.P_TaskId">
+                    <img src="~/img/edit.png" />
+                </a>
+                <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId">
+                    <img src="~/img/delete.png" />
+                </a>
+    -->
+                                                        </h5>
+                                                    </div>
                                                     <div class="card-body">
-                                                        <h5 class="card-title">name: @task.P_TaskName</h5>
                                                         <p class="card-text lead">Created at: @task.CreationDate</p>
-                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
                                                         <p class="card-text lead">Deadline at: @task.Deadline</p>
-                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
                                                         <p class="card-text lead">Comemtary: @task.Comentary</p>
-                                                        <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                                                        <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
                                                     </div>
                                                 </div>
                                             }
