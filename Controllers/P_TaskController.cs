@@ -197,5 +197,10 @@ namespace FinalProject.Controllers
         {
             return _context.P_Task.Any(e => e.P_TaskId == id);
         }
+
+        public IActionResult teste(int id)
+        {
+            return Content("Funciona");
+        }
     }
 }

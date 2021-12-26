@@ -12,7 +12,7 @@ namespace FinalProject.Models
         public int P_TaskId { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(200)]
         public string P_TaskName { get; set; }
 
         [StringLength(500)]

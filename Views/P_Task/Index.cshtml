@@ -6,6 +6,8 @@
     var T_Project = ViewBag.T_Project;
 }
 
+<!--<input type="submit" value="Upload" onclick="location.href='@Url.Action("ActionName", "ControllerName")'" />-->
+
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
@@ -26,140 +28,79 @@
                         </div>
                     </form>
                 </div>
-
             </div>
+
             <p></p>
-            <div class="card mb-4">
+
+            <div class="card">
                 <div class="card-header" style="background-color: #6666ff;">
                     <h2 style="text-align:center"><i class="fas fa-table me-1"></i>Tasks</h2>
                 </div>
-                <div class="row" style="background-color: #ccccff;">
-                    <div class="col-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Not Started</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        @foreach (var task in Model.P_Task)
-                                        {
-                                            @if (task.State.StateId == 1)
-                                            {
-                                                <div class="card mt-3">
-                                                    <div class="card-header">
-                                                        <div class="container">
-                                                            <div class="row">
-                                                                <div class="col-md-10">
-                                                                    <p style="margin-bottom:7px;" />
-                                                                    <h5 class="card-title text-left">
-                                                                        @task.P_TaskName
-                                                                    </h5>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <ul class="navbar-nav">
-                                                                        <li class="dropdown">
-                                                                            <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
-                                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                                                <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
-                                                                                <li><hr class="dropdown-divider" /></li>
-                                                                                <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
-                                                                            </ul>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <h5><strong>Comemtary:</strong></h5>
+                <div class="container" style="background-color: #ccccff;">
+                    <p></p>
 
-                                                        <div class="comentary-card">
-                                                            <h6>@task.Comentary</h6>
-                                                        </div>
-                                                        <!--<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="contentToggle"><i class="fas fa-bars"></i></button>-->
-                                                        <button id="contentToggle"> Mostrar/esconder</button>
-                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
-                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="btnradio1">Radio 1</label>
+
+                        <input onselect="teste" type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btnradio2">Radio 2</label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btnradio3">Radio 3</label>
                     </div>
-                    <div class="col-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>In Progress</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        @foreach (var task in Model.P_Task)
-                                        {
-                                            @if (task.State.StateId == 2)
-                                            {
-                                                <div class="card mt-3">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">name: @task.P_TaskName</h5>
-                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
-                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
-                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
-                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
-                                                        <p class="card-text lead">Comemtary: @task.Comentary</p>
-                                                        <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                                                        <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-                                                    </div>
-                                                </div>
+
+                    @foreach (var task in Model.P_Task)
+                    {
+                        @if (task.State.StateId == 1)
+                        {
+                            <p></p>
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
+                                        <div class="col-2">
+                                            <ul class="navbar-nav">
+                                                <li class="dropdown">
+                                                    <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
+                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                                        <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                        <li><hr class="dropdown-divider" /></li>
+                                                        <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-2 align-self-center">
+                                            <h5><strong>Comemtary:</strong></h5>
+                                        </div>
+                                        <div class="col-2">
+                                            @if (task.Comentary != null) {
+                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="contentToggle">
+                                                    <i class="fas fa-plus-circle" color="green"></i>
+                                                </button>
+                                            } else {
+                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="contentToggle" disabled>
+                                                    <i class="fas fa-plus-circle" color="gray"></i>
+                                                </button>
                                             }
-                                        }
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Conclued</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        @foreach (var task in Model.P_Task)
-                                        {
-                                            @if (task.State.StateId == 3)
-                                            {
-                                                <div class="card mt-3">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">name: @task.P_TaskName</h5>
-                                                        <p class="card-text lead">Created at: @task.CreationDate</p>
-                                                        <p class="card-text lead">Inicialized at : @task.StartDate</p>
-                                                        <p class="card-text lead">Deadline at: @task.Deadline</p>
-                                                        <p class="card-text lead">Finished at: @task.EffectiveEndDate</p>
-                                                        <p class="card-text lead">Comemtary: @task.Comentary</p>
-                                                        <p class="card-text lead">State: @task.State.StateValue</p>
-                                                        <a asp-action="Edit" asp-route-id="@task.P_TaskId" class="btn btn-primary">Edit</a>
-                                                        <a asp-action="Delete" asp-controller="P_Task" asp-route-id="@task.P_TaskId" class="btn btn-danger">Delete</a>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                        </div>
+                                    </div>
+                                        <div class="comentary-card">
+                                        <h6>@task.Comentary</h6>
+                                    </div>
+                                    <p class="card-text lead">Created at: @task.CreationDate</p>
+                                    <p class="card-text lead">Deadline at: @task.Deadline</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    <p></p>
                 </div>
             </div>
 
