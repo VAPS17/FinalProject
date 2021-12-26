@@ -1,0 +1,68 @@
+﻿@model FinalProject.Models.P_Task
+
+@{
+    ViewData["Title"] = "Edit Task";
+    var ID = ViewBag.ID;
+}
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+            <h2><strong>Task:@Model.P_TaskName</strong></h2>
+            <h4>Inicialize the Task?</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="TaskInProgress">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="P_TaskId" />
+                        <div class="form-group" hidden>
+                            <label asp-for="P_TaskName" class="control-label">Name</label>
+                            <input asp-for="P_TaskName" class="form-control" />
+                            <span asp-validation-for="P_TaskName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Comentary" class="control-label"></label>
+                            <input asp-for="Comentary" class="form-control" />
+                            <span asp-validation-for="Comentary" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Deadline" class="control-label"></label>
+                            <input asp-for="Deadline" class="form-control" />
+                            <span asp-validation-for="Deadline" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="CreationDate" class="control-label"></label>
+                            <input asp-for="CreationDate" class="form-control" />
+                            <span asp-validation-for="CreationDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="EffectiveEndDate" class="control-label"></label>
+                            <input asp-for="EffectiveEndDate" class="form-control" />
+                            <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="ProjectId" class="control-label"></label>
+                            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                            <span asp-validation-for="ProjectId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="submit" value="Yes" class="btn btn-primary" />
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-secondary" asp-route-id="@Model.ProjectId" asp-action="Index">No</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

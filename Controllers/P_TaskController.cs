@@ -6,12 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
 using FinalProject.ViewModels;
+using System.Data;
+
+
 
 namespace FinalProject.Controllers
 {
     public class P_TaskController : Controller
     {
-        private ProjectManaContext _context;
+        private readonly ProjectManaContext _context;
         public P_TaskController(ProjectManaContext context)
         {
             _context = context;
@@ -20,7 +23,7 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index(int id, string search, int page = 1)
         {
-            ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
+           ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
             ViewBag.ID = id;
 
             var P_TaskSearch = _context.P_Task
@@ -50,7 +53,7 @@ namespace FinalProject.Controllers
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
                             .ToListAsync();
-            
+
             return View(
                 new P_TaskListViewModel
                 {
@@ -76,7 +79,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,P_TaskState,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId")] P_Task p_task)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +125,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,P_TaskState,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -193,14 +196,125 @@ namespace FinalProject.Controllers
             return View("Success");
         }
 
+        public async Task<IActionResult> TaskInProgress(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var p_task = await _context.P_Task.FindAsync(id);
+            if (p_task == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TaskInProgress(int id, [Bind("P_TaskId,P_TaskName," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+        {
+            if (id != p_task.P_TaskId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.StartDate = System.DateTime.Now.Date;
+                    p_task.StateId = 2;
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Task edited";
+                ViewBag.Message = "Taskessfully altered.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        public async Task<IActionResult> TaskTerminate(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var p_task = await _context.P_Task.FindAsync(id);
+            if (p_task == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TaskTerminate(int id, [Bind("P_TaskId,P_TaskName," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+        {
+            if (id != p_task.P_TaskId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.EffectiveEndDate = System.DateTime.Now.Date;
+                    p_task.StateId = 3;
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Task edited";
+                ViewBag.Message = "Taskessfully altered.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
         private bool P_TaskExists(int id)
         {
             return _context.P_Task.Any(e => e.P_TaskId == id);
-        }
-
-        public IActionResult teste(int id)
-        {
-            return Content("Funciona");
         }
     }
 }

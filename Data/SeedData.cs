@@ -13,7 +13,7 @@ namespace FinalProject.Data
 	{
 		internal static void Populate(ProjectManaContext projectManaContext)
 		{
-				
+			/*	
 			//Preencher a tabela "State
 			if (projectManaContext.State.Any()) return;
 
@@ -58,7 +58,7 @@ namespace FinalProject.Data
 								});
 						}
 						projectManaContext.SaveChanges();
-#endif
+#endif*/
 			/*	
 			#if TEST_PAGINATION_PROJECTS
 						for (int i = 1; i <= 1000; i++) {
