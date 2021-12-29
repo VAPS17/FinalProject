@@ -17,15 +17,15 @@ namespace FinalProject.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MemberProject>().HasKey(bc => new { bc.MemberId, bc.ProjectId});
+            modelBuilder.Entity<MemberProject>().HasKey(mp => new { mp.MemberId, mp.ProjectId});
             modelBuilder.Entity<MemberProject>()
-                .HasOne(bc => bc.Member)
-                .WithMany(b => b.MemberProjects)
-                .HasForeignKey(bc => bc.MemberId);
+                .HasOne(mp => mp.Member)
+                .WithMany(mp => mp.MemberProjects)
+                .HasForeignKey(mp => mp.MemberId);
             modelBuilder.Entity<MemberProject>()
-                .HasOne(bc => bc.Project)
-                .WithMany(b => b.ProjectMembers)
-                .HasForeignKey(bc => bc.ProjectId);
+                .HasOne(mp => mp.Project)
+                .WithMany(mp => mp.ProjectMembers)
+                .HasForeignKey(mp => mp.ProjectId);
 
             var foreignKeysWithCascadeDelete = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())

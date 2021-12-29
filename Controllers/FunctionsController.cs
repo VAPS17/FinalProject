@@ -21,15 +21,15 @@ namespace FinalProject.Controllers
         }
 
         // GET: Functions
-        public async Task<IActionResult> Index(string search, int page = 1)
+        public async Task<IActionResult> Index(string fname = null, int page = 1)
         {
-            var functionsSearch = _context.Function
-                .Where(f => search == null || f.Name.Contains(search));
+            var functionSearch = _context.Function
+                .Where(f => fname == null || f.Name.Contains(fname));
 
             var pagingInfo = new PagingInfo
             {
                 CurrentPage = page,
-                TotalItems = functionsSearch.Count()
+                TotalItems = functionSearch.Count()
             };
 
             if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
@@ -42,7 +42,7 @@ namespace FinalProject.Controllers
                 pagingInfo.CurrentPage = 1;
             }
 
-            var functions = await functionsSearch
+            var functions = await functionSearch
                             .OrderBy(f => f.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
@@ -53,7 +53,7 @@ namespace FinalProject.Controllers
                 {
                     Functions = functions,
                     PagingInfo = pagingInfo,
-                    StringSearched = search
+                    StringSearched = fname
                 }
             );
         }

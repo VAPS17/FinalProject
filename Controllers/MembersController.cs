@@ -21,10 +21,11 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string search, int page = 1)
+        public async Task<IActionResult> Index(string search = null , int page = 1)
         {
+            
             var membersSearch = _context.Member
-                .Where(m => search == null || m.Name.Contains(search) || m.EmployeeNumber.Equals(search));
+                .Where(m => search == null || m.Name.Contains(search) || m.EmployeeNumber.Contains(search) || m.Function.Name.Contains(search));
 
             var pagingInfo = new PagingInfo
             {
@@ -43,6 +44,7 @@ namespace FinalProject.Controllers
             }
 
             var members = await membersSearch
+                            .Include(m => m.Function)
                             .OrderBy(m => m.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
