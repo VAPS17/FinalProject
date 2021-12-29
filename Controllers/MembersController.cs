@@ -21,10 +21,11 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string search, int page = 1)
+        public async Task<IActionResult> Index(string search = null , int page = 1)
         {
+            
             var membersSearch = _context.Member
-                .Where(m => search == null || m.Name.Contains(search) || m.EmployeeNumber.Contains(search));
+                .Where(m => search == null || m.Name.Contains(search) || m.EmployeeNumber.Contains(search) || m.Function.Name.Contains(search));
 
             var pagingInfo = new PagingInfo
             {
