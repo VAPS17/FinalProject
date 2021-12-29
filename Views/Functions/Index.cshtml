@@ -17,8 +17,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Search</h5>
                     <form asp-action="Index" method="get">
-                        <label for="title" class="control-label">Search</label>
-                        <input name="Function Name" type="search" class="form-control" value="@Model.StringSearched" />
+                        <label for="fname" class="control-label">Search</label>
+                        <input name="fname" type="search" class="form-control" value="@Model.StringSearched" />
                         <div class="mt-3">
                             <input type="submit" value="Search" class="btn btn-success" />
                             <a asp-action="Index" class="btn btn-secondary">Clear</a>
