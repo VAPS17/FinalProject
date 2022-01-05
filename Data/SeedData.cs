@@ -1,4 +1,4 @@
-﻿//#define TEST_PAGINATION_MEMBERS
+﻿#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_PROJECTS
 
 using FinalProject.Models;
@@ -13,7 +13,7 @@ namespace FinalProject.Data
 	{
 		internal static void Populate(ProjectManaContext projectManaContext)
 		{
-			/*	
+            /*	
 			//Preencher a tabela "State
 			if (projectManaContext.State.Any()) return;
 
@@ -39,27 +39,34 @@ namespace FinalProject.Data
 					, CreationDate = DateTime.Now.Date, Deadline = DateTime.Now.Date }
 					); ;
 				projectManaContext.SaveChanges();
-
+			*/
 #if TEST_PAGINATION_MEMBERS
-						Function function = projectManaContext.Function.FirstOrDefault();
+            Function function = projectManaContext.Function.FirstOrDefault();
+            Member member = projectManaContext.Member.FirstOrDefault();
 
-						if (function == null) {
-							function = new Function { Name = "Anonymous" };
-							projectManaContext.Add(function);
-						}
+            if (function == null)
+            {
+                function = new Function { Name = "Anonymous" };
+                projectManaContext.Add(function);
+            }
 
-						for (int i = 1; i <= 1000; i++) {
-							projectManaContext.Member.Add(
-								new Member {
-									Name = "Member " + i,
-									Email = "membertest" + i + "@ipg.pt",
-									EmployeeNumber = "" + i,
-									Function = function 
-								});
-						}
-						projectManaContext.SaveChanges();
-#endif*/
-			/*	
+            if (member == null)
+            {
+                for (int i = 1; i <= 1000; i++)
+                {
+                    projectManaContext.Member.Add(
+                        new Member
+                        {
+                            Name = "Member " + i,
+                            Email = "membertest" + i + "@ipg.pt",
+                            EmployeeNumber = "" + i,
+                            Function = function
+                        });
+                }
+                projectManaContext.SaveChanges();
+            }
+#endif
+            /*	
 			#if TEST_PAGINATION_PROJECTS
 						for (int i = 1; i <= 1000; i++) {
 							projectManaContext.Project.Add(
@@ -75,6 +82,6 @@ namespace FinalProject.Data
 						projectManaContext.SaveChanges();
 			#endif
 						*/
-		}
-	}
+        }
+    }
 }
