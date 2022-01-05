@@ -20,6 +20,11 @@ namespace FinalProject.Models
         public string Email { get; set; }
 
         [Required]
+        [Phone]
+        [DisplayName("Phone Number")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
         [StringLength(6)]
         [DisplayName("Employee Number")]
         public string EmployeeNumber { get; set; }
