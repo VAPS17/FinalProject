@@ -39,7 +39,7 @@ namespace FinalProject.Data
 					, CreationDate = DateTime.Now.Date, Deadline = DateTime.Now.Date }
 					); ;
 				projectManaContext.SaveChanges();
-			*/
+			
 #if TEST_PAGINATION_MEMBERS
             Function function = projectManaContext.Function.FirstOrDefault();
             Member member = projectManaContext.Member.FirstOrDefault();
@@ -66,7 +66,7 @@ namespace FinalProject.Data
                 projectManaContext.SaveChanges();
             }
 #endif
-            /*	
+            	
 			#if TEST_PAGINATION_PROJECTS
 						for (int i = 1; i <= 1000; i++) {
 							projectManaContext.Project.Add(

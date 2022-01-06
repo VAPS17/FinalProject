@@ -4,6 +4,10 @@
     ViewData["Title"] = "Task List";
     var ID = ViewBag.ID;
     var T_Project = ViewBag.T_Project;
+    var CurrentState = ViewBag.CurrentState;
+    var NotStartedExist = ViewBag.NotStartedExist;
+    var InProgressExist = ViewBag.InProgressExist;
+    var FinishedExist = ViewBag.FinishedExist;
 }
 
 
@@ -26,208 +30,250 @@
 
                     @using (Html.BeginForm("Index", "P_Task", FormMethod.Post))
                     {
-                        <div>
-                            Not Started @Html.RadioButton("State", "Not Started")
-                            In Progress @Html.RadioButton("State", "In Progress")
-                            Finished @Html.RadioButton("State", "Finished")
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" value="Not Started" name="State" id="btnState1" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnState1">Not Started</label>
+
+                            <input type="radio" class="btn-check" value="In Progress" name="State" id="btnState2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnState2">In Progress</label>
+
+                            <input type="radio" class="btn-check" value="Finished" name="State" id="btnState3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnState3">Finished</label>
+
+                            <input type="radio" class="btn-check" value="" name="State" id="btnState4" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnState4">All</label>
+
+                            <button type="submit" class="btn btn-primary" value="submit"><i class="fas fa-search"></i></button>
                         </div>
-                        <input type="submit" value="submit" />
                     }
 
                     <p></p>
 
-                    @foreach (var task in Model.P_Task)
+                    @if (NotStartedExist && (CurrentState == "Not Started" || CurrentState == ""))
                     {
-                        @if (task.State.StateId == 1)
-                        {
-
-                            <p></p>
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
-                                        <div class="col-2">
-                                            <ul class="navbar-nav">
-                                                <li class="dropdown">
-                                                    <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                        <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-2 align-self-center">
-                                            <h5><strong>Comentary:</strong></h5>
-                                        </div>
-                                        <div class="col-2">
-                                            @if (task.Comentary != null)
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="CreationContentToggle">
-                                                    <i class="fas fa-plus-circle" color="green"></i>
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="CreationContentToggle" disabled>
-                                                    <i class="fas fa-plus-circle" color="gray"></i>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="comentary-card creation">
-                                        <h6>@task.Comentary</h6>
-                                    </div>
-                                    <p class="card-text lead">Created at: @task.CreationDate</p>
-                                    <p class="card-text lead">Deadline at: @task.Deadline</p>
-
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-action="EditTaskInProgress">Inicialize</a>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="card">
+                            <div class="card-header" style="background-color: #83afaf;">
+                                <h4 style="text-align:center"><strong>Not Started</strong></h4>
                             </div>
-                        }
+                            <div class="card-body" style="background-color: #d0e1e1;">
+                                @foreach (var task in Model.P_Task)
+                                {
+                                    @if (task.State.StateId == 1)
+                                    {
+
+                                        <p></p>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
+                                                    <div class="col-2">
+                                                        <ul class="navbar-nav">
+                                                            <li class="dropdown">
+                                                                <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                                                    <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-2 align-self-center">
+                                                        <h5><strong>Comentary:</strong></h5>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        @if (task.Comentary != null)
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InicializeContentToggle">
+                                                                <i class="fas fa-plus-circle" color="green"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InicializeContentToggle" disabled>
+                                                                <i class="fas fa-plus-circle" color="gray"></i>
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="comentary-card inicialize">
+                                                    <h6>@task.Comentary</h6>
+                                                </div>
+                                                <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                <p class="card-text lead">Deadline at: @task.Deadline</p>
+
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-action="EditTaskInProgress">Inicialize</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
                     }
+
                     <p></p>
 
-                    @foreach (var task in Model.P_Task)
+                    @if (InProgressExist && (CurrentState == "In Progress" || CurrentState == ""))
                     {
-                        @if (task.State.StateId == 2)
-                        {
-                            <p></p>
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
-                                        <div class="col-2">
-                                            <ul class="navbar-nav">
-                                                <li class="dropdown">
-                                                    <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                        <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-2 align-self-center">
-                                            <h5><strong>Comentary:</strong></h5>
-                                        </div>
-                                        <div class="col-2">
-                                            @if (task.Comentary != null)
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InitialContentToggle">
-                                                    <i class="fas fa-plus-circle" color="green"></i>
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InitialContentToggle" disabled>
-                                                    <i class="fas fa-plus-circle" color="gray"></i>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="comentary-card initialize">
-                                        <h6>@task.Comentary</h6>
-                                    </div>
-                                    <p class="card-text lead">Created at: @task.CreationDate</p>
-                                    <p class="card-text lead">Created at: @task.StartDate</p>
-                                    <p class="card-text lead">Deadline at: @task.Deadline</p>
-
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <a class="btn btn-secondary" asp-route-id="@task.P_TaskId" asp-action="EditTaskTerminate">Terminate</a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a class="btn btn-danger" asp-route-id="@task.P_TaskId" asp-action="ReverseProgretion">Reverse Progretion</a>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="card">
+                            <div class="card-header" style="background-color: #ffff66;">
+                                <h4 style="text-align:center"><strong>In Progress</strong></h4>
                             </div>
-                        }
+                            <div class="card-body" style="background-color: #ffff99;">
+                                @foreach (var task in Model.P_Task)
+                                {
+                                    @if (task.State.StateId == 2)
+                                    {
+                                        <p></p>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
+                                                    <div class="col-2">
+                                                        <ul class="navbar-nav">
+                                                            <li class="dropdown">
+                                                                <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                                                    <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-2 align-self-center">
+                                                        <h5><strong>Comentary:</strong></h5>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        @if (task.Comentary != null)
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InProgressContentToggle">
+                                                                <i class="fas fa-plus-circle" color="green"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="InProgressContentToggle" disabled>
+                                                                <i class="fas fa-plus-circle" color="gray"></i>
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="comentary-card inProgress">
+                                                    <h6>@task.Comentary</h6>
+                                                </div>
+                                                <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                <p class="card-text lead">Created at: @task.StartDate</p>
+                                                <p class="card-text lead">Deadline at: @task.Deadline</p>
+
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <a class="btn btn-secondary" asp-route-id="@task.P_TaskId" asp-action="EditTaskTerminate">Terminate</a>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <a class="btn btn-danger" asp-route-id="@task.P_TaskId" asp-action="ReverseProgretion">Reverse Progretion</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
                     }
+
                     <p></p>
 
-                    @foreach (var task in Model.P_Task)
+                    @if (FinishedExist && (CurrentState == "Finished" || CurrentState == ""))
                     {
-                        @if (task.State.StateId == 3)
-                        {
-                            <p></p>
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
-                                        <div class="col-2">
-                                            <ul class="navbar-nav">
-                                                <li class="dropdown">
-                                                    <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                        <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
-                                                        <li><hr class="dropdown-divider" /></li>
-                                                        <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-2 align-self-center">
-                                            <h5><strong>Comentary:</strong></h5>
-                                        </div>
-                                        <div class="col-2">
-                                            @if (task.Comentary != null)
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="TerminateContentToggle">
-                                                    <i class="fas fa-plus-circle" color="green"></i>
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="TerminateContentToggle" disabled>
-                                                    <i class="fas fa-plus-circle" color="gray"></i>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="comentary-card terminate">
-                                        <h6>@task.Comentary</h6>
-                                    </div>
-                                    <p class="card-text lead">Created at: @task.CreationDate</p>
-                                    <p class="card-text lead">Created at: @task.StartDate</p>
-                                    <p class="card-text lead">Created at: @task.EffectiveEndDate</p>
-                                    <p class="card-text lead">Deadline at: @task.Deadline</p>
-
-                                    <div class="col-4">
-                                        <a class="btn btn-danger" asp-route-id="@task.P_TaskId" asp-action="ReverseProgretion">Reverse Progretion</a>
-                                    </div>
-                                </div>
+                        <div class="card">
+                            <div class="card-header" style="background-color: #6fdc6f;">
+                                <h4 style="text-align:center"><strong>In Progress</strong></h4>
                             </div>
-                        }
+                            <div class="card-body" style="background-color: #adebad;">
+                                @foreach (var task in Model.P_Task)
+                                {
+                                    @if (task.State.StateId == 3)
+                                    {
+                                        <p></p>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col-10"><h4><strong>@task.P_TaskName</strong></h4></div>
+                                                    <div class="col-2">
+                                                        <ul class="navbar-nav">
+                                                            <li class="dropdown">
+                                                                <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                                                    <li><a asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                                    <li><hr class="dropdown-divider" /></li>
+                                                                    <li><a asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-2 align-self-center">
+                                                        <h5><strong>Comentary:</strong></h5>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        @if (task.Comentary != null)
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="TerminateContentToggle">
+                                                                <i class="fas fa-plus-circle" color="green"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-link order-1 order-lg-0 me-4 me-lg-0" id="TerminateContentToggle" disabled>
+                                                                <i class="fas fa-plus-circle" color="gray"></i>
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="comentary-card terminate">
+                                                    <h6>@task.Comentary</h6>
+                                                </div>
+                                                <p class="card-text lead">Created at: @task.CreationDate</p>
+                                                <p class="card-text lead">Created at: @task.StartDate</p>
+                                                <p class="card-text lead">Created at: @task.EffectiveEndDate</p>
+                                                <p class="card-text lead">Deadline at: @task.Deadline</p>
+
+                                                <div class="col-4">
+                                                    <a class="btn btn-danger" asp-route-id="@task.P_TaskId" asp-action="ReverseProgretion">Reverse Progretion</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
                     }
+
                     <p></p>
                 </div>
             </div>
@@ -289,6 +335,6 @@
     </div>
 </div>
 
-<script src="~/js/hideCreation.js"></script>
-<script src="~/js/hideInitialize.js"></script>
+<script src="~/js/hideInicialize.js"></script>
+<script src="~/js/hideInProgress.js"></script>
 <script src="~/js/hideTerminate.js"></script>

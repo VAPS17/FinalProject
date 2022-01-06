@@ -20,12 +20,19 @@ namespace FinalProject.Controllers
         }
 
         // GET: P_Task
-        public async Task<IActionResult> Index(IFormCollection frm, int id, string search, int page = 1)
+        public async Task<IActionResult> Index(IFormCollection frm, int id, int page = 1)
         {
             string stateRadio = frm["State"].ToString();
 
             ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
             ViewBag.ID = id;
+            ViewData["CurrentState"] = stateRadio;
+            ViewData["NotStartedExist"] = _context.P_Task.Any(e => e.StateId == 1 && e.ProjectId == id);
+            ViewData["InProgressExist"] = _context.P_Task.Any(e => e.StateId == 2 && e.ProjectId == id);
+            ViewData["FinishedExist"] = _context.P_Task.Any(e => e.StateId == 3 && e.ProjectId == id);
+
+            var teste = _context.P_Task.Where(e => e.StateId == 2);
+            
 
             var P_TaskSearch = _context.P_Task
                                 .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
@@ -81,6 +88,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
             ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId")] P_Task p_task)
         {
+            
 
             if (ModelState.IsValid)
             {
