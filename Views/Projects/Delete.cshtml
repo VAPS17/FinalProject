@@ -7,13 +7,13 @@
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <div class="d-flex justify-content-center">
-                <div>
-                    <h3 class="justify-content-center">Delete Project</h3>
-                    <h4 class="justify-content-center">Are you sure you want to delete this Project?</h4>
+            <div>
+                <h3 class="d-flex justify-content-center">Delete Project</h3>
+                <h4 class="d-flex justify-content-center">Are you sure you want to delete this Project?</h4>
+                </div>
 
-
-                    <div style="margin-top: 30px">
+                <div style="margin-top: 30px">
+                    <div class="d-flex justify-content-center">
                         <dl class="row">
                             <dt class="col-sm-2">
                                 @Html.DisplayNameFor(model => model.Name)
@@ -52,16 +52,17 @@
                                 @Html.DisplayFor(model => model.DecisiveDeliveryDate)
                             </dd>
                         </dl>
+                    </div>
+            </div>
 
-                    </div>
-                        <form asp-action="Delete">
-                            <input type="hidden" asp-for="ProjectId" />
-                            <input type="submit" value="Delete" class="btn btn-danger" />
-                            <a asp-action="Index" class="btn btn-outline-primary">Back to Projects</a>
-                        </form>
-                    
-                    </div>
-                </div>
+            <div class="d-flex justify-content-center">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="ProjectId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <a asp-action="Details" class="btn btn-outline-primary">Back to Details</a>
+                </form>
+            </div>
+
         </main>
     </div>
 </div>

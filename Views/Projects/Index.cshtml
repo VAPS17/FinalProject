@@ -17,7 +17,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Search</h5>
                     <form asp-action="Index" method="get">
-                        <input name="Project name" type="search" class="form-control" value="@Model.ProjectNameSearched" />
+                        <label for="search" class="control-label">Search</label>
+                        <input name="search" type="search" class="form-control" value="@Model.ProjectNameSearched" />
                         <div class="mt-3">
                             <input type="submit" value="Search" class="btn btn-success" />
                             <a asp-action="Index" class="btn btn-secondary">Clear</a>
@@ -29,7 +30,7 @@
             @foreach (var project in Model.Projects)
             {
 
-                <!---->
+                
                 <div class="card" style="margin-top:50px">
                     <div class="card-header text-center">
                         <h3>@project.Name</h3>
@@ -47,10 +48,8 @@
                         <p> @project.DecisiveDeliveryDate</p>-->
 
                     <div class="d-flex justify-content-md-end" style="margin-top:50px">
-                        <a class="btn btn-success">Concluded</a>
-                        <a asp-action="Edit" asp-route-id="@project.ProjectId" class="btn btn-primary" style="margin-left:3px">Edit</a>
-                        <a asp-controller="P_Task" asp-action="Index" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
-                        <a asp-action="Delete" asp-route-id="@project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete</a>
+                        <a class="btn btn-success">Conclude</a>               
+                        <a asp-action="Details" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>                      
                     </div>
                     </div>
                 </div>

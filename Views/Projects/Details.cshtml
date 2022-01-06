@@ -7,48 +7,39 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Edit Project</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectCreatorId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectCreatorId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FinishDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FinishDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DecisiveDeliveryDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DecisiveDeliveryDate)
-        </dd>
-    </dl>
+        <h4 class="d-flex justify-content-center" style="margin-top:15px">Project Name "@Html.DisplayFor(model => model.Name)"</h4>
+        <hr />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FinishDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FinishDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DecisiveDeliveryDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DecisiveDeliveryDate)
+            </dd>
+        </dl>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ProjectId" class="btn btn-danger">Edit</a>
-    <a asp-action="Index" class="btn btn-outline-primary">Back to Projects</a>
+    <a asp-action="Index" class="btn btn-outline-primary">Back to list of Projects</a>
+    <a asp-action="Edit" asp-route-id="@Model.ProjectId" class="btn btn-primary">Edit Project</a>
+    <a asp-action="Delete" asp-route-id="@Model.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
 </div>
