@@ -8,12 +8,11 @@
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <h2><strong>Task:@Model.P_TaskName</strong></h2>
-            <h4>Terminate the Task?</h4>
-
+            <h1>Comemtary Edition of Task: @Model.P_TaskName</h1>
+            
             <div class="row">
                 <div class="col-md-4">
-                    <form asp-action="TaskTerminate">
+                    <form asp-action="EditComentary">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="P_TaskId" />
                         <div class="form-group" hidden>
@@ -22,14 +21,14 @@
                             <span asp-validation-for="P_TaskName" class="text-danger"></span>
                         </div>
                         <div class="form-group" hidden>
-                            <label asp-for="Comentary" class="control-label"></label>
-                            <input asp-for="Comentary" class="form-control" />
-                            <span asp-validation-for="Comentary" class="text-danger"></span>
-                        </div>
-                        <div class="form-group" hidden>
                             <label asp-for="Deadline" class="control-label"></label>
                             <input asp-for="Deadline" class="form-control" />
                             <span asp-validation-for="Deadline" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" >
+                            <label asp-for="Comentary" class="control-label"></label>
+                            <textarea asp-for="Comentary" class="form-control" rows="7"></textarea>
+                            <span asp-validation-for="Comentary" class="text-danger"></span>
                         </div>
                         <div class="form-group" hidden>
                             <label asp-for="StartDate" class="control-label"></label>
@@ -42,6 +41,16 @@
                             <span asp-validation-for="CreationDate" class="text-danger"></span>
                         </div>
                         <div class="form-group" hidden>
+                            <label asp-for="EffectiveEndDate" class="control-label"></label>
+                            <input asp-for="EffectiveEndDate" class="form-control" />
+                            <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="StateId" class="control-label"></label>
+                            <select asp-for="StateId" class="form-control" asp-items="ViewBag.StateId"></select>
+                            <span asp-validation-for="StateId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
                             <label asp-for="ProjectId" class="control-label"></label>
                             <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                             <span asp-validation-for="ProjectId" class="text-danger"></span>
@@ -52,7 +61,7 @@
                                     <input type="submit" value="Yes" class="btn btn-primary" />
                                 </div>
                                 <div class="col">
-                                    <a class="btn btn-secondary" asp-route-id="@Model.ProjectId" asp-action="Index">No</a>
+                                    <a class="btn btn-secondary" asp-route-id="@Model.ProjectId" asp-action="Index">Cancel</a>
                                 </div>
                             </div>
                         </div>

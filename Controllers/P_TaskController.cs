@@ -7,8 +7,7 @@ using FinalProject.Data;
 using FinalProject.Models;
 using FinalProject.ViewModels;
 using System.Data;
-
-
+using Microsoft.AspNetCore.Http;
 
 namespace FinalProject.Controllers
 {
@@ -21,13 +20,15 @@ namespace FinalProject.Controllers
         }
 
         // GET: P_Task
-        public async Task<IActionResult> Index(int id, string search, int page = 1)
+        public async Task<IActionResult> Index(IFormCollection frm, int id, string search, int page = 1)
         {
-           ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
+            string stateRadio = frm["State"].ToString();
+
+            ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
             ViewBag.ID = id;
 
             var P_TaskSearch = _context.P_Task
-                                .Where(b => search == null || b.P_TaskName.Contains(search))
+                                .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                                 .Where(t => t.ProjectId == id)
                                 .Include(b => b.Project)
                                 .Include(b => b.State);
@@ -59,7 +60,6 @@ namespace FinalProject.Controllers
                 {
                     P_Task = p_task,
                     P_TaskPagingInfo = pagingInfo,
-                    P_TaskStringSearched = search
                 }
             );
         }
@@ -81,6 +81,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
             ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId")] P_Task p_task)
         {
+
             if (ModelState.IsValid)
             {
                 p_task.CreationDate = System.DateTime.Now.Date;
@@ -88,14 +89,15 @@ namespace FinalProject.Controllers
                 _context.Add(p_task);
                 await _context.SaveChangesAsync();
 
-                ViewBag.Title = "Task added";
-                ViewBag.Message = "Task sucessfully added.";
+                ViewBag.Title = "Task Creation";
+                ViewBag.Message = "Task sucessfully created.";
                 ViewBag.ID = id;
 
                 return View("Success");
             }
 
             ViewBag.ID = id;
+            
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
             ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
@@ -151,8 +153,8 @@ namespace FinalProject.Controllers
                     }
                 }
 
-                ViewBag.Title = "Task edited";
-                ViewBag.Message = "Taskessfully altered.";
+                ViewBag.Title = "Task Edition";
+                ViewBag.Message = "Task successfully altered.";
                 ViewBag.ID = p_task.ProjectId;
                 return View("Success");
             }
@@ -191,12 +193,13 @@ namespace FinalProject.Controllers
             await _context.SaveChangesAsync();
 
             ViewBag.ID = p_task.ProjectId;
-            ViewBag.Title = "P_Task deleted";
-            ViewBag.Message = "P_Task sucessfully deleted.";
+            ViewBag.Title = "Task Elimination.";
+            ViewBag.Message = "Task sucessfully deleted.";
             return View("Success");
         }
 
-        public async Task<IActionResult> TaskInProgress(int? id)
+        //GET EditTaskInProgress
+        public async Task<IActionResult> EditTaskInProgress(int? id)
         {
             if (id == null)
             {
@@ -213,9 +216,10 @@ namespace FinalProject.Controllers
             return View(p_task);
         }
 
+        //POST EditTaskInProgress
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TaskInProgress(int id, [Bind("P_TaskId,P_TaskName," +
+        public async Task<IActionResult> EditTaskInProgress(int id, [Bind("P_TaskId,P_TaskName," +
             ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
@@ -244,8 +248,8 @@ namespace FinalProject.Controllers
                     }
                 }
 
-                ViewBag.Title = "Task edited";
-                ViewBag.Message = "Taskessfully altered.";
+                ViewBag.Title = "Progress Edtion.";
+                ViewBag.Message = "Progress change was a success.";
                 ViewBag.ID = p_task.ProjectId;
                 return View("Success");
             }
@@ -254,7 +258,8 @@ namespace FinalProject.Controllers
             return View(p_task);
         }
 
-        public async Task<IActionResult> TaskTerminate(int? id)
+        //GET EditTaskTerminate
+        public async Task<IActionResult> EditTaskTerminate(int? id)
         {
             if (id == null)
             {
@@ -271,9 +276,10 @@ namespace FinalProject.Controllers
             return View(p_task);
         }
 
+        //POST EditTaskTerminate
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TaskTerminate(int id, [Bind("P_TaskId,P_TaskName," +
+        public async Task<IActionResult> EditTaskTerminate(int id, [Bind("P_TaskId,P_TaskName," +
             ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
@@ -302,8 +308,126 @@ namespace FinalProject.Controllers
                     }
                 }
 
-                ViewBag.Title = "Task edited";
-                ViewBag.Message = "Taskessfully altered.";
+                ViewBag.Title = "Progress Edtion.";
+                ViewBag.Message = "Progress change was a success.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        //GET EditComentary
+        public async Task<IActionResult> EditComentary(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var p_task = await _context.P_Task.FindAsync(id);
+            if (p_task == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        //POST EditComentary
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditComentary(int id, [Bind("P_TaskId,P_TaskName," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+        {
+            if (id != p_task.P_TaskId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Comment Saved";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        //GET ReverseProgretion
+        public async Task<IActionResult> ReverseProgretion(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var p_task = await _context.P_Task.FindAsync(id);
+            if (p_task == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
+            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        //POST ReverseProgretion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReverseProgretion(int id, [Bind("P_TaskId,P_TaskName," +
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+        {
+            int num = p_task.StateId;
+
+            if (id != p_task.P_TaskId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.StateId = p_task.StateId - 1;
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Reverse Progretion.";
+                ViewBag.Message = "Progretion Saved.";
                 ViewBag.ID = p_task.ProjectId;
                 return View("Success");
             }
