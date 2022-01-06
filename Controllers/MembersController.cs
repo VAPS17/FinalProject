@@ -21,9 +21,9 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string search = null , int page = 1)
+        public async Task<IActionResult> Index(string search = null, int page = 1)
         {
-            
+
             var membersSearch = _context.Member
                 .Where(m => search == null || m.Name.Contains(search) || m.EmployeeNumber.Contains(search) || m.Function.Name.Contains(search));
 
@@ -82,7 +82,7 @@ namespace FinalProject.Controllers
         // GET: Members/Create
         public IActionResult Create()
         {
-            ViewData["FunctionId"] = new SelectList(_context.Set<Function>(), "FunctionId", "Name");
+            ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name");
             return View();
         }
 
@@ -91,7 +91,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,EmployeeNumber,FunctionId")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +99,7 @@ namespace FinalProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FunctionId"] = new SelectList(_context.Set<Function>(), "FunctionId", "Name", member.FunctionId);
+            ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
             return View(member);
         }
 
@@ -116,7 +116,7 @@ namespace FinalProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["FunctionId"] = new SelectList(_context.Set<Function>(), "FunctionId", "Name", member.FunctionId);
+            ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
             return View(member);
         }
 
@@ -125,7 +125,7 @@ namespace FinalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,EmployeeNumber,FunctionId")] Member member)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
         {
             if (id != member.MemberId)
             {
@@ -152,7 +152,7 @@ namespace FinalProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FunctionId"] = new SelectList(_context.Set<Function>(), "FunctionId", "Name", member.FunctionId);
+            ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
             return View(member);
         }
 
