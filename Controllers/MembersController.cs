@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
 using FinalProject.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinalProject.Controllers
 {
@@ -80,6 +81,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name");
@@ -89,6 +91,7 @@ namespace FinalProject.Controllers
         // POST: Members/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
@@ -104,6 +107,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,6 +127,7 @@ namespace FinalProject.Controllers
         // POST: Members/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
@@ -157,6 +162,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -176,6 +182,7 @@ namespace FinalProject.Controllers
         }
 
         // POST: Members/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
