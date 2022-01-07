@@ -24,15 +24,15 @@ namespace FinalProject.Controllers
         {
             string stateRadio = frm["State"].ToString();
 
-            ViewData["T_Project"] = (from project in _context.Project where project.ProjectId == id select project.Name).First();
-            ViewBag.ID = id;
-            ViewData["CurrentState"] = stateRadio;
+            ViewData["TerminationValidation"] = TerminationValidation(id);
+            ViewData["T_Project"] = _context.Project.Where(a => a.ProjectId == id).Select(d => d.Name).First();
             ViewData["NotStartedExist"] = _context.P_Task.Any(e => e.StateId == 1 && e.ProjectId == id);
             ViewData["InProgressExist"] = _context.P_Task.Any(e => e.StateId == 2 && e.ProjectId == id);
             ViewData["FinishedExist"] = _context.P_Task.Any(e => e.StateId == 3 && e.ProjectId == id);
-
-            var teste = _context.P_Task.Where(e => e.StateId == 2);
-            
+            ViewData["DeadlineNotStarted"] = TaskValidation(id, 1);
+            ViewData["DeadlineInProgress"] = TaskValidation(id, 2);
+            ViewData["CurrentState"] = stateRadio;
+            ViewBag.ID = id;
 
             var P_TaskSearch = _context.P_Task
                                 .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
@@ -57,7 +57,7 @@ namespace FinalProject.Controllers
             }
 
             var p_task = await P_TaskSearch
-                            .OrderBy(b => b.P_TaskName)
+                            .OrderBy(b => b.CreationDate)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)
                             .ToListAsync();
@@ -88,7 +88,10 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
             ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId")] P_Task p_task)
         {
-            
+            if (p_task.Deadline <= System.DateTime.Now.Date)
+            {
+                ModelState.AddModelError("Deadline", "Deadline can't be lesse then the CURRENT DATE.");
+            }
 
             if (ModelState.IsValid)
             {
@@ -442,6 +445,38 @@ namespace FinalProject.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
             ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
             return View(p_task);
+        }
+
+        private bool TaskValidation(int id, int Stateid)
+        {
+            var numDelayedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid).Count();
+            var totalDeadlineDates = _context.P_Task.Where(a => a.ProjectId == id && a.StateId == Stateid).Count();
+
+            if(numDelayedDates >= 0 && totalDeadlineDates == 0 )
+            {
+                return false;
+            } else if (numDelayedDates == totalDeadlineDates)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool TerminationValidation(int id)
+        {
+            var numOfDelyedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline).Count();
+            var finishedState = _context.P_Task.Where(b => b.ProjectId == id && System.DateTime.Now.Date > b.Deadline && b.StateId == 3).Count();
+
+            if (numOfDelyedDates == finishedState)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
         }
 
         private bool P_TaskExists(int id)

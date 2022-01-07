@@ -11,16 +11,6 @@
         <main>
             <h1>Task Creation</h1>
 
-            @using (Html.BeginForm("Index", "P_Task", FormMethod.Post))
-            {
-                <div>
-                    Select Gender:<br />
-                    In Progress @Html.RadioButton("State", "In Progress")
-                    Not Started @Html.RadioButton("State", "Not Started")
-                </div>
-                <input asp-route-id="@ID" type="submit" value="submit" />
-            }
-
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
