@@ -9,8 +9,11 @@
         <main>
             <div class="container" style="margin-top:40px">
                 <h1>List of Members</h1>
-                <h4>Do you want to create a new Member?</h4><br />
-                <a asp-action="Create" class="btn btn-success">Create</a>
+                @if (User.IsInRole("admin"))
+                {
+                    <h4>Do you want to create a new Member?</h4><br />
+                    <a asp-action="Create" class="btn btn-success">Create</a>
+                }
             </div>
 
             <div class="card" style="margin-top:20px">
@@ -35,8 +38,11 @@
                         <p class="card-text">Employee Number: @member.EmployeeNumber</p>
                         <p class="card-text">Function: @member.Function.Name</p>
                         <a asp-action="Details" asp-route-id="@member.MemberId" class="btn btn-success">Details</a>
-                        <a asp-action="Edit" asp-route-id="@member.MemberId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@member.MemberId" class="btn btn-danger">Delete</a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@member.MemberId" class="btn btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@member.MemberId" class="btn btn-danger">Delete</a>
+                        }
                     </div>
                 </div>
             }
@@ -95,5 +101,5 @@
                 </ul>
             </nav>
         </main>
-        </div>
     </div>
+</div>
