@@ -66,6 +66,7 @@ namespace FinalProject.Data
                         {
                             Name = "Member " + i,
                             Email = "membertest" + i + "@ipg.pt",
+			    PhoneNumber = "987654321",
                             EmployeeNumber = "" + i,
                             Function = function
                         });
