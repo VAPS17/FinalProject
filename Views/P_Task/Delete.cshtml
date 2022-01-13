@@ -36,7 +36,7 @@
                 <form asp-action="Delete">
                     <input type="hidden" asp-for="P_TaskId" />
                     <input type="submit" value="Delete" class="btn btn-danger" />
-                    <a asp-route-id="@Model.ProjectId" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    <a asp-route-id="@Model.ProjectId" asp-controller="Projects" asp-action="Details" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
         </main>

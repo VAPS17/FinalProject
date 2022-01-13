@@ -22,6 +22,7 @@ namespace FinalProject.Controllers
         // GET: P_Task
         public async Task<IActionResult> Index(IFormCollection frm, int id, int page = 1)
         {
+            /*
             string stateRadio = frm["State"].ToString();
 
             ViewData["TerminationValidation"] = TerminationValidation(id);
@@ -68,7 +69,8 @@ namespace FinalProject.Controllers
                     P_Task = p_task,
                     P_TaskPagingInfo = pagingInfo,
                 }
-            );
+            );*/
+            return View();
         }
 
         // GET: P_Task/Create
