@@ -94,6 +94,13 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FunctionId,Name")] Function function)
         {
+            var functionUnique = _context.Function.Where(f => f.Name.Equals(function.Name)).Count();
+
+            if (functionUnique != 0)
+            {
+                ModelState.AddModelError("Name", "Function already exists");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(function);
@@ -131,6 +138,13 @@ namespace FinalProject.Controllers
             if (id != function.FunctionId)
             {
                 return NotFound();
+            }
+
+            var functionUnique = _context.Function.Where(f => f.Name.Equals(function.Name) && f.FunctionId != function.FunctionId).Count();
+
+            if (functionUnique != 0)
+            {
+                ModelState.AddModelError("Name", "Function already exists");
             }
 
             if (ModelState.IsValid)
