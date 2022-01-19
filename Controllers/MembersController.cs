@@ -96,6 +96,30 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
         {
+            var memberUnique = _context.Member.Where(m => m.Email.Equals(member.Email)).Count();
+
+            if ( memberUnique != 0)
+            {
+                ModelState.AddModelError("Email", "Email already in use");
+            }
+
+            
+            memberUnique = _context.Member
+                .Where(m => m.PhoneNumber.Equals(member.PhoneNumber)).Count();
+
+            if (memberUnique != 0)
+            {
+                ModelState.AddModelError("PhoneNumber", "Phone Number already in use");
+            }
+
+            memberUnique = _context.Member
+                .Where(m => m.EmployeeNumber.Equals(member.EmployeeNumber)).Count();
+
+            if (memberUnique != 0)
+            {
+                ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
+            }
+            
             if (ModelState.IsValid)
             {
                 _context.Add(member);
@@ -135,6 +159,30 @@ namespace FinalProject.Controllers
             if (id != member.MemberId)
             {
                 return NotFound();
+            }
+
+            var memberUnique = _context.Member.Where(m => m.Email.Equals(member.Email) && m.MemberId != member.MemberId).Count();
+
+            if (memberUnique != 0)
+            {
+                ModelState.AddModelError("Email", "Email already in use");
+            }
+
+
+            memberUnique = _context.Member
+                .Where(m => m.PhoneNumber.Equals(member.PhoneNumber) && m.MemberId != member.MemberId).Count();
+
+            if (memberUnique != 0)
+            {
+                ModelState.AddModelError("PhoneNumber", "Phone Number already in use");
+            }
+
+            memberUnique = _context.Member
+                .Where(m => m.EmployeeNumber.Equals(member.EmployeeNumber) && m.MemberId != member.MemberId).Count();
+
+            if (memberUnique != 0)
+            {
+                ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
 
             if (ModelState.IsValid)
