@@ -1,4 +1,5 @@
 ﻿#define TEST_PAGINATION_MEMBERS
+//#define TEST_PAGINATION_TASKS
 //#define TEST_PAGINATION_PROJECTS
 
 using FinalProject.Models;
@@ -20,9 +21,11 @@ namespace FinalProject.Data
 
 		internal static void Populate(ProjectManaContext projectManaContext)
 		{
-            /*	
+			State state = projectManaContext.State.FirstOrDefault();
+			
 			//Preencher a tabela "State
-			if (projectManaContext.State.Any()) return;
+			if (state == null) { 
+			//if (projectManaContext.State.Any()) return;
 
 			projectManaContext.State.AddRange(
 				new State { StateValue = "Not Started" },
@@ -31,9 +34,13 @@ namespace FinalProject.Data
 				new State { StateValue = "Late" }
 				);
 			projectManaContext.SaveChanges();
-
-			//Preencher a tabela "P_Task"
-			if (projectManaContext.P_Task.Any()) return;
+			}
+#if TEST_PAGINATION_TASKS
+			P_Task task = projectManaContext.P_Task.FirstOrDefault();
+			if (task == null)
+			{
+				//Preencher a tabela "P_Task"
+				//if (projectManaContext.P_Task.Any()) return;
 
 				projectManaContext.P_Task.AddRange(
 					new P_Task { P_TaskName = "Teste_1", Comentary = "Ola primeira Tarefa", StateId = 1, ProjectId = 1
@@ -46,9 +53,11 @@ namespace FinalProject.Data
 					, CreationDate = DateTime.Now.Date, Deadline = DateTime.Now.Date }
 					); ;
 				projectManaContext.SaveChanges();
-			
+			}
+#endif
+
 #if TEST_PAGINATION_MEMBERS
-            Function function = projectManaContext.Function.FirstOrDefault();
+			Function function = projectManaContext.Function.FirstOrDefault();
             Member member = projectManaContext.Member.FirstOrDefault();
 
             if (function == null)
@@ -74,7 +83,7 @@ namespace FinalProject.Data
                 projectManaContext.SaveChanges();
             }
 #endif
-            	
+            
 			#if TEST_PAGINATION_PROJECTS
 						for (int i = 1; i <= 1000; i++) {
 							projectManaContext.Project.Add(
@@ -89,7 +98,7 @@ namespace FinalProject.Data
 								}
 						projectManaContext.SaveChanges();
 			#endif
-						*/
+						
         }
 
 		internal static void CreateDefaultAdmin(UserManager<IdentityUser> userManager)
