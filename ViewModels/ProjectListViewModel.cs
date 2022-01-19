@@ -8,6 +8,8 @@ namespace FinalProject.ViewModels
 {
     public class ProjectListViewModel
     {
+        public Project Project { get; set; }
+
         public IEnumerable<Project> Projects { get; set; }
 
         public IEnumerable<P_Task> P_Task { get; set; }

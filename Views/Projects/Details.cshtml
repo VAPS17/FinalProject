@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = "Task List";
-    var ID = ViewBag.ID;
-    var T_Project = ViewBag.T_Project;
     var NumOfDelayedDates = ViewBag.NumOfDelayedDates;
     var CurrentState = ViewBag.CurrentState;
     bool NotStartedExist = ViewBag.NotStartedExist;
@@ -18,10 +16,10 @@
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <h1>Project: @T_Project</h1>
+            <h1>Project: @Model.Project.Name</h1>
 
             <p>
-                <a asp-controller="P_Task" asp-action="Create" asp-route-id="@ID" class="btn btn-success">Create a new task</a>
+                <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success">Create a new task</a>
             </p>
             <p></p>
 
@@ -60,7 +58,7 @@
                                 <h4 style="text-align:center"><strong>Delayed</strong></h4>
                             </div>
                             <div class="card-body" style="background-color: #ff6666;">
-                                @foreach (var task in Model.P_Task)
+                                @foreach (var task in Model.Project.P_Task)
                                 {
                                     @if (CurrentDate > task.Deadline && (task.StateId == 1 || task.StateId == 2))
                                     {
@@ -132,7 +130,7 @@
                                 <h4 style="text-align:center"><strong>Not Started</strong></h4>
                             </div>
                             <div class="card-body" style="background-color: #d0e1e1;">
-                                @foreach (var task in Model.P_Task)
+                                @foreach (var task in Model.Project.P_Task)
                                 {
                                     @if (task.State.StateId == 1 && CurrentDate <= task.Deadline)
                                     {
@@ -204,7 +202,7 @@
                                 <h4 style="text-align:center"><strong>In Progress</strong></h4>
                             </div>
                             <div class="card-body" style="background-color: #ffff99;">
-                                @foreach (var task in Model.P_Task)
+                                @foreach (var task in Model.Project.P_Task)
                                 {
                                     @if (task.State.StateId == 2 && CurrentDate <= task.Deadline)
                                     {
@@ -282,7 +280,7 @@
                                 <h4 style="text-align:center"><strong>Finished</strong></h4>
                             </div>
                             <div class="card-body" style="background-color: #adebad;">
-                                @foreach (var task in Model.P_Task)
+                                @foreach (var task in Model.Project.P_Task)
                                 {
                                     @if (task.State.StateId == 3)
                                     {
