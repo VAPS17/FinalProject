@@ -119,7 +119,7 @@ namespace FinalProject.Controllers
             {
                 ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
-
+            
             if (ModelState.IsValid)
             {
                 _context.Add(member);
