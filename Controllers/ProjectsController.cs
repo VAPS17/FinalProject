@@ -84,6 +84,13 @@ namespace FinalProject.Controllers
             ViewData["DeadlineNotStarted"] = TaskValidation(id, 1);
             ViewData["DeadlineInProgress"] = TaskValidation(id, 2);
             ViewData["CurrentState"] = stateRadio;
+            ViewData["Delayed"] = false;
+
+            if (stateRadio == "Delayed")
+            {
+                stateRadio = "";
+                ViewData["Delayed"] = true;
+            }
 
             var P_TaskSearch = _context.P_Task
                                 .Where(x => x.State.StateValue == stateRadio || stateRadio == "")

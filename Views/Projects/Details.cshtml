@@ -11,6 +11,7 @@
     bool DeadlineNotStarted = ViewBag.DeadlineNotStarted;
     bool DeadlineInProgress = ViewBag.DeadlineInProgress;
     bool TerminationValidation = ViewBag.TerminationValidation;
+    bool Delayed = ViewBag.Delayed;
 }
 
 <div id="layoutSidenav">
@@ -32,10 +33,6 @@
                 <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
             </div>
 
-            <div style="margin-top: 50px">
-                <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success">Create a new task</a>
-            </div>
-
             <p></p>
 
             <div class="card">
@@ -45,25 +42,38 @@
                 <div class="container" style="background-color: #ccccff;">
                     <p></p>
 
-                    <form asp-action="Details" method="post">
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="submit" class="btn-check" value="Not Started" name="State" id="btnState1" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnState1">Not Started</label>
+                    <div class="row">
+                        <div class="col-9">
+                            <form asp-action="Details" method="post">
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="submit" class="btn-check" value="Not Started" name="State" id="btnState1" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="btnState1">Not Started</label>
 
-                            <input type="submit" class="btn-check" value="In Progress" name="State" id="btnState2" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnState2">In Progress</label>
+                                    <input type="submit" class="btn-check" value="In Progress" name="State" id="btnState2" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="btnState2">In Progress</label>
 
-                            <input type="submit" class="btn-check" value="Finished" name="State" id="btnState3" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnState3">Finished</label>
+                                    <input type="submit" class="btn-check" value="Finished" name="State" id="btnState3" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="btnState3">Finished</label>
 
-                            <input type="submit" class="btn-check" value="" name="State" id="btnState4" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnState4">All</label>
+                                    @if (TerminationValidation)
+                                    {
+                                        <input type="submit" class="btn-check" value="Delayed" name="State" id="btnState4" autocomplete="off">
+                                        <label class="btn btn-outline-danger" for="btnState4">Delayed</label>
+                                    }
+
+                                    <input type="submit" class="btn-check" value="" name="State" id="btnState5" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="btnState5">All</label>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                        <div class="col-3">
+                            <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Create a new task</a>
+                        </div>
+                    </div>
 
                     <p></p>
 
-                    @if (TerminationValidation)
+                    @if (TerminationValidation && (Delayed || CurrentState == ""))
                     {
                         <div class="card">
                             <div class="card-header" style="background-color: #ff1a1a;">
@@ -135,7 +145,7 @@
 
                     <p></p>
 
-                    @if ((NotStartedExist && DeadlineNotStarted) && (CurrentState == "Not Started" || CurrentState == ""))
+                    @if (!Delayed && (NotStartedExist && DeadlineNotStarted) && (CurrentState == "Not Started" || CurrentState == ""))
                     {
                         <div class="card">
                             <div class="card-header" style="background-color: #83afaf;">
@@ -144,6 +154,7 @@
                             <div class="card-body" style="background-color: #d0e1e1;">
                                 @foreach (var task in Model.Project.P_Task)
                                 {
+
                                     @if (task.State.StateId == 1 && CurrentDate <= task.Deadline)
                                     {
 
@@ -207,7 +218,7 @@
 
                     <p></p>
 
-                    @if ((InProgressExist && DeadlineInProgress) && (CurrentState == "In Progress" || CurrentState == ""))
+                    @if (!Delayed && (InProgressExist && DeadlineInProgress) && (CurrentState == "In Progress" || CurrentState == ""))
                     {
                         <div class="card">
                             <div class="card-header" style="background-color: #ffff66;">
@@ -285,7 +296,7 @@
 
                     <p></p>
 
-                    @if (FinishedExist && (CurrentState == "Finished" || CurrentState == ""))
+                    @if (!Delayed && FinishedExist && (CurrentState == "Finished" || CurrentState == ""))
                     {
                         <div class="card">
                             <div class="card-header" style="background-color: #6fdc6f;">

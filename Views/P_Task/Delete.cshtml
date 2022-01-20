@@ -13,23 +13,29 @@
             <div>
                 <hr />
                 <dl class="row">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.P_TaskName)
+                    <dt class="col-sm-3">
+                        Associated Project:
                     </dt>
-                    <dd class="col-sm-10">
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Project.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Name:
+                    </dt>
+                    <dd class="col-sm-9">
                         @Html.DisplayFor(model => model.P_TaskName)
                     </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Comentary)
+                    <dt class="col-sm-3">
+                        Associated Member:
                     </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Comentary)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Project.Name)
-                    </dt>
-                    <dd class="col-sm-10">
+                    <dd class="col-sm-9">
                         @Html.DisplayFor(model => model.Project.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Deadline:
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Deadline)
                     </dd>
                 </dl>
 
