@@ -27,21 +27,11 @@
                             <input asp-for="Description" class="form-control" />
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                        <div class="form-group" style="margin-top: 20px">
-                            <label asp-for="ProjectCreatorId" class="control-label"></label>
-                            <input asp-for="ProjectCreatorId" class="form-control" />
-                            <span asp-validation-for="ProjectCreatorId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group" style="margin-top: 20px">
-                            <label asp-for="StartDate" class="control-label"></label>
-                            <input asp-for="StartDate" class="form-control" />
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
-                        </div>
-                        <div class="form-group" style="margin-top: 20px">
-                            <label asp-for="FinishDate" class="control-label"></label>
-                            <input asp-for="FinishDate" class="form-control" />
-                            <span asp-validation-for="FinishDate" class="text-danger"></span>
-                        </div>
+                        <!--<div class="form-group" style="margin-top: 20px">
+        <label asp-for="ProjectCreatorId" class="control-label"></label>
+        <input asp-for="ProjectCreatorId" class="form-control" />
+        <span asp-validation-for="ProjectCreatorId" class="text-danger"></span>
+    </div>-->
                         <div class="form-group" style="margin-top: 20px">
                             <label asp-for="DecisiveDeliveryDate" class="control-label"></label>
                             <input asp-for="DecisiveDeliveryDate" class="form-control" />
@@ -50,7 +40,7 @@
 
                         <div class="form-group justify-content-center" style="margin-top: 30px">
                             <input type="submit" value="Save" class="btn btn-primary" />
-                            <a asp-action="Details"  asp-route-Id="@Model.ProjectId" class="btn btn-outline-primary" style="margin-left:15px">Back to Details</a>
+                            <a asp-action="Details" asp-route-Id="@Model.ProjectId" class="btn btn-outline-primary" style="margin-left:15px">Back to Details</a>
                         </div>
                     </form>
                 </div>

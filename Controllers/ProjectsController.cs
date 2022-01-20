@@ -125,7 +125,7 @@ namespace FinalProject.Controllers
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Start date is high than Decisive delivery date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is high than system date");
             }
 
             if (ModelState.IsValid)
