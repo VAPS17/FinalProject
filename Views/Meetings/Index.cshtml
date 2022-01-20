@@ -8,11 +8,10 @@
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
-            <div>
+            <div style="margin-top: 40px">
                 <h1>List of Meetings</h1>
-                <p>
+                    <h4>Do you want to create a new Meeting?</h4>
                     <a asp-action="Create" class="btn btn-success">Create Meeting</a>
-                </p>
             </div>
 
             @foreach (var item in Model)
