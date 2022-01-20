@@ -18,9 +18,21 @@
         <main>
             <h1>Project: @Model.Project.Name</h1>
 
-            <p>
+            <div>
+                <p>Description: @Model.Project.Description</p>
+                <p>Start Date: @Model.Project.StartDate</p>
+                <p>Finish Date: @Model.Project.FinishDate</p>
+                <p>Decisive Delivery Date: @Model.Project.DecisiveDeliveryDate</p>
+            </div>
+
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary">Edit Project</a>
+                <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
+            </div>
+
+            <div style="margin-top: 50px">
                 <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success">Create a new task</a>
-            </p>
+            </div>
 
             <p></p>
 
@@ -350,9 +362,13 @@
                     }
 
                     <p></p>
-
                 </div>
             </div>
+
+            <div style="margin-top: 20px">
+                <a asp-action="Index" class="btn btn-outline-primary">Back to list of Projects</a>
+            </div>
+
         </main>
     </div>
 </div>
