@@ -120,9 +120,12 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
         {
+
+            project.StartDate = DateTime.Now;
+
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Start date is high than Decisive delivery date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is high than system date");
             }
 
             if (ModelState.IsValid)
