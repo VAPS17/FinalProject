@@ -54,12 +54,14 @@ namespace FinalProject
                 // Lockout
                 options.Lockout.AllowedForNewUsers = true;
             })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultUI();
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
 
             services.AddDbContext<ProjectManaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProjectManaContext")));
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
