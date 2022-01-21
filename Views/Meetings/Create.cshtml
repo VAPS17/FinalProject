@@ -4,44 +4,50 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Meeting</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DateandTime" class="control-label"></label>
-                <input asp-for="DateandTime" class="form-control" />
-                <span asp-validation-for="DateandTime" class="text-danger"></span>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+
+            <div class="d-flex justify-content-center" style="margin-top:100px">
+                <h3>Create a Meeting</h3>
             </div>
-            <div class="form-group">
-                <label asp-for="Topic" class="control-label"></label>
-                <input asp-for="Topic" class="form-control" />
-                <span asp-validation-for="Topic" class="text-danger"></span>
+            
+            <div class="d-flex justify-content-center" style="margin-top: 30px">
+                <div class="col-md-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="DateandTime" class="control-label">Date and Hour</label>
+                            <input asp-for="DateandTime" class="form-control" />
+                            <span asp-validation-for="DateandTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="Topic" class="control-label">Topic</label>
+                            <input asp-for="Topic" class="form-control" />
+                            <span asp-validation-for="Topic" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="ProjectId" class="control-label">Project</label>
+                            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                        </div>
+
+                        <div class="d-flex justify-content-center" style="margin-top: 30px">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-outline-primary" style="margin-left:15px">Back to Meetings</a>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+            </main>
+</div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }

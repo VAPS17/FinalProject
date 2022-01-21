@@ -19,22 +19,22 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="MeetingId" />
                         <div class="form-group">
-                            <label asp-for="DateandTime" class="control-label"></label>
+                            <label asp-for="DateandTime" class="control-label">Date and Hour</label>
                             <input asp-for="DateandTime" class="form-control" />
                             <span asp-validation-for="DateandTime" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Topic" class="control-label"></label>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="Topic" class="control-label">Topic</label>
                             <input asp-for="Topic" class="form-control" />
                             <span asp-validation-for="Topic" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Description" class="control-label"></label>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="Description" class="control-label">Description</label>
                             <input asp-for="Description" class="form-control" />
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="ProjectId" class="control-label"></label>
+                        <div class="form-group" style="margin-top: 20px">
+                            <label asp-for="ProjectId" class="control-label">Choose a Project</label>
                             <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                             <span asp-validation-for="ProjectId" class="text-danger"></span>
                         </div>
