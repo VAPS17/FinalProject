@@ -229,6 +229,57 @@ namespace FinalProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET
+        public async Task<IActionResult> AddMember(int id)
+        {
+            var members = await _context.Member
+                            .Include(m => m.Function)
+                            .Include(m => m.MemberProjects)
+                            .OrderBy(m => m.Name)
+                            .ToListAsync();
+
+            foreach (var member in members.ToList())
+            {
+                if (member.MemberProjects.Count() != 0)
+                {
+                    foreach (var memberProject in member.MemberProjects)
+                    {
+                        if (member.MemberId == memberProject.MemberId && id == memberProject.ProjectId)
+                        {
+                            members.Remove(member);
+                        }
+                    }
+                }
+            }
+
+            return View(
+                new MemberListViewModel
+                {
+                    Members = members
+                }
+            );
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddMember(IFormCollection frm, int id, [Bind("MemberId,ProjectId")] MemberProject memberProject) {
+
+            string buttonId= frm["MemberProject"].ToString();
+
+            int IdMember = Convert.ToInt32(buttonId);
+
+            if (ModelState.IsValid)
+            {
+                memberProject.MemberId = IdMember;
+                memberProject.ProjectId = id;
+                _context.Add(memberProject);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(AddMember));
+            }
+            return View(memberProject);
+        }
+
         private bool TaskValidation(int? id, int Stateid)
         {
             var numDelayedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid).Count();

@@ -29,6 +29,8 @@
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary">Edit Project</a>
                 <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
+                <a asp-action="AddMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Add Member</a>
+                <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Remove Member</a>
             </div>
 
             <p></p>
