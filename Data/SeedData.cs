@@ -1,6 +1,6 @@
 ﻿#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_TASKS
-//#define TEST_PAGINATION_PROJECTS
+#define TEST_PAGINATION_PROJECTS
 
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -83,22 +83,51 @@ namespace FinalProject.Data
                 projectManaContext.SaveChanges();
             }
 #endif
-            
-			#if TEST_PAGINATION_PROJECTS
-						for (int i = 1; i <= 1000; i++) {
+
+			//int year, int month, int day, int hour, int minute, int second
+#if TEST_PAGINATION_PROJECTS
 							projectManaContext.Project.Add(
 								new Project {
-									Name = "Project " + i,
-									Description = "ola" + i + "bomdia",
-									ProjectCreator = "antonio" + i,
-									NumberEmployees = "1" + i,
-									StartDate = 12 / 2 / 2021 14:12,
-									FinishDate = 0,
-									DecisiveDeliveryDate = 
-								}
-						projectManaContext.SaveChanges();
-			#endif
-						
+									Name = "Montar carro",
+									Description = "E preciso primeiro montar a carrocaria",
+									ProjectCreatorId = 123,
+									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+									//FinishDate = new DateTime(),
+									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 6, 0, 0)
+								});
+
+							projectManaContext.Project.Add(
+								new Project{
+									Name = "Fazer o jogo 2048",
+									Description = "E necessario ter numeros",
+									ProjectCreatorId = 1234,
+									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+									//FinishDate = new DateTime(),
+									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 7, 12, 10)
+								});
+
+							projectManaContext.Project.Add(
+								new Project{
+									Name = "Dadores for us",
+									Description = "O site deve ser desenvolvido para dadores de sangue assiduos",
+									ProjectCreatorId = 12345,
+									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+									//FinishDate = new DateTime(),
+									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 8, 5, 5)
+								});
+
+							projectManaContext.Project.Add(
+								new Project{
+									Name = "Engenharia de Software e Programacao",
+									Description = "O site deve ser desenvolvido em c#, arquitetura MVC",
+									ProjectCreatorId = 123456,
+									StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
+									//FinishDate = new DateTime(),
+									DecisiveDeliveryDate = new DateTime(2022, 5, 25, 8, 5, 30)
+								});
+
+							projectManaContext.SaveChanges();
+							#endif						
         }
 
 		internal static void CreateDefaultAdmin(UserManager<IdentityUser> userManager)
