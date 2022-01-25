@@ -9,9 +9,9 @@ namespace FinalProject.Models
     {
         public int MemberId { get; set; }
 
-        public Member Member { get; set; }
-
         public int ProjectId { get; set; }
+
+        public Member Member { get; set; }
 
         public Project Project { get; set; }
 
