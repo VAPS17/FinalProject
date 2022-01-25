@@ -229,9 +229,11 @@ namespace FinalProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET
+        // GET AddMember
         public async Task<IActionResult> AddMember(int id)
         {
+            ViewData["ID"] = id;
+
             var members = await _context.Member
                             .Include(m => m.Function)
                             .Include(m => m.MemberProjects)
@@ -260,12 +262,12 @@ namespace FinalProject.Controllers
             );
         }
 
-        // POST
+        // POST AddMember
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddMember(IFormCollection frm, int id, [Bind("MemberId,ProjectId")] MemberProject memberProject) {
 
-            string buttonId= frm["MemberProject"].ToString();
+            string buttonId= frm["AddMemberProject"].ToString();
 
             int IdMember = Convert.ToInt32(buttonId);
 
@@ -278,6 +280,57 @@ namespace FinalProject.Controllers
                 return RedirectToAction(nameof(AddMember));
             }
             return View(memberProject);
+        }
+
+        //GET Remove Member
+        public async Task<IActionResult> RemoveMember(int id)
+        {
+            ViewData["ID"] = id;
+
+            var members = await _context.Member
+                            .Include(m => m.Function)
+                            .OrderBy(m => m.Name)
+                            .ToListAsync();
+
+            var memberIds = _context.Member.Select(a => a.MemberId);
+
+            var memberProjectsIds = _context.MemberProject.Where(a => a.ProjectId == id).Select(b => b.MemberId);
+
+            var IdComparation = memberIds.Except(memberProjectsIds);
+
+            foreach (var member in members.ToList())
+            {
+                foreach(var memberId in IdComparation)
+                {
+                    if (member.MemberId == memberId)
+                    {
+                        members.Remove(member);
+                    }
+                }
+            }
+
+            return View(
+                new MemberListViewModel
+                {
+                    Members = members
+                }
+            );
+        }
+
+        // POST RemoveMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveMember(IFormCollection frm, int id)
+        {
+
+            string buttonId = frm["RemoveMemberProject"].ToString();
+
+            int IdMember = Convert.ToInt32(buttonId);
+
+            var member = await _context.MemberProject.FindAsync(IdMember, id);
+            _context.MemberProject.Remove(member);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(RemoveMember));
         }
 
         private bool TaskValidation(int? id, int Stateid)

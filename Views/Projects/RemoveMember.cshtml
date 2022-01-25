@@ -1,7 +1,10 @@
-﻿@model FinalProject.Models.Project
+﻿@model MemberListViewModel
 
 @{
     ViewData["Title"] = "Members List";
+    var ID = ViewBag.ID;
+
+    var teste = ViewBag.teste;
 }
 
 <div id="layoutSidenav">
@@ -11,16 +14,18 @@
                 <h1>List of Members</h1>
             </div>
 
-            @foreach (var memberProject in Model.ProjectMembers)
+            <a class="btn" asp-controller="Projects" asp-action="Details" asp-route-id="@ID">Back</a>
+
+            @foreach (var member in Model.Members)
             {
                 <div class="card mt-3">
                     <div class="card-body">
-                        <h5 class="card-title">@memberProject.Member.Name</h5>
-                        <p class="card-text">Employee Number: @memberProject.Member.EmployeeNumber</p>
-                        <p class="card-text">Function: @memberProject.Member.Function.Name</p>
+                        <h5 class="card-title">@member.Name</h5>
+                        <p class="card-text">Employee Number: @member.EmployeeNumber</p>
+                        <p class="card-text">Function: @member.Function.Name</p>
 
                         <form asp-action="RemoveMember" method="post">
-                            <button type="submit" class="btn btn-danger" value="@memberProject.Member.MemberId" name="MemberProject" id="btnMemberProject1" autocomplete="off">Remove</button>
+                            <button type="submit" class="btn btn-danger" value="@member.MemberId" name="RemoveMemberProject" id="btnMemberProject1" autocomplete="off">Remove</button>
                         </form>
 
                     </div>
