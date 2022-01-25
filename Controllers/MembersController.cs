@@ -9,16 +9,25 @@ using FinalProject.Data;
 using FinalProject.Models;
 using FinalProject.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace FinalProject.Controllers
 {
     public class MembersController : Controller
     {
         private readonly ProjectManaContext _context;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public MembersController(ProjectManaContext context)
+        public MembersController(
+            ProjectManaContext context,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager
+        )
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Members
@@ -94,16 +103,16 @@ namespace FinalProject.Controllers
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberId,Name,Email,PhoneNumber,EmployeeNumber,FunctionId")] Member member)
+        public async Task<IActionResult> Create(CreateMemberViewModel member)
         {
             var memberUnique = _context.Member.Where(m => m.Email.Equals(member.Email)).Count();
 
-            if ( memberUnique != 0)
+            if (memberUnique != 0)
             {
                 ModelState.AddModelError("Email", "Email already in use");
             }
 
-            
+
             memberUnique = _context.Member
                 .Where(m => m.PhoneNumber.Equals(member.PhoneNumber)).Count();
 
@@ -119,14 +128,43 @@ namespace FinalProject.Controllers
             {
                 ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
-            
-            if (ModelState.IsValid)
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(member);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
+
+            // Register customer (user)
+            var user = new IdentityUser { UserName = member.Email, Email = member.Email };
+            var result = await _userManager.CreateAsync(user, member.Password);
+
+            if (result.Succeeded)
             {
-                _context.Add(member);
+                await _userManager.AddToRoleAsync(user, "member");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                _context.Add(new Member
+                {
+                    EmployeeNumber = member.EmployeeNumber,
+                    Email = member.Email,
+                    Name = member.Name,
+                    PhoneNumber = member.PhoneNumber,
+                    FunctionId = member.FunctionId
+                });
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Members");
             }
-            ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
             return View(member);
         }
 

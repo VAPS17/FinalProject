@@ -62,6 +62,13 @@ namespace FinalProject
                 options.UseSqlServer(Configuration.GetConnectionString("ProjectManaContext")));
 
             services.AddRazorPages();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+        
+                options.LoginPath = "/Identity/Account/Login";
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
