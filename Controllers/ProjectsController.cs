@@ -100,16 +100,21 @@ namespace FinalProject.Controllers
 
 
             
-
             var p_task = await P_TaskSearch
                             .OrderBy(b => b.CreationDate)
                             .ToListAsync();
 
-            return View(
+
+            var meeting = _context.Meeting.Where(m => m.ProjectId == id)
+                .OrderBy(d => d.DateandTime);
+                
+
+              return View(
                 new ProjectListViewModel
                 {
                     P_Task = p_task,
-                    Project = project
+                    Project = project,
+                    Meetings = meeting
                 }
             );
         }

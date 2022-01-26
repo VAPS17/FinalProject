@@ -17,5 +17,7 @@ namespace FinalProject.ViewModels
         public PagingInfo Pagination { get; set; }
 
         public string ProjectNameSearched { get; set; }
+
+        public IEnumerable<Meeting> Meetings { get; set; }
     }
 }
