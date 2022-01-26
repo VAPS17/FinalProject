@@ -65,7 +65,7 @@ namespace FinalProject
 
             services.ConfigureApplicationCookie(options =>
             {
-        
+
                 options.LoginPath = "/Identity/Account/Login";
             });
 
