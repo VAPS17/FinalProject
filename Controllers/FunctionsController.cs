@@ -22,6 +22,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Functions
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index(string fname = null, int page = 1)
         {
             var functionSearch = _context.Function

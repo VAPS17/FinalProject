@@ -251,13 +251,6 @@ namespace FinalProject.Controllers
 
             var project = await _context.Project.FindAsync(id);
 
-            project.StartDate = DateTime.Now;
-
-            if (project.StartDate >= project.DecisiveDeliveryDate)
-            {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
-            }
-
             if (project == null)
             {
                 return NotFound();

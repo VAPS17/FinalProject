@@ -31,6 +31,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index(string search = null, int page = 1)
         {
 
@@ -71,6 +72,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

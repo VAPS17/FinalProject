@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Data;
 using FinalProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinalProject.Controllers
 {
@@ -20,6 +21,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Meetings
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
             var projectManaContext = _context.Meeting.Include(m => m.Project);
@@ -46,6 +48,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Meetings/Create
+        [Authorize(Roles = "manager")]
         public IActionResult Create()
         {
             ViewData["ProjectId"] = new SelectList(_context.Project, "ProjectId", "Name");
@@ -70,6 +73,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Meetings/Edit/5
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +93,7 @@ namespace FinalProject.Controllers
         // POST: Meetings/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MeetingId,DateandTime,Topic,Description,ProjectId")] Meeting meeting)
@@ -123,6 +128,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Meetings/Delete/5
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +150,7 @@ namespace FinalProject.Controllers
         // POST: Meetings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var meeting = await _context.Meeting.FindAsync(id);
