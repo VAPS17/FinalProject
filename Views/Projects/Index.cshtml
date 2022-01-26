@@ -50,7 +50,10 @@
                         <p> @project.DecisiveDeliveryDate</p>-->
 
                     <div class="d-flex justify-content-md-end" style="margin-top:50px">
-                        <a class="btn btn-success">Conclude</a>
+                        @if (project.StateId !=3)
+                        {
+                            <a asp-controller="Projects" asp-action="Conclude" asp-route-id="@project.ProjectId" class="btn btn-success">Conclude</a>
+                        }
                         <a asp-controller="Meetings" asp-action="Create" asp-route-id="@project.ProjectId" class="btn btn-secondary" style="margin-left:3px">Create Meeting</a>
                         <a asp-action="Details" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
                     </div>
