@@ -106,13 +106,13 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateMemberViewModel member)
         {
-            var memberUnique = _context.Member.Where(m => m.Email.Equals(member.Email)).Count();
+            var memberUnique = _context.Member
+                .Where(m => m.Email.Equals(member.Email)).Count();
 
             if (memberUnique != 0)
             {
                 ModelState.AddModelError("Email", "Email already in use");
             }
-
 
             memberUnique = _context.Member
                 .Where(m => m.PhoneNumber.Equals(member.PhoneNumber)).Count();
@@ -130,7 +130,16 @@ namespace FinalProject.Controllers
                 ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
 
-            
+            if (!member.Password.Equals(member.ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match");
+            }
+
+            if (member.Password.Length<6)
+            {
+                ModelState.AddModelError("Password", "The password must be at least 6 characters long");
+            }
+
             var user = new IdentityUser { UserName = member.Email, Email = member.Email };
             var result = await _userManager.CreateAsync(user, member.Password);
 
