@@ -254,38 +254,7 @@ namespace FinalProject.Controllers
             return View(member);
         }
 
-        // GET: Members/Delete/5
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var member = await _context.Member
-                .Include(m => m.Function)
-                .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            return View(member);
-        }
-
-        // POST: Members/Delete/5
-        [Authorize(Roles = "admin")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var member = await _context.Member.FindAsync(id);
-            _context.Member.Remove(member);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool MemberExists(int id)
         {
             return _context.Member.Any(e => e.MemberId == id);
