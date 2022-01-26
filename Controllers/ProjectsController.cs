@@ -170,6 +170,7 @@ namespace FinalProject.Controllers
                                 .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                                 .Where(t => t.ProjectId == id)
                                 .Include(b => b.Project)
+                                .Include(m => m.Member)
                                 .Include(b => b.State);
 
 
@@ -184,7 +185,7 @@ namespace FinalProject.Controllers
                 {
                     P_Task = p_task,
                     Project = project,
-                    Meetings = mettings
+                    Meetings = mettings,
                 }
             );
         }

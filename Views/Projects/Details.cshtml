@@ -239,8 +239,24 @@
                                                 <p class="card-text lead">Created at: @task.CreationDate</p>
                                                 <p class="card-text lead">Deadline at: @task.Deadline</p>
 
+                                                @if (task.MemberId != Model.Project.ProjectCreatorId)
+                                                {
+                                                    <p class="card-text lead">Member Associated: @task.Member.Name</p>
+                                                }
+
                                                 <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="EditTaskInProgress">Inicialize</a>
-                                                <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="AssignMember">Assign</a>
+
+                                                @if (task.MemberId != Model.Project.ProjectCreatorId)
+                                                {
+                                                    <form asp-action="UnassignMember" asp-controller="P_Task" asp-route-id="@Model.Project.ProjectId" method="post">
+                                                        <button type="submit" class="btn-danger" value="@task.P_TaskId" name="UnassignMember" id="btnUnassign1" autocomplete="off">Unassign</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="AssignMember">Assign</a>
+                                                }
+
 
                                             </div>
                                         </div>

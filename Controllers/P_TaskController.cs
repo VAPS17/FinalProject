@@ -24,8 +24,6 @@ namespace FinalProject.Controllers
         public IActionResult Create(int id)
         {
             ViewBag.ID = id;
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", id);
-            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue");
             return View();
         }
 
@@ -45,6 +43,8 @@ namespace FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
+                p_task.ProjectId = id;
+                p_task.StateId = 1;
                 p_task.CreationDate = System.DateTime.Now.Date;
                 p_task.MemberId = _context.Project.Where(p => p.ProjectId == id).Select(p => p.ProjectCreatorId).First();
 
@@ -473,8 +473,6 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignMember(IFormCollection frm, int id)
         {
-
-
             var p_task = _context.P_Task.Find(id);
 
             string buttonId = frm["AssignMemberProject"].ToString();
@@ -501,13 +499,50 @@ namespace FinalProject.Controllers
                     }
                 }
 
-                ViewBag.Title = "Task Edition";
-                ViewBag.Message = "Task successfully altered.";
+                ViewBag.Title = "Association of a User to a Task";
+                ViewBag.Message = "Task successfully Unassign.";
                 ViewBag.ID = p_task.ProjectId;
                 return View("Success");
             }
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
-            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        // POST UnassignMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnassignMember(IFormCollection frm, int id)
+        {
+            string buttonId = frm["UnassignMember"].ToString();
+
+            int IdTask = Convert.ToInt32(buttonId);
+
+            var p_task = _context.P_Task.Find(IdTask);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.MemberId = _context.Project.Where(p => p.ProjectId == id).Select(c => c.ProjectCreatorId).First();
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Association of a User to a Task";
+                ViewBag.Message = "Task successfully associated.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
             return View(p_task);
         }
 
