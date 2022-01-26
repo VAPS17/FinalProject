@@ -34,22 +34,6 @@ namespace FinalProject.Controllers
             var projectsSearch = _context.Project
                 .Where(b => search == null || b.Name.Contains(search));
 
-            var pagingInfo = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = projectsSearch.Count()
-            };
-
-            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
-            {
-                pagingInfo.CurrentPage = pagingInfo.TotalPages;
-            }
-
-            if (pagingInfo.CurrentPage < 1)
-            {
-                pagingInfo.CurrentPage = 1;
-            }
-
             string email = User.Identity.Name;
             bool checkManager = User.IsInRole("manager");
             bool checkMember = User.IsInRole("member");
@@ -58,17 +42,35 @@ namespace FinalProject.Controllers
             {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
 
-                var projects = await projectsSearch
-                .Where(p => p.ProjectCreatorId == memberId)
-                .OrderBy(b => b.Name)
-                .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                .Take(pagingInfo.PageSize)
-                .ToListAsync();
+                var projects = projectsSearch
+                .Where(p => p.ProjectCreatorId == memberId);
+
+                var pagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    TotalItems = projects.Count()
+                };
+
+                if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+                {
+                    pagingInfo.CurrentPage = pagingInfo.TotalPages;
+                }
+
+                if (pagingInfo.CurrentPage < 1)
+                {
+                    pagingInfo.CurrentPage = 1;
+                }
+
+                var finalProjects = await projects
+                    .OrderBy(b => b.Name)
+                    .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                    .Take(pagingInfo.PageSize)
+                    .ToListAsync();
 
                 return View(
                     new ProjectListViewModel
                     {
-                        Projects = projects,
+                        Projects = finalProjects,
                         Pagination = pagingInfo,
                         ProjectNameSearched = search
                     }
@@ -77,12 +79,28 @@ namespace FinalProject.Controllers
             else if (checkMember)
             {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
-
+                
                 var memberProjectId = _context.MemberProject.Where(p => p.MemberId == memberId).Select(p => p.ProjectId);
 
                 var projectsId = _context.Project.Select(p => p.ProjectId);
 
                 var IdComparation = projectsId.Except(memberProjectId);
+
+                var pagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    TotalItems = memberProjectId.Count()
+                };
+
+                if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+                {
+                    pagingInfo.CurrentPage = pagingInfo.TotalPages;
+                }
+
+                if (pagingInfo.CurrentPage < 1)
+                {
+                    pagingInfo.CurrentPage = 1;
+                }
 
                 var projects = await projectsSearch
                             .OrderBy(b => b.Name)
@@ -174,35 +192,63 @@ namespace FinalProject.Controllers
             ViewData["CurrentState"] = stateRadio;
             ViewData["Delayed"] = false;
 
+            bool checkMember = User.IsInRole("member");
+            string currentLogin = User.Identity.Name;
+
             if (stateRadio == "Delayed")
             {
                 stateRadio = "";
                 ViewData["Delayed"] = true;
             }
 
+            var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+
             var mettings = _context.Meeting;
 
-            var P_TaskSearch = _context.P_Task
-                                .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
-                                .Where(t => t.ProjectId == id)
-                                .Include(b => b.Project)
-                                .Include(b => b.State);
+            if (checkMember) {
+                var P_TaskSearch = _context.P_Task
+                    .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
+                    .Where(t => t.MemberId == memberId)
+                    .Where(t => t.ProjectId == id)
+                    .Include(b => b.Project)
+                    .Include(m => m.Member)
+                    .Include(b => b.State);
 
+                var p_task = await P_TaskSearch
+                                .OrderBy(b => b.CreationDate)
+                                .ToListAsync();
 
+                return View(
+                    new ProjectListViewModel
+                    {
+                        P_Task = p_task,
+                        Project = project,
+                        Meetings = mettings,
+                    }
+                );
 
+            } else {
+                var P_TaskSearch = _context.P_Task
+                    .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
+                    .Where(t => t.ProjectId == id)
+                    .Include(b => b.Project)
+                    .Include(m => m.Member)
+                    .Include(b => b.State);
 
-            var p_task = await P_TaskSearch
-                            .OrderBy(b => b.CreationDate)
-                            .ToListAsync();
+                var p_task = await P_TaskSearch
+                                .OrderBy(b => b.CreationDate)
+                                .ToListAsync();
 
-            return View(
-                new ProjectListViewModel
-                {
-                    P_Task = p_task,
-                    Project = project,
-                    Meetings = mettings
-                }
-            );
+                return View(
+                    new ProjectListViewModel
+                    {
+                        P_Task = p_task,
+                        Project = project,
+                        Meetings = mettings,
+                    }
+                );
+            }
+
         }
 
         // GET: Projects/Create
@@ -219,7 +265,7 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate,StateId")] Project project)
         {
-
+            MemberProject memberProject = new MemberProject();
             project.StartDate = DateTime.Now;
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
@@ -231,9 +277,16 @@ namespace FinalProject.Controllers
             {
                 string currentLogin = User.Identity.Name;
 
-                project.ProjectCreatorId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+                var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+
+                project.ProjectCreatorId = memberId;
                 project.StateId = 2; 
                 _context.Add(project);
+                await _context.SaveChangesAsync();
+
+                memberProject.ProjectId = project.ProjectId;
+                memberProject.MemberId = memberId;
+                _context.Add(memberProject);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -325,8 +378,15 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.FindAsync(id);
+            var idMember = project.ProjectCreatorId;
+
+            var memberProject = await _context.MemberProject.FindAsync(idMember, id);
+            _context.Remove(memberProject);
+            await _context.SaveChangesAsync();
+
             _context.Project.Remove(project);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -410,6 +470,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> RemoveMember(int id, string search, int page = 1)
         {
             ViewData["ID"] = id;
+            ViewData["creatorId"] = _context.Project.Where(p => p.ProjectId == id).Select(p => p.ProjectCreatorId).First();
 
             var memberSearch = _context.Member
                 .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
@@ -489,93 +550,14 @@ namespace FinalProject.Controllers
             return RedirectToAction(nameof(RemoveMember));
         }
 
-        //GET AssignMember
-        public async Task<IActionResult> AssignMember(int id, string search, int page = 1)
-        {
-            ViewData["ID"] = id;
-
-            var memberSearch = _context.Member
-                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
-
-            var memberIds = _context.Member.Select(a => a.MemberId);
-
-            var memberProjectsIds = _context.MemberProject.Where(a => a.ProjectId == id).Select(b => b.MemberId);
-
-            var IdComparation = memberIds.Except(memberProjectsIds);
-
-            var pagingInfo = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = memberProjectsIds.Count()
-            };
-
-            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
-            {
-                pagingInfo.CurrentPage = pagingInfo.TotalPages;
-            }
-
-            if (pagingInfo.CurrentPage < 1)
-            {
-                pagingInfo.CurrentPage = 1;
-            }
-
-            var members = await memberSearch
-                            .Include(m => m.Function)
-                            .Include(m => m.MemberProjects)
-                            .OrderBy(m => m.Name)
-                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                            .Take(pagingInfo.PageSize)
-                            .ToListAsync();
-
-            foreach (var member in members.ToList())
-            {
-                foreach (var memberId in IdComparation)
-                {
-                    if (member.MemberId == memberId)
-                    {
-                        members.Remove(member);
-                    }
-                }
-            }
-
-            if (members.Count() == 0)
-            {
-                ViewData["member"] = false;
-            }
-            else
-            {
-                ViewData["member"] = true;
-            }
-
-            return View(
-                new MemberListViewModel
-                {
-                    Members = members,
-                    PagingInfo = pagingInfo
-                }
-            );
-        }
-
-        // POST AssignMember
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignMember(IFormCollection frm, int id)
-        {
-
-            string buttonId = frm["AssignMemberProject"].ToString();
-
-            int IdMember = Convert.ToInt32(buttonId);
-
-            var member = await _context.MemberProject.FindAsync(IdMember, id);
-            _context.MemberProject.Remove(member);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(RemoveMember));
-        }
-
         private bool TaskValidation(int? id, int Stateid)
         {
-            var numDelayedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid).Count();
-            var totalDeadlineDates = _context.P_Task.Where(a => a.ProjectId == id && a.StateId == Stateid).Count();
+            var numDelayedDates = _context.P_Task
+                .Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid)
+                .Count();
+
+            var totalDeadlineDates = _context.P_Task.Where(a => a.ProjectId == id && a.StateId == Stateid)
+                .Count();
 
             if (numDelayedDates >= 0 && totalDeadlineDates == 0)
             {
@@ -593,8 +575,13 @@ namespace FinalProject.Controllers
 
         private bool TerminationValidation(int? id)
         {
-            var numOfDelyedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline).Count();
-            var finishedState = _context.P_Task.Where(b => b.ProjectId == id && System.DateTime.Now.Date > b.Deadline && b.StateId == 3).Count();
+            var numOfDelyedDates = _context.P_Task
+                .Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline)
+                .Count();
+
+            var finishedState = _context.P_Task
+                .Where(b => b.ProjectId == id && System.DateTime.Now.Date > b.Deadline && b.StateId == 3)
+                .Count();
 
             if (numOfDelyedDates == finishedState)
             {

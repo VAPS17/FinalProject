@@ -4,6 +4,7 @@
     ViewData["Title"] = "Members List";
     var ID = ViewBag.ID;
     bool memberExist = ViewBag.member;
+    var creatorId = ViewBag.creatorId;
 }
 
 <div id="layoutSidenav">
@@ -48,12 +49,23 @@
                                     <div class="card-header">
                                         <div class="row align-items-center">
                                             <div class="col-10">
-                                                <h4 class="card-title"><strong>@member.Name</strong></h4>
+                                                @if (member.MemberId != creatorId)
+                                                {
+                                                    <h4 class="card-title"><strong>@member.Name</strong></h4>
+                                                }
+                                                else
+                                                {
+                                                    <h4 class="card-title"><strong>@member.Name (Manager)</strong></h4>
+                                                }
+
                                             </div>
                                             <div class="col-2">
-                                                <form asp-action="RemoveMember" method="post">
-                                                    <button type="submit" class="btn btn-danger" value="@member.MemberId" name="RemoveMemberProject" id="btnRemoveMemberProject1" autocomplete="off"><i class="fas fa-user-minus"></i> Remove</button>
-                                                </form>
+                                                @if (member.MemberId != creatorId)
+                                                {
+                                                    <form asp-action="RemoveMember" method="post">
+                                                        <button type="submit" class="btn btn-danger" value="@member.MemberId" name="RemoveMemberProject" id="btnRemoveMemberProject1" autocomplete="off"><i class="fas fa-user-minus"></i> Remove</button>
+                                                    </form>
+                                                }
                                             </div>
                                         </div>
                                     </div>
