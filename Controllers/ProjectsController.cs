@@ -158,36 +158,63 @@ namespace FinalProject.Controllers
             ViewData["CurrentState"] = stateRadio;
             ViewData["Delayed"] = false;
 
+            bool checkMember = User.IsInRole("member");
+            string currentLogin = User.Identity.Name;
+
             if (stateRadio == "Delayed")
             {
                 stateRadio = "";
                 ViewData["Delayed"] = true;
             }
 
+            var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+
             var mettings = _context.Meeting;
 
-            var P_TaskSearch = _context.P_Task
-                                .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
-                                .Where(t => t.ProjectId == id)
-                                .Include(b => b.Project)
-                                .Include(m => m.Member)
-                                .Include(b => b.State);
+            if (checkMember) {
+                var P_TaskSearch = _context.P_Task
+                    .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
+                    .Where(t => t.MemberId == memberId)
+                    .Where(t => t.ProjectId == id)
+                    .Include(b => b.Project)
+                    .Include(m => m.Member)
+                    .Include(b => b.State);
 
+                var p_task = await P_TaskSearch
+                                .OrderBy(b => b.CreationDate)
+                                .ToListAsync();
 
+                return View(
+                    new ProjectListViewModel
+                    {
+                        P_Task = p_task,
+                        Project = project,
+                        Meetings = mettings,
+                    }
+                );
 
+            } else {
+                var P_TaskSearch = _context.P_Task
+                    .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
+                    .Where(t => t.ProjectId == id)
+                    .Include(b => b.Project)
+                    .Include(m => m.Member)
+                    .Include(b => b.State);
 
-            var p_task = await P_TaskSearch
-                            .OrderBy(b => b.CreationDate)
-                            .ToListAsync();
+                var p_task = await P_TaskSearch
+                                .OrderBy(b => b.CreationDate)
+                                .ToListAsync();
 
-            return View(
-                new ProjectListViewModel
-                {
-                    P_Task = p_task,
-                    Project = project,
-                    Meetings = mettings,
-                }
-            );
+                return View(
+                    new ProjectListViewModel
+                    {
+                        P_Task = p_task,
+                        Project = project,
+                        Meetings = mettings,
+                    }
+                );
+            }
+
         }
 
         // GET: Projects/Create
@@ -496,8 +523,12 @@ namespace FinalProject.Controllers
 
         private bool TaskValidation(int? id, int Stateid)
         {
-            var numDelayedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid).Count();
-            var totalDeadlineDates = _context.P_Task.Where(a => a.ProjectId == id && a.StateId == Stateid).Count();
+            var numDelayedDates = _context.P_Task
+                .Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline && a.StateId == Stateid)
+                .Count();
+
+            var totalDeadlineDates = _context.P_Task.Where(a => a.ProjectId == id && a.StateId == Stateid)
+                .Count();
 
             if (numDelayedDates >= 0 && totalDeadlineDates == 0)
             {
@@ -515,8 +546,13 @@ namespace FinalProject.Controllers
 
         private bool TerminationValidation(int? id)
         {
-            var numOfDelyedDates = _context.P_Task.Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline).Count();
-            var finishedState = _context.P_Task.Where(b => b.ProjectId == id && System.DateTime.Now.Date > b.Deadline && b.StateId == 3).Count();
+            var numOfDelyedDates = _context.P_Task
+                .Where(a => a.ProjectId == id && System.DateTime.Now.Date > a.Deadline)
+                .Count();
+
+            var finishedState = _context.P_Task
+                .Where(b => b.ProjectId == id && System.DateTime.Now.Date > b.Deadline && b.StateId == 3)
+                .Count();
 
             if (numOfDelyedDates == finishedState)
             {
