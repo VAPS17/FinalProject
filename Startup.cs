@@ -46,7 +46,6 @@ namespace FinalProject
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredUniqueChars = 4;
-                options.Password.RequiredLength = 8;
 
                 // User
                 options.User.RequireUniqueEmail = true;

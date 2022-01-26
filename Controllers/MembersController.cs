@@ -94,6 +94,7 @@ namespace FinalProject.Controllers
         public IActionResult Create()
         {
             ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name");
+            ViewData["Role"] = new List<string> {"Normal Member", "Project Manager" };
             return View();
         }
 
@@ -135,9 +136,16 @@ namespace FinalProject.Controllers
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "member");
+                if (member.Role.Equals("Normal Member"))
+                {
+                    await _userManager.AddToRoleAsync(user, "member");
+                }
+                else if (member.Role.Equals("Project Manager"))
+                {
+                    await _userManager.AddToRoleAsync(user, "manager");
+                }
 
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
 
                 _context.Add(new Member
                 {
