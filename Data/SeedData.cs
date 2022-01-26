@@ -1,6 +1,7 @@
 ﻿//#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_TASKS
 //#define TEST_PAGINATION_PROJECTS
+//#define TEST_PAGINATION_MEETINGS
 
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -131,6 +132,42 @@ namespace FinalProject.Data
 									StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 5, 25, 8, 5, 30)
+								});
+
+							projectManaContext.SaveChanges();
+			}
+#endif
+
+#if TEST_PAGINATION_MEETINGS
+
+			Meeting meeting = projectManaContext.Meeting.FirstOrDefault();
+
+			if(meeting == null)
+            {
+
+							projectManaContext.Meeting.Add(
+								new Meeting {
+									Topic = "Recolha de requisitos",
+									Description = "A reuniao e feita para recolha dos requisitos de software com o cliente presente",
+									ProjectId = 123,
+									DateandTime = new DateTime(2022, 2, 27, 9, 9, 0),
+								});
+
+							projectManaContext.Meeting.Add(
+								new Meeting
+								{
+									Topic = "Recolha de modelos",
+									Description = "A reuniao e feita para recolha dos modelos do projeto",
+									ProjectId = 1234,
+									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
+								});
+
+				projectManaContext.Meeting.Add(
+								new Meeting{
+									Topic = "Recolha de modelos",
+									Description = "A reuniao e feita para recolha dos modelos do projeto",
+									ProjectId = 12345,
+									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
 								});
 
 							projectManaContext.SaveChanges();
