@@ -40,23 +40,20 @@
                     <div class="card-body" style="text-align:center">
                         <h5>Description</h5>
                         <p> @project.Description</p>
-                        <!--<h5>ProjectCreator</h5>
-                        <p> @project.ProjectCreatorId</p>
-                        <h5>StartDate</h5>
-                        <p> @project.StartDate</p>
-                        <h5>FinishDate</h5>
-                        <p> @project.FinishDate</p>
-                        <h5>DecisiveDeliveryDate</h5>
-                        <p> @project.DecisiveDeliveryDate</p>-->
-
-                    <div class="d-flex justify-content-md-end" style="margin-top:50px">
-                        @if (project.StateId !=3)
+                        @if (project.StateId != 3)
                         {
-                            <a asp-controller="Projects" asp-action="Conclude" asp-route-id="@project.ProjectId" class="btn btn-success">Conclude</a>
+                            <h5>FinishDate</h5>
+                            <p> @project.FinishDate</p>
+
                         }
-                        <a asp-controller="Meetings" asp-action="Create" asp-route-id="@project.ProjectId" class="btn btn-secondary" style="margin-left:3px">Create Meeting</a>
-                        <a asp-action="Details" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
-                    </div>
+                        <div class="d-flex justify-content-md-end" style="margin-top:50px">
+                            @if (project.StateId != 3)
+                            {
+                                <a asp-controller="Projects" asp-action="Conclude" asp-route-id="@project.ProjectId" class="btn btn-success">Conclude</a>
+                            }
+                            <a asp-controller="Meetings" asp-action="Create" asp-route-id="@project.ProjectId" class="btn btn-secondary" style="margin-left:3px">Create Meeting</a>
+                            <a asp-action="Details" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
+                        </div>
                     </div>
                 </div>
             }
