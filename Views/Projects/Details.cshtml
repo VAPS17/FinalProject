@@ -34,7 +34,7 @@
                 <a asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary">Edit Project</a>
                 <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
                 <a asp-action="AddMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Add Member</a>
-                <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Remove Member</a>
+                <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary" style="margin-left:3px">Project Members</a>
             </div>
             }
 
@@ -90,9 +90,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-3">
-                            <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Create a new task</a>
-                        </div>
+
+                        @if (User.IsInRole("manager"))
+                        {
+                            <div class="col-3">
+                                <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Create a new task</a>
+                            </div>
+                        }
                     </div>
 
                     <p></p>
@@ -119,11 +123,17 @@
                                                             <li class="dropdown">
                                                                 <a class="nav-link dropdown-toggle text-right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color:gray"><i class="fas fa-cog"></i></a>
                                                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                                    <li><a asp-controller="P_Task" asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
-                                                                    <li><hr class="dropdown-divider" /></li>
-                                                                    <li><a asp-controller="P_Task" asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
-                                                                    <li><hr class="dropdown-divider" /></li>
-                                                                    <li><a asp-controller="P_Task" asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
+                                                                    @if (User.IsInRole("manager"))
+                                                                    {
+                                                                        <li><a asp-controller="P_Task" asp-action="Edit" asp-route-id="@task.P_TaskId" class="dropdown-item dropdown-item-text"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                        <li><hr class="dropdown-divider" /></li>
+                                                                        <li><a asp-controller="P_Task" asp-action="Delete" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                                                        <li><hr class="dropdown-divider" /></li>
+                                                                    }
+                                                                    else if (User.IsInRole("manager,member"))
+                                                                    {
+                                                                        <li><a asp-controller="P_Task" asp-action="EditComentary" asp-route-id="@task.P_TaskId" class="dropdown-item"><i class="fas fa-comment-alt"></i> Comment</a></li>
+                                                                    }
                                                                 </ul>
                                                             </li>
                                                         </ul>
@@ -157,8 +167,7 @@
                                                 <p class="card-text lead">Created at: @task.CreationDate</p>
                                                 <p class="card-text lead">Deadline at: @task.Deadline</p>
 
-                                                <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="EditTaskTerminate">Terminate</a>
-
+                                                <a class="btn btn-danger" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="EditTaskTerminate">Terminate</a>
                                             </div>
                                         </div>
                                     }
@@ -231,6 +240,7 @@
                                                 <p class="card-text lead">Deadline at: @task.Deadline</p>
 
                                                 <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="EditTaskInProgress">Inicialize</a>
+                                                <a class="btn btn-success" asp-route-id="@Model.Project.ProjectId" asp-controller="Projects" asp-action="AssignMember">Assign</a>
 
                                             </div>
                                         </div>

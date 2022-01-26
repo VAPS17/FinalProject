@@ -50,13 +50,15 @@ namespace FinalProject.Controllers
                 pagingInfo.CurrentPage = 1;
             }
 
-            string currentLogin = User.Identity.Name;
+            string email = User.Identity.Name;
+            bool checkManager = User.IsInRole("manager");
+            bool checkMember = User.IsInRole("member");
 
-            if(currentLogin != null)
+            if (checkManager)
             {
-                var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+                var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
 
-                var projectsManager = await projectsSearch
+                var projects = await projectsSearch
                 .Where(p => p.ProjectCreatorId == memberId)
                 .OrderBy(b => b.Name)
                 .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
@@ -66,7 +68,42 @@ namespace FinalProject.Controllers
                 return View(
                     new ProjectListViewModel
                     {
-                        Projects = projectsManager,
+                        Projects = projects,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    }
+                );
+            }
+            else if (checkMember) {
+                var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
+
+                var memberProjectId = _context.MemberProject.Where(p => p.MemberId == memberId).Select(p => p.ProjectId);
+
+                var projectsId = _context.Project.Select(p => p.ProjectId);
+
+                var IdComparation = projectsId.Except(memberProjectId);
+
+                var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+                foreach (var project in projects.ToList())
+                {
+                    foreach (var projectId in IdComparation)
+                    {
+                        if (project.ProjectId == projectId)
+                        {
+                            projects.Remove(project);
+                        }
+                    }
+                }
+
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projects,
                         Pagination = pagingInfo,
                         ProjectNameSearched = search
                     }
@@ -415,6 +452,89 @@ namespace FinalProject.Controllers
         {
 
             string buttonId = frm["RemoveMemberProject"].ToString();
+
+            int IdMember = Convert.ToInt32(buttonId);
+
+            var member = await _context.MemberProject.FindAsync(IdMember, id);
+            _context.MemberProject.Remove(member);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(RemoveMember));
+        }
+
+        //GET AssignMember
+        public async Task<IActionResult> AssignMember(int id, string search, int page = 1)
+        {
+            ViewData["ID"] = id;
+
+            var memberSearch = _context.Member
+                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
+
+            var memberIds = _context.Member.Select(a => a.MemberId);
+
+            var memberProjectsIds = _context.MemberProject.Where(a => a.ProjectId == id).Select(b => b.MemberId);
+
+            var IdComparation = memberIds.Except(memberProjectsIds);
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = memberProjectsIds.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var members = await memberSearch
+                            .Include(m => m.Function)
+                            .Include(m => m.MemberProjects)
+                            .OrderBy(m => m.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            foreach (var member in members.ToList())
+            {
+                foreach (var memberId in IdComparation)
+                {
+                    if (member.MemberId == memberId)
+                    {
+                        members.Remove(member);
+                    }
+                }
+            }
+
+            if (members.Count() == 0)
+            {
+                ViewData["member"] = false;
+            }
+            else
+            {
+                ViewData["member"] = true;
+            }
+
+            return View(
+                new MemberListViewModel
+                {
+                    Members = members,
+                    PagingInfo = pagingInfo
+                }
+            );
+        }
+
+        // POST AssignMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignMember(IFormCollection frm, int id)
+        {
+
+            string buttonId = frm["AssignMemberProject"].ToString();
 
             int IdMember = Convert.ToInt32(buttonId);
 

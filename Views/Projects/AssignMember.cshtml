@@ -1,0 +1,139 @@
+﻿@model MemberListViewModel
+
+@{
+    ViewData["Title"] = "Members List";
+    var ID = ViewBag.ID;
+}
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+            <p></p>
+            <div class="card">
+                <div class="card-header" style="background-color: #6666ff;">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <a class="btn btn-primary" asp-controller="Projects" asp-action="Details" asp-route-id="@ID" style="margin-left:50px">Back</a>
+                        </div>
+                        <div class="col">
+                            <h2 style="text-align:center"><i class="fas fa-user"></i> Members</h2>
+                        </div>
+                        <div class="col">
+                            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" asp-action="AssignMember" method="get">
+                                <div class="input-group">
+                                    <input class="form-control" name="search" type="search" value="@Model.StringSearched" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                    <button class="btn btn-primary" value="Search" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container" style="background-color: #ccccff;">
+                    <div class="card-body">
+                        <p></p>
+                            @foreach (var member in Model.Members)
+                            {
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col-10">
+                                                <h4 class="card-title"><strong>@member.Name</strong></h4>
+                                            </div>
+                                            <div class="col-2">
+                                                <form asp-action="AssignMember" method="post">
+                                                    <button type="submit" class="btn btn-success" value="@member.MemberId" name="AssignMemberProject" id="btnAssignMemberProject1" autocomplete="off"><i class="fas fa-user-plus"></i> Assign</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <h5 class="card-text"><strong>Function: </strong><span style="font-size: 1rem;">@member.Function.Name</span></h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h5 class="card-text"><strong>Employee Number: </strong><span style="font-size: 1rem;">@member.EmployeeNumber</span></h5>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h5 class="card-text"><strong>Email: </strong><span style="font-size: 1rem;">@member.Email</span></h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h5 class="card-text"><strong>Phone Number: </strong><span style="font-size: 1rem;">@member.PhoneNumber</span></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p></p>
+                            }
+                    </div>
+
+                    <p></p>
+
+                    <div class="card-footer" style="background-color: #6666ff;">
+                        <nav class="mt-3">
+                            <ul class="pagination">
+                                @{
+                                    if (Model.PagingInfo.CurrentPage == 1)
+                                    {
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">First</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="AssignMember" asp-route-id="@ID" asp-route-page="1">First</a>
+                                        </li>
+                                    }
+
+                                    int firstPage = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                                    if (firstPage < 1) firstPage = 1;
+
+                                    int lastPage = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                                    if (lastPage > Model.PagingInfo.TotalPages) lastPage = Model.PagingInfo.TotalPages;
+
+                                    for (int p = firstPage; p <= lastPage; p++)
+                                    {
+                                        if (p == Model.PagingInfo.CurrentPage)
+                                        {
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">@p <span class="sr-only">(current)</span></a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link" asp-action="AssignMember" asp-route-id="@ID" asp-route-page="@p">@p</a>
+                                            </li>
+                                        }
+                                    }
+
+                                    if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+                                    {
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">Last</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="AssignMember" asp-route-id="@ID" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                    <p></p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

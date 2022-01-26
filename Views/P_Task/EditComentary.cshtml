@@ -25,7 +25,7 @@
                             <input asp-for="Deadline" class="form-control" />
                             <span asp-validation-for="Deadline" class="text-danger"></span>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label asp-for="Comentary" class="control-label"></label>
                             <textarea asp-for="Comentary" class="form-control" rows="7"></textarea>
                             <span asp-validation-for="Comentary" class="text-danger"></span>
@@ -44,6 +44,11 @@
                             <label asp-for="EffectiveEndDate" class="control-label"></label>
                             <input asp-for="EffectiveEndDate" class="form-control" />
                             <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="MemberId" class="control-label"></label>
+                            <input asp-for="MemberId" class="form-control" />
+                            <span asp-validation-for="MemberId" class="text-danger"></span>
                         </div>
                         <div class="form-group" hidden>
                             <label asp-for="StateId" class="control-label"></label>
