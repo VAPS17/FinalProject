@@ -137,9 +137,9 @@ namespace FinalProject.Controllers
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
             }
-
+                                                                    
             if (ModelState.IsValid)
             {
                 _context.Add(project);
@@ -160,12 +160,7 @@ namespace FinalProject.Controllers
 
             var project = await _context.Project.FindAsync(id);
 
-            project.StartDate = DateTime.Now;
-
-            if (project.StartDate >= project.DecisiveDeliveryDate)
-            {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
-            }
+            
 
             if (project == null)
             {
@@ -188,10 +183,12 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            if (project.StartDate >= project.DecisiveDeliveryDate)
+
+            if (DateTime.Now >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Start Date is high than Decisive delivery date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
             }
+
 
             if (ModelState.IsValid)
             {
