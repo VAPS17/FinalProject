@@ -92,10 +92,13 @@
                         </a>
                     </div>
                 </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    Start Bootstrap
-                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        @User.Identity.Name
+                    </div>
+                }
             </nav>
         </div>
 
