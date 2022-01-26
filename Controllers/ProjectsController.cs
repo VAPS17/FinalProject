@@ -27,7 +27,7 @@ namespace FinalProject.Controllers
             _signInManager = signInManager;
         }
 
-        [Authorize(Roles ="manager,member")]
+        [Authorize(Roles = "manager,member,admin")]
         // GET: Projects
         public async Task<IActionResult> Index(string search, int page = 1)
         {
@@ -74,7 +74,8 @@ namespace FinalProject.Controllers
                     }
                 );
             }
-            else if (checkMember) {
+            else if (checkMember)
+            {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
 
                 var memberProjectId = _context.MemberProject.Where(p => p.MemberId == memberId).Select(p => p.ProjectId);
@@ -108,6 +109,23 @@ namespace FinalProject.Controllers
                         ProjectNameSearched = search
                     }
                 );
+
+            }
+
+            if (User.IsInRole("admin"))
+            {
+                var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projects,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    });
             }
 
             return View();
@@ -198,7 +216,7 @@ namespace FinalProject.Controllers
                 string currentLogin = User.Identity.Name;
 
                 project.ProjectCreatorId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
-                
+
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -428,10 +446,11 @@ namespace FinalProject.Controllers
                 }
             }
 
-            if(members.Count() == 0)
+            if (members.Count() == 0)
             {
                 ViewData["member"] = false;
-            } else
+            }
+            else
             {
                 ViewData["member"] = true;
             }
