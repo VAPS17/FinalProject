@@ -9,18 +9,25 @@ using FinalProject.Data;
 using FinalProject.Models;
 using FinalProject.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace FinalProject.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ProjectManaContext _context;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProjectsController(ProjectManaContext context)
+        public ProjectsController(ProjectManaContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
+        [Authorize(Roles ="manager,member")]
         // GET: Projects
         public async Task<IActionResult> Index(string search, int page = 1)
         {
@@ -43,20 +50,30 @@ namespace FinalProject.Controllers
                 pagingInfo.CurrentPage = 1;
             }
 
-            var projects = await projectsSearch
-                            .OrderBy(b => b.Name)
-                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                            .Take(pagingInfo.PageSize)
-                            .ToListAsync();
+            string currentLogin = User.Identity.Name;
 
-            return View(
-                new ProjectListViewModel
-                {
-                    Projects = projects,
-                    Pagination = pagingInfo,
-                    ProjectNameSearched = search
-                }
-            );
+            if(currentLogin != null)
+            {
+                var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+
+                var projectsManager = await projectsSearch
+                .Where(p => p.ProjectCreatorId == memberId)
+                .OrderBy(b => b.Name)
+                .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                .Take(pagingInfo.PageSize)
+                .ToListAsync();
+
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projectsManager,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    }
+                );
+            }
+
+            return View();
         }
 
 
@@ -126,6 +143,7 @@ namespace FinalProject.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
@@ -140,6 +158,10 @@ namespace FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
+                string currentLogin = User.Identity.Name;
+
+                project.ProjectCreatorId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+                
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
