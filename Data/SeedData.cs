@@ -1,7 +1,7 @@
 ﻿#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_TASKS
-//#define TEST_PAGINATION_PROJECTS
-//#define TEST_PAGINATION_MEETINGS
+#define TEST_PAGINATION_PROJECTS
+#define TEST_PAGINATION_MEETINGS
 
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
