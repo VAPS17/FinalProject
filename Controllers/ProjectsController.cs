@@ -128,7 +128,23 @@ namespace FinalProject.Controllers
                     });
             }
 
-            return View();
+            if (User.IsInRole("admin"))
+            {
+                var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projects,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    });
+            }
+
+            
         }
 
 

@@ -35,6 +35,7 @@ namespace FinalProject.Data
 				);
 			projectManaContext.SaveChanges();
 			}
+
 #if TEST_PAGINATION_TASKS
 			P_Task task = projectManaContext.P_Task.FirstOrDefault();
 			if (task == null)
@@ -86,6 +87,12 @@ namespace FinalProject.Data
 
 			//int year, int month, int day, int hour, int minute, int second
 #if TEST_PAGINATION_PROJECTS
+
+			Project project = projectManaContext.Project.FirstOrDefault();
+
+			if(project == null)
+            {
+
 							projectManaContext.Project.Add(
 								new Project {
 									Name = "Montar carro",
@@ -127,8 +134,9 @@ namespace FinalProject.Data
 								});
 
 							projectManaContext.SaveChanges();
-							#endif						
-        }
+			}
+#endif
+		}
 
 		internal static void CreateDefaultAdmin(UserManager<IdentityUser> userManager)
 		{
