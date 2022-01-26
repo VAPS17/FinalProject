@@ -129,15 +129,7 @@ namespace FinalProject.Controllers
                 ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
 
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(member);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name", member.FunctionId);
-
-            // Register customer (user)
+            
             var user = new IdentityUser { UserName = member.Email, Email = member.Email };
             var result = await _userManager.CreateAsync(user, member.Password);
 
