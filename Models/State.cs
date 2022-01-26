@@ -15,5 +15,7 @@ namespace FinalProject.Models
         public string StateValue { get; set; }
 
         public ICollection<P_Task> P_Task { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
     }
 }

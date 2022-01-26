@@ -217,7 +217,7 @@ namespace FinalProject.Controllers
         [Authorize(Roles = "manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate,StateId")] Project project)
         {
 
             project.StartDate = DateTime.Now;
@@ -232,7 +232,7 @@ namespace FinalProject.Controllers
                 string currentLogin = User.Identity.Name;
 
                 project.ProjectCreatorId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
-
+                project.StateId = 2; 
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
