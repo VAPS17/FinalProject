@@ -70,16 +70,17 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div>
                             Projects
                         </a>
-
-                        <a class="nav-link" asp-controller="Meetings" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-handshake"></i></div>
-                            Meetings
-                        </a>
-                        <a class="nav-link" asp-controller="Members" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Members
-
-                        </a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a class="nav-link" asp-controller="Meetings" asp-action="Index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake"></i></div>
+                                Meetings
+                            </a>
+                            <a class="nav-link" asp-controller="Members" asp-action="Index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Members
+                            </a>
+                        }
                         <div class="sb-sidenav-menu-heading">About Us</div>
                         <a class="nav-link" asp-controller="Home" asp-action="About">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
