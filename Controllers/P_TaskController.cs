@@ -31,6 +31,7 @@ namespace FinalProject.Controllers
         // POST: P_Task/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
@@ -44,6 +45,7 @@ namespace FinalProject.Controllers
             if (ModelState.IsValid)
             {
                 p_task.CreationDate = System.DateTime.Now.Date;
+                p_task.MemberId = _context.Project.Where(p => p.ProjectId == id).Select(p => p.ProjectCreatorId).First();
 
                 _context.Add(p_task);
                 await _context.SaveChangesAsync();
