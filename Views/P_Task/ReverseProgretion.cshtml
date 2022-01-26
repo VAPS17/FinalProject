@@ -52,6 +52,11 @@
                             <span asp-validation-for="ProjectId" class="text-danger"></span>
                         </div>
                         <div class="form-group" hidden>
+                            <label asp-for="MemberId" class="control-label"></label>
+                            <select asp-for="MemberId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                            <span asp-validation-for="MemberId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
                             <label asp-for="StateId" class="control-label"></label>
                             <select asp-for="StateId" class="form-control" asp-items="ViewBag.StateId"></select>
                             <span asp-validation-for="StateId" class="text-danger"></span>
