@@ -44,6 +44,7 @@ namespace FinalProject.Controllers
             }
 
             var functions = await functionSearch
+                            .Include(f => f.Members)
                             .OrderBy(f => f.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)

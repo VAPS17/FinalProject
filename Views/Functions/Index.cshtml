@@ -39,7 +39,9 @@
                         @if (User.IsInRole("admin"))
                         {
                             <a asp-action="Edit" asp-route-id="@function.FunctionId" class="btn btn-primary">Edit</a>
+                            if (function.Members.Count == 0) { 
                             <a asp-action="Delete" asp-route-id="@function.FunctionId" class="btn btn-danger">Delete</a>
+                            }
                         }
                     </div>
                 </div>
