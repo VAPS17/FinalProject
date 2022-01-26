@@ -122,7 +122,9 @@ namespace FinalProject.Data
 									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 6, 0, 0)
-								});
+									,
+									StateId = 2
+								});;
 
 							projectManaContext.Project.Add(
 								new Project{
@@ -132,6 +134,8 @@ namespace FinalProject.Data
 									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 7, 12, 10)
+									,
+									StateId = 2
 								});
 
 							projectManaContext.Project.Add(
@@ -142,6 +146,8 @@ namespace FinalProject.Data
 									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 8, 5, 5)
+									,
+									StateId = 2
 								});
 
 							projectManaContext.Project.Add(
@@ -152,6 +158,8 @@ namespace FinalProject.Data
 									StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 5, 25, 8, 5, 30)
+									,
+									StateId = 2
 								});
 
 							projectManaContext.SaveChanges();
@@ -171,6 +179,7 @@ namespace FinalProject.Data
 									Description = "A reuniao e feita para recolha dos requisitos de software com o cliente presente",
 									ProjectId = 123,
 									DateandTime = new DateTime(2022, 2, 27, 9, 9, 0),
+									
 								});
 
 							projectManaContext.Meeting.Add(
