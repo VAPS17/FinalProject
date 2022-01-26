@@ -60,29 +60,49 @@ namespace FinalProject.Data
 
 #if TEST_PAGINATION_MEMBERS
 			Function function = projectManaContext.Function.FirstOrDefault();
-            Member member = projectManaContext.Member.FirstOrDefault();
+			Function function2;
+			Member member = projectManaContext.Member.FirstOrDefault();
 
             if (function == null)
             {
-                function = new Function { Name = "Anonymous" };
-                projectManaContext.Add(function);
-            }
-
-            if (member == null)
-            {
-                for (int i = 1; i <= 1000; i++)
-                {
-                    projectManaContext.Member.Add(
+                function = new Function { Name = "Programmer" };
+				function2 = new Function { Name = "Tester" };
+				projectManaContext.Add(function);
+           
+					projectManaContext.Member.Add(
                         new Member
                         {
-                            Name = "Member " + i,
-                            Email = "membertest" + i + "@ipg.pt",
-			    PhoneNumber = "987654321",
-                            EmployeeNumber = "" + i,
+                            Name = "Victor Seguro",
+                            Email = "victors@ipg.pt",
+							PhoneNumber = "987654321",
+                            EmployeeNumber = "1",
                             Function = function
-                        });
-                }
-                projectManaContext.SaveChanges();
+                        }
+						
+						);
+				projectManaContext.Member.Add(
+				new Member
+				{
+					Name = "Gonçalo Silva",
+					Email = "goncalos@ipg.pt",
+					PhoneNumber = "987567821",
+					EmployeeNumber = "2",
+					Function = function2
+				}
+				);
+				projectManaContext.Member.Add(
+				new Member
+				{
+					Name = "Daniel Carmona",
+					Email = "danielc@ipg.pt",
+					PhoneNumber = "988567821",
+					EmployeeNumber = "3",
+					Function = function
+				}
+				);
+
+
+				projectManaContext.SaveChanges();
             }
 #endif
 
@@ -201,8 +221,9 @@ namespace FinalProject.Data
 
 		internal static void PopulateUsers(UserManager<IdentityUser> userManager)
 		{
-			//EnsureUserIsCreatedAsync(userManager, "john@ipg.pt", "Secret123$", ROLE_CUSTOMER).Wait();
-			//EnsureUserIsCreatedAsync(userManager, "mary@ipg.pt", "Secret123$", ROLE_PRODUCT_MANAGER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "victors@ipg.pt", "Secret123$", ROLE_MEMBER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "goncalos@ipg.pt", "Secret123$", ROLE_MEMBER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "danielc@ipg.pt", "Secret123$", ROLE_MANAGER).Wait();
 		}
 		internal static void CreateRoles(RoleManager<IdentityRole> roleManager)
 		{
