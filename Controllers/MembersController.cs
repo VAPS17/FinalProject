@@ -31,6 +31,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index(string search = null, int page = 1)
         {
 
@@ -71,6 +72,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Members/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -94,6 +96,7 @@ namespace FinalProject.Controllers
         public IActionResult Create()
         {
             ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name");
+            ViewData["Roles"] = new List<string>(){ "Normal Member", "Project Manager" };
             return View();
         }
 
@@ -105,13 +108,13 @@ namespace FinalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateMemberViewModel member)
         {
-            var memberUnique = _context.Member.Where(m => m.Email.Equals(member.Email)).Count();
+            var memberUnique = _context.Member
+                .Where(m => m.Email.Equals(member.Email)).Count();
 
             if (memberUnique != 0)
             {
                 ModelState.AddModelError("Email", "Email already in use");
             }
-
 
             memberUnique = _context.Member
                 .Where(m => m.PhoneNumber.Equals(member.PhoneNumber)).Count();
@@ -129,15 +132,29 @@ namespace FinalProject.Controllers
                 ModelState.AddModelError("EmployeeNumber", "Employee Number already exists");
             }
 
-            
+            if (!member.Password.Equals(member.ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match");
+            }
+
+            if (member.Password.Length<6)
+            {
+                ModelState.AddModelError("Password", "The password must be at least 6 characters long");
+            }
+
             var user = new IdentityUser { UserName = member.Email, Email = member.Email };
             var result = await _userManager.CreateAsync(user, member.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "member");
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                if (member.Role.Equals("Normal Member"))
+                {
+                    await _userManager.AddToRoleAsync(user, "member");
+                }
+                else if (member.Role.Equals("Project Manager"))
+                {
+                    await _userManager.AddToRoleAsync(user, "manager");
+                }
 
                 _context.Add(new Member
                 {
@@ -239,38 +256,7 @@ namespace FinalProject.Controllers
             return View(member);
         }
 
-        // GET: Members/Delete/5
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var member = await _context.Member
-                .Include(m => m.Function)
-                .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            return View(member);
-        }
-
-        // POST: Members/Delete/5
-        [Authorize(Roles = "admin")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var member = await _context.Member.FindAsync(id);
-            _context.Member.Remove(member);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool MemberExists(int id)
         {
             return _context.Member.Any(e => e.MemberId == id);

@@ -1,6 +1,7 @@
-﻿//#define TEST_PAGINATION_MEMBERS
+﻿#define TEST_PAGINATION_MEMBERS
 //#define TEST_PAGINATION_TASKS
-//#define TEST_PAGINATION_PROJECTS
+#define TEST_PAGINATION_PROJECTS
+#define TEST_PAGINATION_MEETINGS
 
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -35,6 +36,7 @@ namespace FinalProject.Data
 				);
 			projectManaContext.SaveChanges();
 			}
+
 #if TEST_PAGINATION_TASKS
 			P_Task task = projectManaContext.P_Task.FirstOrDefault();
 			if (task == null)
@@ -58,34 +60,60 @@ namespace FinalProject.Data
 
 #if TEST_PAGINATION_MEMBERS
 			Function function = projectManaContext.Function.FirstOrDefault();
-            Member member = projectManaContext.Member.FirstOrDefault();
+			Function function2;
+			Member member = projectManaContext.Member.FirstOrDefault();
 
             if (function == null)
             {
-                function = new Function { Name = "Anonymous" };
-                projectManaContext.Add(function);
-            }
-
-            if (member == null)
-            {
-                for (int i = 1; i <= 1000; i++)
-                {
-                    projectManaContext.Member.Add(
+                function = new Function { Name = "Programmer" };
+				function2 = new Function { Name = "Tester" };
+				projectManaContext.Add(function);
+           
+					projectManaContext.Member.Add(
                         new Member
                         {
-                            Name = "Member " + i,
-                            Email = "membertest" + i + "@ipg.pt",
-			    PhoneNumber = "987654321",
-                            EmployeeNumber = "" + i,
+                            Name = "Victor Seguro",
+                            Email = "victors@ipg.pt",
+							PhoneNumber = "987654321",
+                            EmployeeNumber = "1",
                             Function = function
-                        });
-                }
-                projectManaContext.SaveChanges();
+                        }
+						
+						);
+				projectManaContext.Member.Add(
+				new Member
+				{
+					Name = "Gonçalo Silva",
+					Email = "goncalos@ipg.pt",
+					PhoneNumber = "987567821",
+					EmployeeNumber = "2",
+					Function = function2
+				}
+				);
+				projectManaContext.Member.Add(
+				new Member
+				{
+					Name = "Daniel Carmona",
+					Email = "danielc@ipg.pt",
+					PhoneNumber = "988567821",
+					EmployeeNumber = "3",
+					Function = function
+				}
+				);
+
+
+				projectManaContext.SaveChanges();
             }
 #endif
 
 			//int year, int month, int day, int hour, int minute, int second
 #if TEST_PAGINATION_PROJECTS
+
+			Project project = projectManaContext.Project.FirstOrDefault();
+
+			if(project == null)
+            {
+
 							projectManaContext.Project.Add(
 								new Project {
 									Name = "Montar carro",
@@ -127,8 +155,45 @@ namespace FinalProject.Data
 								});
 
 							projectManaContext.SaveChanges();
-							#endif						
-        }
+			}
+#endif
+
+#if TEST_PAGINATION_MEETINGS
+
+			Meeting meeting = projectManaContext.Meeting.FirstOrDefault();
+
+			if(meeting == null)
+            {
+
+							projectManaContext.Meeting.Add(
+								new Meeting {
+									Topic = "Recolha de requisitos",
+									Description = "A reuniao e feita para recolha dos requisitos de software com o cliente presente",
+									ProjectId = 123,
+									DateandTime = new DateTime(2022, 2, 27, 9, 9, 0),
+								});
+
+							projectManaContext.Meeting.Add(
+								new Meeting
+								{
+									Topic = "Recolha de modelos",
+									Description = "A reuniao e feita para recolha dos modelos do projeto",
+									ProjectId = 1234,
+									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
+								});
+
+				projectManaContext.Meeting.Add(
+								new Meeting{
+									Topic = "Recolha de modelos",
+									Description = "A reuniao e feita para recolha dos modelos do projeto",
+									ProjectId = 12345,
+									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
+								});
+
+							projectManaContext.SaveChanges();
+			}
+#endif
+		}
 
 		internal static void CreateDefaultAdmin(UserManager<IdentityUser> userManager)
 		{
@@ -156,8 +221,9 @@ namespace FinalProject.Data
 
 		internal static void PopulateUsers(UserManager<IdentityUser> userManager)
 		{
-			//EnsureUserIsCreatedAsync(userManager, "john@ipg.pt", "Secret123$", ROLE_CUSTOMER).Wait();
-			//EnsureUserIsCreatedAsync(userManager, "mary@ipg.pt", "Secret123$", ROLE_PRODUCT_MANAGER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "victors@ipg.pt", "Secret123$", ROLE_MEMBER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "goncalos@ipg.pt", "Secret123$", ROLE_MEMBER).Wait();
+			EnsureUserIsCreatedAsync(userManager, "danielc@ipg.pt", "Secret123$", ROLE_MANAGER).Wait();
 		}
 		internal static void CreateRoles(RoleManager<IdentityRole> roleManager)
 		{

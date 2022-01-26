@@ -191,7 +191,12 @@ namespace FinalProject.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
                     b.HasKey("ProjectId");
+
+                    b.HasIndex("StateId");
 
                     b.ToTable("Project");
                 });
@@ -281,6 +286,17 @@ namespace FinalProject.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("FinalProject.Models.Project", b =>
+                {
+                    b.HasOne("FinalProject.Models.State", "State")
+                        .WithMany("Projects")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("State");
+                });
+
             modelBuilder.Entity("FinalProject.Models.Function", b =>
                 {
                     b.Navigation("Members");
@@ -305,6 +321,8 @@ namespace FinalProject.Migrations
             modelBuilder.Entity("FinalProject.Models.State", b =>
                 {
                     b.Navigation("P_Task");
+
+                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

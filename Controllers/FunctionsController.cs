@@ -22,6 +22,7 @@ namespace FinalProject.Controllers
         }
 
         // GET: Functions
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index(string fname = null, int page = 1)
         {
             var functionSearch = _context.Function
@@ -44,6 +45,7 @@ namespace FinalProject.Controllers
             }
 
             var functions = await functionSearch
+                            .Include(f => f.Members)
                             .OrderBy(f => f.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
                             .Take(pagingInfo.PageSize)

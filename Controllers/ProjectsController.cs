@@ -27,7 +27,7 @@ namespace FinalProject.Controllers
             _signInManager = signInManager;
         }
 
-        [Authorize(Roles ="manager,member")]
+        [Authorize(Roles = "manager,member,admin")]
         // GET: Projects
         public async Task<IActionResult> Index(string search, int page = 1)
         {
@@ -76,7 +76,8 @@ namespace FinalProject.Controllers
                     }
                 );
             }
-            else if (checkMember) {
+            else if (checkMember)
+            {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
                 
                 var memberProjectId = _context.MemberProject.Where(p => p.MemberId == memberId).Select(p => p.ProjectId);
@@ -126,6 +127,39 @@ namespace FinalProject.Controllers
                         ProjectNameSearched = search
                     }
                 );
+
+            }
+
+            if (User.IsInRole("admin"))
+            {
+                var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projects,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    });
+            }
+
+            if (User.IsInRole("admin"))
+            {
+                var projects = await projectsSearch
+                            .OrderBy(b => b.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+                return View(
+                    new ProjectListViewModel
+                    {
+                        Projects = projects,
+                        Pagination = pagingInfo,
+                        ProjectNameSearched = search
+                    });
             }
 
             return View();
@@ -229,7 +263,7 @@ namespace FinalProject.Controllers
         [Authorize(Roles = "manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description,ProjectCreator,StartDate,FinishDate,DecisiveDeliveryDate,StateId")] Project project)
         {
             MemberProject memberProject = new MemberProject();
             project.StartDate = DateTime.Now;
@@ -246,6 +280,7 @@ namespace FinalProject.Controllers
                 var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
 
                 project.ProjectCreatorId = memberId;
+                project.StateId = 2; 
                 _context.Add(project);
                 await _context.SaveChangesAsync();
 
@@ -268,13 +303,6 @@ namespace FinalProject.Controllers
             }
 
             var project = await _context.Project.FindAsync(id);
-
-            project.StartDate = DateTime.Now;
-
-            if (project.StartDate >= project.DecisiveDeliveryDate)
-            {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
-            }
 
             if (project == null)
             {
@@ -488,10 +516,11 @@ namespace FinalProject.Controllers
                 }
             }
 
-            if(members.Count() == 0)
+            if (members.Count() == 0)
             {
                 ViewData["member"] = false;
-            } else
+            }
+            else
             {
                 ViewData["member"] = true;
             }
@@ -567,6 +596,48 @@ namespace FinalProject.Controllers
         private bool ProjectExists(int id)
         {
             return _context.Project.Any(e => e.ProjectId == id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Conclude(int id)
+        {
+
+
+
+
+            Project project = _context.Project.Find(id);
+
+            if(project == null)
+            {
+                return NotFound();
+            }
+
+            project.FinishDate = DateTime.Now;
+            project.StateId = 3;
+
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    _context.Update(project);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProjectExists(project.ProjectId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(project);
         }
     }
 }
