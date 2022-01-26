@@ -100,16 +100,21 @@ namespace FinalProject.Controllers
 
 
             
-
             var p_task = await P_TaskSearch
                             .OrderBy(b => b.CreationDate)
                             .ToListAsync();
 
-            return View(
+
+            var meeting = _context.Meeting.Where(m => m.ProjectId == id)
+                .OrderBy(d => d.DateandTime);
+                
+
+              return View(
                 new ProjectListViewModel
                 {
                     P_Task = p_task,
-                    Project = project
+                    Project = project,
+                    Meetings = meeting
                 }
             );
         }
@@ -132,9 +137,9 @@ namespace FinalProject.Controllers
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
             }
-
+                                                                    
             if (ModelState.IsValid)
             {
                 _context.Add(project);
@@ -155,12 +160,7 @@ namespace FinalProject.Controllers
 
             var project = await _context.Project.FindAsync(id);
 
-            project.StartDate = DateTime.Now;
-
-            if (project.StartDate >= project.DecisiveDeliveryDate)
-            {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
-            }
+            
 
             if (project == null)
             {
@@ -183,10 +183,12 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            if (project.StartDate >= project.DecisiveDeliveryDate)
+
+            if (DateTime.Now >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Start Date is high than Decisive delivery date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
             }
+
 
             if (ModelState.IsValid)
             {

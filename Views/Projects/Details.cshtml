@@ -26,6 +26,7 @@
                 <p>Start Date: @Model.Project.StartDate</p>
                 <p>Finish Date: @Model.Project.FinishDate</p>
                 <p>Decisive Delivery Date: @Model.Project.DecisiveDeliveryDate</p>
+                @*<p>Number of members: @Model.Project.ProjectMembers.Count()</p>*@
             </div>
 
             <div>
@@ -35,9 +36,30 @@
                 <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Remove Member</a>
             </div>
 
-            <p></p>
+           
 
-            <div class="card">
+            @foreach (var m in Model.Meetings)
+            {
+                <div class="card" style="margin-top:50px">
+                    <div class="card-header text-center text-warning" style="text-decoration:blink">
+                        <h3>Meeting</h3>
+                    </div>
+                    <div class="card-body" style="text-align:center">
+                        <h5>Topic</h5>
+                        <p> @m.Topic</p>
+                        <h5>Description</h5>
+                        <p> @m.Description</p>
+                        <h5>Date and Hour</h5>
+                        <p> @m.DateandTime</p>
+                        <div class="d-flex justify-content-md-end" style="margin-top:50px">
+                            <a asp-action="Delete" asp-controller="Meetings" asp-route-id="@m.MeetingId" class="btn btn-danger" style="margin-left:3px">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            <div class="card" style="margin-top: 50px">
                 <div class="card-header" style="background-color: #6666ff;">
                     <h2 style="text-align:center"><i class="fas fa-table me-1"></i>Tasks</h2>
                 </div>
