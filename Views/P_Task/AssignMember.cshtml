@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Members List";
     var ID = ViewBag.ID;
+    var creatorId = ViewBag.creatorId;
 }
 
 <div id="layoutSidenav">
@@ -32,7 +33,9 @@
                 <div class="container" style="background-color: #ccccff;">
                     <div class="card-body">
                         <p></p>
-                            @foreach (var member in Model.Members)
+                        @foreach (var member in Model.Members)
+                        {
+                            if (member.MemberId != creatorId)
                             {
                                 <div class="card">
                                     <div class="card-header">
@@ -42,7 +45,7 @@
                                             </div>
                                             <div class="col-2">
                                                 <form asp-action="AssignMember" method="post">
-                                                    <button type="submit" class="btn btn-success" value="@member.MemberId" name="AssignMemberProject" id="btnAssignMemberProject1" autocomplete="off"><i class="fas fa-user-plus"></i> Assign</button>
+                                                    <button  type="submit" class="btn btn-success" value="@member.MemberId" name="AssignMemberProject" id="btnAssignMemberProject1" autocomplete="off"><i class="fas fa-user-plus"></i> Assign</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -72,6 +75,8 @@
                                 </div>
                                 <p></p>
                             }
+
+                        }
                     </div>
 
                     <p></p>

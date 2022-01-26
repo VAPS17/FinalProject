@@ -40,6 +40,14 @@
                     <div class="card-body" style="text-align:center">
                         <h5>Description</h5>
                         <p> @project.Description</p>
+
+                        <div class="d-flex justify-content-md-end" style="margin-top:50px">
+                            @if (User.IsInRole("manager"))
+                            {
+                                <a asp-controller="Meetings" asp-action="Create" asp-route-id="@project.ProjectId" class="btn btn-secondary" style="margin-left:3px">Create Meeting</a>
+
+                            }
+                          
                         @if (project.StateId != 3)
                         {
                             <h5>FinishDate</h5>
@@ -52,6 +60,7 @@
                                 <a asp-controller="Projects" asp-action="Conclude" asp-route-id="@project.ProjectId" class="btn btn-success">Conclude</a>
                             }
                             <a asp-controller="Meetings" asp-action="Create" asp-route-id="@project.ProjectId" class="btn btn-secondary" style="margin-left:3px">Create Meeting</a>
+                          
                             <a asp-action="Details" asp-route-id="@project.ProjectId" class="btn btn-info" style="margin-left:3px">Details</a>
                         </div>
                     </div>

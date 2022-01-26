@@ -8,6 +8,7 @@ using FinalProject.Models;
 using FinalProject.ViewModels;
 using System.Data;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace FinalProject.Controllers
 {
@@ -23,8 +24,6 @@ namespace FinalProject.Controllers
         public IActionResult Create(int id)
         {
             ViewBag.ID = id;
-            ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", id);
-            ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue");
             return View();
         }
 
@@ -44,6 +43,8 @@ namespace FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
+                p_task.ProjectId = id;
+                p_task.StateId = 1;
                 p_task.CreationDate = System.DateTime.Now.Date;
                 p_task.MemberId = _context.Project.Where(p => p.ProjectId == id).Select(p => p.ProjectCreatorId).First();
 
@@ -394,6 +395,154 @@ namespace FinalProject.Controllers
             }
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "ProjectId", "Name", p_task.ProjectId);
             ViewData["StateId"] = new SelectList(_context.Set<State>(), "StateId", "StateValue", p_task.StateId);
+            return View(p_task);
+        }
+
+        //GET AssignMember
+        public async Task<IActionResult> AssignMember(int id, string search, int page = 1)
+        {
+            var projectId = _context.P_Task.Where(t => t.P_TaskId == id).Select(t => t.ProjectId).First();
+
+            ViewData["ID"] = projectId;
+            ViewData["creatorId"] = _context.Project.Where(p => p.ProjectId == projectId).Select(p => p.ProjectCreatorId).First();
+
+            var memberSearch = _context.Member
+                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
+
+            var memberIds = _context.Member.Select(a => a.MemberId);
+
+            var memberProjectsIds = _context.MemberProject.Where(a => a.ProjectId == projectId).Select(b => b.MemberId);
+
+            var IdComparation = memberIds.Except(memberProjectsIds);
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = memberProjectsIds.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var members = await memberSearch
+                            .Include(m => m.Function)
+                            .Include(m => m.MemberProjects)
+                            .OrderBy(m => m.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
+            foreach (var member in members.ToList())
+            {
+                foreach (var memberId in IdComparation)
+                {
+                    if (member.MemberId == memberId)
+                    {
+                        members.Remove(member);
+                    }
+                }
+            }
+
+            if (members.Count() == 0)
+            {
+                ViewData["member"] = false;
+            }
+            else
+            {
+                ViewData["member"] = true;
+            }
+
+            return View(
+                new MemberListViewModel
+                {
+                    Members = members,
+                    PagingInfo = pagingInfo
+                }
+            );
+        }
+
+        // POST AssignMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignMember(IFormCollection frm, int id)
+        {
+            var p_task = _context.P_Task.Find(id);
+
+            string buttonId = frm["AssignMemberProject"].ToString();
+
+            int IdMember = Convert.ToInt32(buttonId);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.MemberId = IdMember;
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Association of a User to a Task";
+                ViewBag.Message = "Task successfully Unassign.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
+            return View(p_task);
+        }
+
+        // POST UnassignMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnassignMember(IFormCollection frm, int id)
+        {
+            string buttonId = frm["UnassignMember"].ToString();
+
+            int IdTask = Convert.ToInt32(buttonId);
+
+            var p_task = _context.P_Task.Find(IdTask);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    p_task.MemberId = _context.Project.Where(p => p.ProjectId == id).Select(c => c.ProjectCreatorId).First();
+                    _context.Update(p_task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!P_TaskExists(p_task.P_TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                ViewBag.Title = "Association of a User to a Task";
+                ViewBag.Message = "Task successfully associated.";
+                ViewBag.ID = p_task.ProjectId;
+                return View("Success");
+            }
             return View(p_task);
         }
 
