@@ -29,7 +29,8 @@ namespace FinalProject.Models
         [DisplayName("Employee Number")]
         public string EmployeeNumber { get; set; }
 
-       // public ICollection<P_Task> p_task { get; set; }
+        public ICollection<P_Task> p_task { get; set; }
+        
         public ICollection<MemberProject> MemberProjects { get; set; }
 
         [DisplayName("Function")]

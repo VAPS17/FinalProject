@@ -14,10 +14,10 @@ namespace FinalProject.ViewModels
 
         public IEnumerable<P_Task> P_Task { get; set; }
 
+        public IEnumerable<Meeting> Meetings { get; set; }
+
         public PagingInfo Pagination { get; set; }
 
         public string ProjectNameSearched { get; set; }
-
-        public IEnumerable<Meeting> Meetings { get; set; }
     }
 }

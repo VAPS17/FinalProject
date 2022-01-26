@@ -27,11 +27,11 @@ namespace FinalProject.Models
         public DateTime Deadline { get; set; }
 
         public DateTime EffectiveEndDate { get; set; }
-        /*
+        
         [DisplayName("Member")]
         public int MemberId { get; set; }
-        public Member member { get; set; }
-        */
+        public Member Member { get; set; }
+        
         [DisplayName("State")]
         public int StateId { get; set; }
         public State State { get; set; }

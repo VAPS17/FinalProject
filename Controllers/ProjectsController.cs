@@ -92,6 +92,8 @@ namespace FinalProject.Controllers
                 ViewData["Delayed"] = true;
             }
 
+            var mettings = _context.Meeting;
+
             var P_TaskSearch = _context.P_Task
                                 .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                                 .Where(t => t.ProjectId == id)
@@ -99,22 +101,18 @@ namespace FinalProject.Controllers
                                 .Include(b => b.State);
 
 
-            
+
+
             var p_task = await P_TaskSearch
                             .OrderBy(b => b.CreationDate)
                             .ToListAsync();
 
-
-            var meeting = _context.Meeting.Where(m => m.ProjectId == id)
-                .OrderBy(d => d.DateandTime);
-                
-
-              return View(
+            return View(
                 new ProjectListViewModel
                 {
                     P_Task = p_task,
                     Project = project,
-                    Meetings = meeting
+                    Meetings = mettings
                 }
             );
         }
@@ -137,9 +135,9 @@ namespace FinalProject.Controllers
 
             if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
             }
-                                                                    
+
             if (ModelState.IsValid)
             {
                 _context.Add(project);
@@ -160,7 +158,12 @@ namespace FinalProject.Controllers
 
             var project = await _context.Project.FindAsync(id);
 
-            
+            project.StartDate = DateTime.Now;
+
+            if (project.StartDate >= project.DecisiveDeliveryDate)
+            {
+                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is higher than system date");
+            }
 
             if (project == null)
             {
@@ -183,12 +186,10 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-
-            if (DateTime.Now >= project.DecisiveDeliveryDate)
+            if (project.StartDate >= project.DecisiveDeliveryDate)
             {
-                ModelState.AddModelError("DecisiveDeliveryDate", "Decisive delivery date is lower than system date");
+                ModelState.AddModelError("DecisiveDeliveryDate", "Start Date is high than Decisive delivery date");
             }
-
 
             if (ModelState.IsValid)
             {
@@ -244,14 +245,35 @@ namespace FinalProject.Controllers
         }
 
         // GET AddMember
-        public async Task<IActionResult> AddMember(int id)
+        public async Task<IActionResult> AddMember(string search, int id, int page = 1)
         {
             ViewData["ID"] = id;
 
-            var members = await _context.Member
+            var memberSearch = _context.Member
+                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = memberSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var members = await memberSearch
                             .Include(m => m.Function)
                             .Include(m => m.MemberProjects)
                             .OrderBy(m => m.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
                             .ToListAsync();
 
             foreach (var member in members.ToList())
@@ -271,7 +293,8 @@ namespace FinalProject.Controllers
             return View(
                 new MemberListViewModel
                 {
-                    Members = members
+                    Members = members,
+                    PagingInfo = pagingInfo
                 }
             );
         }
@@ -279,9 +302,10 @@ namespace FinalProject.Controllers
         // POST AddMember
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddMember(IFormCollection frm, int id, [Bind("MemberId,ProjectId")] MemberProject memberProject) {
+        public async Task<IActionResult> AddMember(IFormCollection frm, int id, [Bind("MemberId,ProjectId")] MemberProject memberProject)
+        {
 
-            string buttonId= frm["AddMemberProject"].ToString();
+            string buttonId = frm["AddMemberProject"].ToString();
 
             int IdMember = Convert.ToInt32(buttonId);
 
@@ -297,14 +321,12 @@ namespace FinalProject.Controllers
         }
 
         //GET Remove Member
-        public async Task<IActionResult> RemoveMember(int id)
+        public async Task<IActionResult> RemoveMember(int id, string search, int page = 1)
         {
             ViewData["ID"] = id;
 
-            var members = await _context.Member
-                            .Include(m => m.Function)
-                            .OrderBy(m => m.Name)
-                            .ToListAsync();
+            var memberSearch = _context.Member
+                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
 
             var memberIds = _context.Member.Select(a => a.MemberId);
 
@@ -312,9 +334,33 @@ namespace FinalProject.Controllers
 
             var IdComparation = memberIds.Except(memberProjectsIds);
 
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = memberProjectsIds.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+            var members = await memberSearch
+                            .Include(m => m.Function)
+                            .Include(m => m.MemberProjects)
+                            .OrderBy(m => m.Name)
+                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
+                            .Take(pagingInfo.PageSize)
+                            .ToListAsync();
+
             foreach (var member in members.ToList())
             {
-                foreach(var memberId in IdComparation)
+                foreach (var memberId in IdComparation)
                 {
                     if (member.MemberId == memberId)
                     {
@@ -323,10 +369,19 @@ namespace FinalProject.Controllers
                 }
             }
 
+            if(members.Count() == 0)
+            {
+                ViewData["member"] = false;
+            } else
+            {
+                ViewData["member"] = true;
+            }
+
             return View(
                 new MemberListViewModel
                 {
-                    Members = members
+                    Members = members,
+                    PagingInfo = pagingInfo
                 }
             );
         }

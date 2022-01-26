@@ -4,14 +4,16 @@ using FinalProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
-    partial class ProjectManaContextModelSnapshot : ModelSnapshot
+    [Migration("20220126145351_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,6 +137,9 @@ namespace FinalProject.Migrations
                     b.Property<DateTime>("EffectiveEndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
                     b.Property<string>("P_TaskName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -150,6 +155,8 @@ namespace FinalProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("P_TaskId");
+
+                    b.HasIndex("MemberId");
 
                     b.HasIndex("ProjectId");
 
@@ -251,6 +258,12 @@ namespace FinalProject.Migrations
 
             modelBuilder.Entity("FinalProject.Models.P_Task", b =>
                 {
+                    b.HasOne("FinalProject.Models.Member", "Member")
+                        .WithMany("p_task")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FinalProject.Models.Project", "Project")
                         .WithMany("P_Task")
                         .HasForeignKey("ProjectId")
@@ -262,6 +275,8 @@ namespace FinalProject.Migrations
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Member");
 
                     b.Navigation("Project");
 
@@ -276,6 +291,8 @@ namespace FinalProject.Migrations
             modelBuilder.Entity("FinalProject.Models.Member", b =>
                 {
                     b.Navigation("MemberProjects");
+
+                    b.Navigation("p_task");
                 });
 
             modelBuilder.Entity("FinalProject.Models.Project", b =>

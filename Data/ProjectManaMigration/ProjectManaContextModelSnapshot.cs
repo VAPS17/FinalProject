@@ -4,16 +4,14 @@ using FinalProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalProject.Migrations
 {
     [DbContext(typeof(ProjectManaContext))]
-    [Migration("20211223222043_initial")]
-    partial class initial
+    partial class ProjectManaContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,6 +89,10 @@ namespace FinalProject.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("MemberId");
 
                     b.HasIndex("FunctionId");
@@ -133,10 +135,13 @@ namespace FinalProject.Migrations
                     b.Property<DateTime>("EffectiveEndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
                     b.Property<string>("P_TaskName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
@@ -148,6 +153,8 @@ namespace FinalProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("P_TaskId");
+
+                    b.HasIndex("MemberId");
 
                     b.HasIndex("ProjectId");
 
@@ -249,6 +256,12 @@ namespace FinalProject.Migrations
 
             modelBuilder.Entity("FinalProject.Models.P_Task", b =>
                 {
+                    b.HasOne("FinalProject.Models.Member", "Member")
+                        .WithMany("p_task")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FinalProject.Models.Project", "Project")
                         .WithMany("P_Task")
                         .HasForeignKey("ProjectId")
@@ -260,6 +273,8 @@ namespace FinalProject.Migrations
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Member");
 
                     b.Navigation("Project");
 
@@ -274,6 +289,8 @@ namespace FinalProject.Migrations
             modelBuilder.Entity("FinalProject.Models.Member", b =>
                 {
                     b.Navigation("MemberProjects");
+
+                    b.Navigation("p_task");
                 });
 
             modelBuilder.Entity("FinalProject.Models.Project", b =>

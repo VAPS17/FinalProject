@@ -59,6 +59,7 @@ namespace FinalProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployeeNumber = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     FunctionId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -96,38 +97,6 @@ namespace FinalProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "P_Task",
-                columns: table => new
-                {
-                    P_TaskId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    P_TaskName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Comentary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EffectiveEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StateId = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_P_Task", x => x.P_TaskId);
-                    table.ForeignKey(
-                        name: "FK_P_Task_Project_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Project",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_P_Task_State_StateId",
-                        column: x => x.StateId,
-                        principalTable: "State",
-                        principalColumn: "StateId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MemberProject",
                 columns: table => new
                 {
@@ -151,6 +120,45 @@ namespace FinalProject.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "P_Task",
+                columns: table => new
+                {
+                    P_TaskId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    P_TaskName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Comentary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EffectiveEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_P_Task", x => x.P_TaskId);
+                    table.ForeignKey(
+                        name: "FK_P_Task_Member_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_P_Task_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_P_Task_State_StateId",
+                        column: x => x.StateId,
+                        principalTable: "State",
+                        principalColumn: "StateId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Meeting_ProjectId",
                 table: "Meeting",
@@ -165,6 +173,11 @@ namespace FinalProject.Migrations
                 name: "IX_MemberProject_ProjectId",
                 table: "MemberProject",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_P_Task_MemberId",
+                table: "P_Task",
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_P_Task_ProjectId",

@@ -19,60 +19,6 @@ namespace FinalProject.Controllers
             _context = context;
         }
 
-        // GET: P_Task
-        public async Task<IActionResult> Index(IFormCollection frm, int id, int page = 1)
-        {
-            /*
-            string stateRadio = frm["State"].ToString();
-
-            ViewData["TerminationValidation"] = TerminationValidation(id);
-            ViewData["T_Project"] = _context.Project.Where(a => a.ProjectId == id).Select(d => d.Name).First();
-            ViewData["NotStartedExist"] = _context.P_Task.Any(e => e.StateId == 1 && e.ProjectId == id);
-            ViewData["InProgressExist"] = _context.P_Task.Any(e => e.StateId == 2 && e.ProjectId == id);
-            ViewData["FinishedExist"] = _context.P_Task.Any(e => e.StateId == 3 && e.ProjectId == id);
-            ViewData["DeadlineNotStarted"] = TaskValidation(id, 1);
-            ViewData["DeadlineInProgress"] = TaskValidation(id, 2);
-            ViewData["CurrentState"] = stateRadio;
-            ViewBag.ID = id;
-
-            var P_TaskSearch = _context.P_Task
-                                .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
-                                .Where(t => t.ProjectId == id)
-                                .Include(b => b.Project)
-                                .Include(b => b.State);
-
-            var pagingInfo = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = P_TaskSearch.Count()
-            };
-
-            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
-            {
-                pagingInfo.CurrentPage = pagingInfo.TotalPages;
-            }
-
-            if (pagingInfo.CurrentPage < 1)
-            {
-                pagingInfo.CurrentPage = 1;
-            }
-
-            var p_task = await P_TaskSearch
-                            .OrderBy(b => b.CreationDate)
-                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                            .Take(pagingInfo.PageSize)
-                            .ToListAsync();
-
-            return View(
-                new P_TaskListViewModel
-                {
-                    P_Task = p_task,
-                    P_TaskPagingInfo = pagingInfo,
-                }
-            );*/
-            return View();
-        }
-
         // GET: P_Task/Create
         public IActionResult Create(int id)
         {
@@ -88,7 +34,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, [Bind("P_TaskId,P_TaskName,Comentary," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             if (p_task.Deadline <= System.DateTime.Now.Date)
             {
@@ -140,7 +86,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -233,7 +179,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditTaskInProgress(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -293,7 +239,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditTaskTerminate(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -353,7 +299,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditComentary(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             if (id != p_task.P_TaskId)
             {
@@ -410,7 +356,7 @@ namespace FinalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReverseProgretion(int id, [Bind("P_TaskId,P_TaskName," +
-            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId")] P_Task p_task)
+            ",CreationDate,StartDate,Deadline,EffectiveEndDate,Comentary,ProjectId,StateId,MemberId")] P_Task p_task)
         {
             int num = p_task.StateId;
 
