@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Members List";
     var ID = ViewBag.ID;
+    var creatorId = ViewBag.creatorId;
 }
 
 <div id="layoutSidenav">
@@ -32,7 +33,9 @@
                 <div class="container" style="background-color: #ccccff;">
                     <div class="card-body">
                         <p></p>
-                            @foreach (var member in Model.Members)
+                        @foreach (var member in Model.Members)
+                        {
+                            if (member.MemberId != creatorId)
                             {
                                 <div class="card">
                                     <div class="card-header">
@@ -72,6 +75,8 @@
                                 </div>
                                 <p></p>
                             }
+
+                        }
                     </div>
 
                     <p></p>

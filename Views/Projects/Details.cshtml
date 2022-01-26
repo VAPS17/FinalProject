@@ -240,7 +240,7 @@
                                                 <p class="card-text lead">Deadline at: @task.Deadline</p>
 
                                                 <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="EditTaskInProgress">Inicialize</a>
-                                                <a class="btn btn-success" asp-route-id="@Model.Project.ProjectId" asp-controller="Projects" asp-action="AssignMember">Assign</a>
+                                                <a class="btn btn-success" asp-route-id="@task.P_TaskId" asp-controller="P_Task" asp-action="AssignMember">Assign</a>
 
                                             </div>
                                         </div>

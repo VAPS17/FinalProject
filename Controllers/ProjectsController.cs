@@ -414,6 +414,7 @@ namespace FinalProject.Controllers
         public async Task<IActionResult> RemoveMember(int id, string search, int page = 1)
         {
             ViewData["ID"] = id;
+            ViewData["creatorId"] = _context.Project.Where(p => p.ProjectId == id).Select(p => p.ProjectCreatorId).First();
 
             var memberSearch = _context.Member
                 .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
@@ -483,89 +484,6 @@ namespace FinalProject.Controllers
         {
 
             string buttonId = frm["RemoveMemberProject"].ToString();
-
-            int IdMember = Convert.ToInt32(buttonId);
-
-            var member = await _context.MemberProject.FindAsync(IdMember, id);
-            _context.MemberProject.Remove(member);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(RemoveMember));
-        }
-
-        //GET AssignMember
-        public async Task<IActionResult> AssignMember(int id, string search, int page = 1)
-        {
-            ViewData["ID"] = id;
-
-            var memberSearch = _context.Member
-                .Where(b => search == null || b.Function.Name.Contains(search) || b.EmployeeNumber.Contains(search) || b.Email.Contains(search) || b.PhoneNumber.Contains(search));
-
-            var memberIds = _context.Member.Select(a => a.MemberId);
-
-            var memberProjectsIds = _context.MemberProject.Where(a => a.ProjectId == id).Select(b => b.MemberId);
-
-            var IdComparation = memberIds.Except(memberProjectsIds);
-
-            var pagingInfo = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = memberProjectsIds.Count()
-            };
-
-            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
-            {
-                pagingInfo.CurrentPage = pagingInfo.TotalPages;
-            }
-
-            if (pagingInfo.CurrentPage < 1)
-            {
-                pagingInfo.CurrentPage = 1;
-            }
-
-            var members = await memberSearch
-                            .Include(m => m.Function)
-                            .Include(m => m.MemberProjects)
-                            .OrderBy(m => m.Name)
-                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                            .Take(pagingInfo.PageSize)
-                            .ToListAsync();
-
-            foreach (var member in members.ToList())
-            {
-                foreach (var memberId in IdComparation)
-                {
-                    if (member.MemberId == memberId)
-                    {
-                        members.Remove(member);
-                    }
-                }
-            }
-
-            if (members.Count() == 0)
-            {
-                ViewData["member"] = false;
-            }
-            else
-            {
-                ViewData["member"] = true;
-            }
-
-            return View(
-                new MemberListViewModel
-                {
-                    Members = members,
-                    PagingInfo = pagingInfo
-                }
-            );
-        }
-
-        // POST AssignMember
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignMember(IFormCollection frm, int id)
-        {
-
-            string buttonId = frm["AssignMemberProject"].ToString();
 
             int IdMember = Convert.ToInt32(buttonId);
 
