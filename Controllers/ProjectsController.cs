@@ -617,5 +617,47 @@ namespace FinalProject.Controllers
         {
             return _context.Project.Any(e => e.ProjectId == id);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Conclude(int id)
+        {
+
+
+
+
+            Project project = _context.Project.Find(id);
+
+            if(project == null)
+            {
+                return NotFound();
+            }
+
+            project.FinishDate = DateTime.Now;
+            project.StateId = 3;
+
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    _context.Update(project);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProjectExists(project.ProjectId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(project);
+        }
     }
 }
