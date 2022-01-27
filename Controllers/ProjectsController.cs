@@ -205,11 +205,12 @@ namespace FinalProject.Controllers
                 ViewData["Delayed"] = true;
             }
 
-            var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+            
 
             var mettings = _context.Meeting;
 
             if (checkMember) {
+            var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
                 var P_TaskSearch = _context.P_Task
                     .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                     .Where(t => t.MemberId == memberId)
