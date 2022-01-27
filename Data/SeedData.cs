@@ -1,7 +1,6 @@
-﻿#define TEST_PAGINATION_MEMBERS
+﻿#define DADOS_FICTICIOS
 //#define TEST_PAGINATION_TASKS
-#define TEST_PAGINATION_PROJECTS
-#define TEST_PAGINATION_MEETINGS
+
 
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -23,18 +22,19 @@ namespace FinalProject.Data
 		internal static void Populate(ProjectManaContext projectManaContext)
 		{
 			State state = projectManaContext.State.FirstOrDefault();
-			
-			//Preencher a tabela "State
-			if (state == null) { 
-			//if (projectManaContext.State.Any()) return;
 
-			projectManaContext.State.AddRange(
-				new State { StateValue = "Not Started" },
-				new State { StateValue = "In Progress" },
-				new State { StateValue = "Finished" },
-				new State { StateValue = "Late" }
-				);
-			projectManaContext.SaveChanges();
+			//Preencher a tabela "State
+			if (state == null)
+			{
+				//if (projectManaContext.State.Any()) return;
+
+				projectManaContext.State.AddRange(
+					new State { StateValue = "Not Started" },
+					new State { StateValue = "In Progress" },
+					new State { StateValue = "Finished" },
+					new State { StateValue = "Late" }
+					);
+				projectManaContext.SaveChanges();
 			}
 
 #if TEST_PAGINATION_TASKS
@@ -58,29 +58,30 @@ namespace FinalProject.Data
 			}
 #endif
 
-#if TEST_PAGINATION_MEMBERS
+#if DADOS_FICTICIOS
 			Function function = projectManaContext.Function.FirstOrDefault();
 			Function function2;
 			Member member = projectManaContext.Member.FirstOrDefault();
 
-            if (function == null)
-            {
-                function = new Function { Name = "Programmer" };
+			if (function == null)
+			{
+				function = new Function { Name = "Programmer" };
 				function2 = new Function { Name = "Tester" };
 				projectManaContext.Add(function);
-           
-					projectManaContext.Member.Add(
-                        new Member
-                        {
-                            Name = "Victor Seguro",
-                            Email = "victors@ipg.pt",
-							PhoneNumber = "987654321",
-                            EmployeeNumber = "1",
-                            Function = function
-                        }
-						
-						);
-				projectManaContext.Member.Add(
+				projectManaContext.Add(function2);
+
+
+				member = new Member
+				{
+					Name = "Victor Seguro",
+					Email = "victors@ipg.pt",
+					PhoneNumber = "987654321",
+					EmployeeNumber = "1",
+					Function = function
+				};
+				projectManaContext.Member.Add(member);
+
+				Member member2 =
 				new Member
 				{
 					Name = "Gonçalo Silva",
@@ -88,9 +89,9 @@ namespace FinalProject.Data
 					PhoneNumber = "987567821",
 					EmployeeNumber = "2",
 					Function = function2
-				}
-				);
-				projectManaContext.Member.Add(
+				};
+				projectManaContext.Member.Add(member2);
+				Member member3 =
 				new Member
 				{
 					Name = "Daniel Carmona",
@@ -98,108 +99,143 @@ namespace FinalProject.Data
 					PhoneNumber = "988567821",
 					EmployeeNumber = "3",
 					Function = function
-				}
-				);
-
+				};
+				projectManaContext.Member.Add(member3);
 
 				projectManaContext.SaveChanges();
-            }
-#endif
+			
+
 
 			//int year, int month, int day, int hour, int minute, int second
-#if TEST_PAGINATION_PROJECTS
 
-			Project project = projectManaContext.Project.FirstOrDefault();
+			 
 
-			if(project == null)
-            {
 
-							projectManaContext.Project.Add(
-								new Project {
-									Name = "Montar carro",
-									Description = "E preciso primeiro montar a carrocaria",
-									ProjectCreatorId = 123,
-									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+
+				Project project =
+					new Project
+					{
+						Name = "Montar carro",
+						Description = "E preciso primeiro montar a carrocaria",
+						ProjectCreatorId = 3,
+						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 6, 0, 0)
-									,
-									StateId = 2
-								});;
+						,
+						StateId = 2
+					}; 
+					projectManaContext.Project.Add(project);
+					
+					Project project2=
+					new Project
+					{
+						Name = "Fazer o jogo 2048",
+						Description = "E necessario ter numeros",
+						ProjectCreatorId = 3,
+						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+						//FinishDate = new DateTime(),
+						DecisiveDeliveryDate = new DateTime(2022, 3, 25, 7, 12, 10)
+						,
+						StateId = 2
+					};
+					projectManaContext.Project.Add(project2); 
 
-							projectManaContext.Project.Add(
-								new Project{
-									Name = "Fazer o jogo 2048",
-									Description = "E necessario ter numeros",
-									ProjectCreatorId = 1234,
-									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
-									//FinishDate = new DateTime(),
-									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 7, 12, 10)
-									,
-									StateId = 2
-								});
-
-							projectManaContext.Project.Add(
-								new Project{
-									Name = "Dadores for us",
-									Description = "O site deve ser desenvolvido para dadores de sangue assiduos",
-									ProjectCreatorId = 12345,
-									StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
+					Project project3=
+					new Project
+					{
+						Name = "Dadores for us",
+						Description = "O site deve ser desenvolvido para dadores de sangue assiduos",
+						ProjectCreatorId = 3,
+						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 8, 5, 5)
-									,
-									StateId = 2
-								});
+						,
+						StateId = 2
+					};
+					projectManaContext.Project.Add(project3);
 
-							projectManaContext.Project.Add(
-								new Project{
-									Name = "Engenharia de Software e Programacao",
-									Description = "O site deve ser desenvolvido em c#, arquitetura MVC",
-									ProjectCreatorId = 123456,
-									StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
+					Project project4=
+					new Project
+					{
+						Name = "Engenharia de Software e Programacao",
+						Description = "O site deve ser desenvolvido em c#, arquitetura MVC",
+						ProjectCreatorId = 3,
+						StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 5, 25, 8, 5, 30)
-									,
-									StateId = 2
-								});
+						,
+						StateId = 2
+					};
+					projectManaContext.Project.Add(project4);
+					projectManaContext.SaveChanges();
 
-							projectManaContext.SaveChanges();
-			}
-#endif
+				projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId=project.ProjectId,
+						MemberId=member3.MemberId
+					}
+					);
+				projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId = project2.ProjectId,
+						MemberId = member3.MemberId
+					}
+					);
+				projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId = project3.ProjectId,
+						MemberId = member3.MemberId
+					}
+					);
+				projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId = project4.ProjectId,
+						MemberId = member3.MemberId
+					}
+					);
+				projectManaContext.SaveChanges();
+			
+			
 
-#if TEST_PAGINATION_MEETINGS
 
 			Meeting meeting = projectManaContext.Meeting.FirstOrDefault();
 
-			if(meeting == null)
-            {
+			
 
-							projectManaContext.Meeting.Add(
-								new Meeting {
-									Topic = "Recolha de requisitos",
-									Description = "A reuniao e feita para recolha dos requisitos de software com o cliente presente",
-									ProjectId = 123,
-									DateandTime = new DateTime(2022, 2, 27, 9, 9, 0),
-									
-								});
+				projectManaContext.Meeting.Add(
+					new Meeting
+					{
+						Topic = "Recolha de requisitos",
+						Description = "A reuniao e feita para recolha dos requisitos de software com o cliente presente",
+						ProjectId = project.ProjectId,
+						DateandTime = new DateTime(2022, 2, 27, 9, 9, 0),
 
-							projectManaContext.Meeting.Add(
+					});
+
+				projectManaContext.Meeting.Add(
+					new Meeting
+					{
+						Topic = "Recolha de modelos",
+						Description = "A reuniao e feita para recolha dos modelos do projeto",
+						ProjectId = project2.ProjectId,
+						DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
+					});
+
+				projectManaContext.Meeting.Add(
 								new Meeting
 								{
 									Topic = "Recolha de modelos",
 									Description = "A reuniao e feita para recolha dos modelos do projeto",
-									ProjectId = 1234,
+									ProjectId = project3.ProjectId,
 									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
 								});
 
-				projectManaContext.Meeting.Add(
-								new Meeting{
-									Topic = "Recolha de modelos",
-									Description = "A reuniao e feita para recolha dos modelos do projeto",
-									ProjectId = 12345,
-									DateandTime = new DateTime(2022, 1, 26, 9, 9, 0),
-								});
-
-							projectManaContext.SaveChanges();
+				projectManaContext.SaveChanges();
+			
 			}
 #endif
 		}

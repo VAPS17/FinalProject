@@ -62,7 +62,7 @@ namespace FinalProject.Controllers
                 var projects = projectsSearch
                 .Where(p => p.ProjectCreatorId == memberId);
 
-                 pagingInfo = new PagingInfo
+                pagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     TotalItems = projects.Count()
@@ -96,7 +96,7 @@ namespace FinalProject.Controllers
             else if (checkMember)
             {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
-                
+
                 var memberProjectId = _context.MemberProject.Where(p => p.MemberId == memberId).Select(p => p.ProjectId);
 
                 var projectsId = _context.Project.Select(p => p.ProjectId);
@@ -151,7 +151,7 @@ namespace FinalProject.Controllers
             if (User.IsInRole("admin"))
             {
 
-                
+
                 var projects = await projectsSearch
                             .OrderBy(b => b.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
@@ -205,12 +205,13 @@ namespace FinalProject.Controllers
                 ViewData["Delayed"] = true;
             }
 
-            
 
-            var mettings = _context.Meeting;
 
-            if (checkMember) {
-            var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
+            var mettings = _context.Meeting.Where(m=>m.ProjectId==project.ProjectId);
+
+            if (checkMember)
+            {
+                var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
                 var P_TaskSearch = _context.P_Task
                     .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                     .Where(t => t.MemberId == memberId)
@@ -232,7 +233,9 @@ namespace FinalProject.Controllers
                     }
                 );
 
-            } else {
+            }
+            else
+            {
                 var P_TaskSearch = _context.P_Task
                     .Where(x => x.State.StateValue == stateRadio || stateRadio == "")
                     .Where(t => t.ProjectId == id)
@@ -285,7 +288,7 @@ namespace FinalProject.Controllers
                 var memberId = _context.Member.Where(m => m.Email.Equals(currentLogin)).Select(m => m.MemberId).First();
 
                 project.ProjectCreatorId = memberId;
-                project.StateId = 2; 
+                project.StateId = 2;
                 _context.Add(project);
                 await _context.SaveChangesAsync();
 
@@ -603,8 +606,7 @@ namespace FinalProject.Controllers
             return _context.Project.Any(e => e.ProjectId == id);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Conclude(int id)
         {
 
@@ -613,7 +615,7 @@ namespace FinalProject.Controllers
 
             Project project = _context.Project.Find(id);
 
-            if(project == null)
+            if (project == null)
             {
                 return NotFound();
             }

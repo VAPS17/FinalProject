@@ -29,13 +29,17 @@
                 @*<p>Number of members: @Model.Project.ProjectMembers.Count()</p>*@
             </div>
 
-            @if (User.IsInRole("manager")){
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary">Edit Project</a>
-                <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
-                <a asp-action="AddMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Add Member</a>
-                <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary" style="margin-left:3px">Project Members</a>
-            </div>
+            @if (User.IsInRole("manager"))
+            {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary">Edit Project</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Project.ProjectId" class="btn btn-danger" style="margin-left:3px">Delete Project</a>
+                    @if (Model.Project.StateId != 3)
+                    {
+                        <a asp-action="AddMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Add Member</a>
+                    }
+                    <a asp-action="RemoveMember" asp-route-id="@Model.Project.ProjectId" class="btn btn-primary" style="margin-left:3px">Project Members</a>
+                </div>
             }
 
             @foreach (var m in Model.Meetings)
@@ -91,7 +95,7 @@
                             </form>
                         </div>
 
-                        @if (User.IsInRole("manager"))
+                        @if (User.IsInRole("manager") && Model.Project.StateId != 3)
                         {
                             <div class="col-3">
                                 <a asp-controller="P_Task" asp-action="Create" asp-route-id="@Model.Project.ProjectId" class="btn btn-success" style="margin-left:3px">Create a new task</a>
