@@ -96,7 +96,8 @@ namespace FinalProject.Controllers
         public IActionResult Create()
         {
             ViewData["FunctionId"] = new SelectList(_context.Function, "FunctionId", "Name");
-            ViewData["Roles"] = new List<string>(){ "Normal Member", "Project Manager" };
+            List<string> list = new List<string>() {"Normal Member","Project Manager"};
+            ViewData["Roles"] = new SelectList(list, "Nome");
             return View();
         }
 
