@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +38,23 @@ namespace FinalProject.Controllers
             bool checkManager = User.IsInRole("manager");
             bool checkMember = User.IsInRole("member");
 
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = projectsSearch.Count()
+            };
+
+            if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
+            {
+                pagingInfo.CurrentPage = pagingInfo.TotalPages;
+            }
+
+            if (pagingInfo.CurrentPage < 1)
+            {
+                pagingInfo.CurrentPage = 1;
+            }
+
+
             if (checkManager)
             {
                 var memberId = _context.Member.Where(m => m.Email.Equals(email)).Select(m => m.MemberId).First();
@@ -45,7 +62,7 @@ namespace FinalProject.Controllers
                 var projects = projectsSearch
                 .Where(p => p.ProjectCreatorId == memberId);
 
-                var pagingInfo = new PagingInfo
+                 pagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     TotalItems = projects.Count()
@@ -86,7 +103,7 @@ namespace FinalProject.Controllers
 
                 var IdComparation = projectsId.Except(memberProjectId);
 
-                var pagingInfo = new PagingInfo
+                pagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     TotalItems = memberProjectId.Count()
@@ -130,24 +147,11 @@ namespace FinalProject.Controllers
 
             }
 
-            if (User.IsInRole("admin"))
-            {
-                var projects = await projectsSearch
-                            .OrderBy(b => b.Name)
-                            .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
-                            .Take(pagingInfo.PageSize)
-                            .ToListAsync();
-                return View(
-                    new ProjectListViewModel
-                    {
-                        Projects = projects,
-                        Pagination = pagingInfo,
-                        ProjectNameSearched = search
-                    });
-            }
 
             if (User.IsInRole("admin"))
             {
+
+                
                 var projects = await projectsSearch
                             .OrderBy(b => b.Name)
                             .Skip((pagingInfo.CurrentPage - 1) * pagingInfo.PageSize)
