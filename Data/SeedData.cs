@@ -117,7 +117,7 @@ namespace FinalProject.Data
 					{
 						Name = "Montar carro",
 						Description = "E preciso primeiro montar a carrocaria",
-						ProjectCreatorId = 3,
+						ProjectCreatorId = member3.MemberId,
 						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 6, 0, 0)
@@ -131,7 +131,7 @@ namespace FinalProject.Data
 					{
 						Name = "Fazer o jogo 2048",
 						Description = "E necessario ter numeros",
-						ProjectCreatorId = 3,
+						ProjectCreatorId = member3.MemberId,
 						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 						//FinishDate = new DateTime(),
 						DecisiveDeliveryDate = new DateTime(2022, 3, 25, 7, 12, 10)
@@ -145,7 +145,7 @@ namespace FinalProject.Data
 					{
 						Name = "Dadores for us",
 						Description = "O site deve ser desenvolvido para dadores de sangue assiduos",
-						ProjectCreatorId = 3,
+						ProjectCreatorId = member3.MemberId,
 						StartDate = new DateTime(2022, 1, 25, 5, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 3, 25, 8, 5, 5)
@@ -159,7 +159,7 @@ namespace FinalProject.Data
 					{
 						Name = "Engenharia de Software e Programacao",
 						Description = "O site deve ser desenvolvido em c#, arquitetura MVC",
-						ProjectCreatorId = 3,
+						ProjectCreatorId = member3.MemberId,
 						StartDate = new DateTime(2021, 1, 25, 9, 26, 40),
 									//FinishDate = new DateTime(),
 									DecisiveDeliveryDate = new DateTime(2022, 5, 25, 8, 5, 30)
@@ -195,6 +195,20 @@ namespace FinalProject.Data
 					{
 						ProjectId = project4.ProjectId,
 						MemberId = member3.MemberId
+					}
+					);
+					projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId = project2.ProjectId,
+						MemberId = member.MemberId
+					}
+					);
+				projectManaContext.MemberProject.Add(
+					new MemberProject
+					{
+						ProjectId = project3.ProjectId,
+						MemberId = member2.MemberId
 					}
 					);
 				projectManaContext.SaveChanges();
@@ -235,7 +249,34 @@ namespace FinalProject.Data
 								});
 
 				projectManaContext.SaveChanges();
-			
+
+				projectManaContext.P_Task.Add(new P_Task
+				{
+					P_TaskName = "Colocar os numeros",
+					Comentary = "Do 2 ao 2048",
+					StateId = 2,
+					ProjectId = project2.ProjectId
+					,StartDate = new DateTime(2022, 1, 21, 9, 9, 0),
+					CreationDate = new DateTime(2022, 1, 20, 9, 9, 0),
+					Deadline = new DateTime(2022, 1, 26, 9, 9, 0),
+					MemberId=member.MemberId
+				});
+
+				projectManaContext.P_Task.Add(new P_Task
+				{
+					P_TaskName = "registar doações",
+					Comentary = "Em ml",
+					StateId = 3,
+					ProjectId = project3.ProjectId
+					,
+					StartDate = new DateTime(2022, 1, 18, 9, 9, 0),
+					CreationDate = new DateTime(2022, 1, 17, 9, 9, 0),
+					Deadline = new DateTime(2022, 1, 24, 9, 9, 0),
+					EffectiveEndDate = new DateTime(2022, 1, 21, 9, 9, 0),
+					MemberId = member2.MemberId
+				});
+				projectManaContext.SaveChanges();
+
 			}
 #endif
 		}
