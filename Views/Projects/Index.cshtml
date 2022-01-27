@@ -40,16 +40,16 @@
             <div class="card-body" style="text-align:center">
                 <h5>Description</h5>
                 <p> @project.Description</p>
+                @if (project.StateId == 3)
+                {
+                    <h5>FinishDate: </h5>
+                    <p> @project.FinishDate</p>
 
+                }
                 <div class="d-flex justify-content-md-end" style="margin-top:50px">
-                   
 
-                    @if (project.StateId == 3)
-                    {
-                        <h5>FinishDate: </h5>
-                        <p> @project.FinishDate</p>
 
-                    }
+
                     <div class="d-flex justify-content-md-end" style="margin-top:50px">
                         @if (project.StateId != 3 && User.IsInRole("manager"))
                         {

@@ -24,10 +24,13 @@
             <div style="margin-top: 15px">
                 <p>Description: @Model.Project.Description</p>
                 <p>Start Date: @Model.Project.StartDate</p>
-                <p>Finish Date: @Model.Project.FinishDate</p>
-                <p>Decisive Delivery Date: @Model.Project.DecisiveDeliveryDate</p>
-                @*<p>Number of members: @Model.Project.ProjectMembers.Count()</p>*@
-            </div>
+                @if (Model.Project.StateId == 3)
+                {
+                    <p>Finish Date: @Model.Project.FinishDate</p>
+                }
+                    <p>Decisive Delivery Date: @Model.Project.DecisiveDeliveryDate</p>
+                    @*<p>Number of members: @Model.Project.ProjectMembers.Count()</p>*@
+                </div>
 
             @if (User.IsInRole("manager"))
             {
